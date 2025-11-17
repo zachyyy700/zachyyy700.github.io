@@ -1,0 +1,60 @@
+/*-- scss:defaults --*/
+
+// Import fonts
+@import url('https://fonts.googleapis.com/css2?family=Baskervville:ital,wght@0,400..700;1,400..700&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
+
+// Fonts
+$basker: "Baskervville";
+
+// Colors
+$black: #121612;
+$brown: #582f0e;
+$lightbrown: #E9A772;
+$tan: #ECE2D0;
+$lightgreen: #d8f3dc;
+$green: #95d5b2;
+$darkgreen: #40916c;
+
+
+// Base document colors
+$navbar-bg: $darkgreen; // navbar
+$navbar-fg: $tan; // navbar foreground elements
+$navbar-hl: $green; // highlight color when hovering over navbar links
+$body-bg: $tan; // page background 
+$body-color: $brown; // page text 
+$footer-bg: $green; // footer 
+$link-color: $darkgreen; // hyperlinks
+
+/*-- scss:rules --*/
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $basker;
+  color: $brown;
+}
+
+body {
+  font-family: $basker;   
+  color: $brown;          
+  font-size: 1.1rem;     
+  line-height: 1.6;
+}
+
+.custom-line {
+  border-style: solid;
+  border-top: 3px solid $brown;
+}
+
+/*quote*/
+.about-entity::after {
+  content: '"The past you\'ve lost will never come back.\A I myself have made so many mistakes, but we can learn from the past so we don\'t repeat it"\A -殺せんせー';
+  white-space: pre;
+  display: block;
+  margin-top: 1.5em;
+  padding-top: 1em;
+  font-style: italic;
+  border-top: 0.8px solid $brown;
+  font-size: 0.8em;
+  color: $brown;
+  text-align: center;
+}
+

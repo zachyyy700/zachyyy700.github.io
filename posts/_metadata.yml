@@ -1,0 +1,10 @@
+
+# re-render posts only when a change to source file is made
+freeze: auto
+
+# enable banner style title blocks
+title-block-banner: true
+
+author:
+  - name: Zach Loo
+    affiliation: Master of Environmental Data Science @ The Bren School, UCSB

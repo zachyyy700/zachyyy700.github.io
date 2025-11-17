@@ -1,0 +1,66 @@
+---
+title: "Curriculum Vitae"
+editor: source
+---
+
+------------------------------------------------------------------------
+
+# Education
+
+**Master of Environmental Data Science Student - UC Santa Barbara**, Bren School of Environmental Science & Management \| UC Santa Barbara (*2025-Present*)
+
+
+
+**B.S. Global Environmental Science - Environmental Health Sciences** \| University of Hawaiʻi at Mānoa (*2020-2024*)
+
+
+
+------------------------------------------------------------------------
+
+# Experience
+
+**Environmental Scientist Intern** - GSI Service Group, Honolulu, HI (6/24 – 12/24)
+
+- Assisted with various projects in environmental consulting, contracted by University of Hawaii, US Navy, & US Army Corps of Engineers
+
+- Collaborated with a team of environmental scientists to assure quality data and sample collection
+
+- Supported operations by drafting project work plans, coordinating with suppliers for field projects, and ensuring timely communication to meet project objectives
+
+**Sustainability Data Science Intern** - Chaminade University, Honolulu, HI (9/24 – 12/24)
+
+- Collaborated with a small team and faculty mentor on mapping plastic marine debris with machine learning
+
+- Utilized RStudio for investigative research and data analysis
+
+- Applied data analysis skills to address the UN’s Sustainable Development Goals
+
+**Undergraduate Thesis Project** - University of Hawaiʻi at Mānoa, Honolulu, HI (3/23 – 12/24)
+
+- Conducted an in-depth literature review on fecal microorganism indicators and their application in water quality assessment
+
+- Utilized RStudio to assess water quality within an urban watershed and the relationship between land use composition
+
+- Collaborated with faculty advisors to ensure the completion of thesis by December 2024
+
+**Valet Attendant** - Prestige Valet Service, Honolulu, HI (3/21 – 6/24)
+
+- Executed quick and safe parking/retreival of vehicles, consistently meeting time constraints and maintaining customer satisfaction
+
+- Cooperated with fellow valets and management to optimize parking procedures
+
+------------------------------------------------------------------------
+
+# Skills
+
+------------------------------------------------------------------------
+
+# Awards & Certificates
+
+**Eagle Scout Award** \| *Scouting America*
+
+**SDG Analytics in R** \| *Chaminade University*
+
+**Dean's List** \| *University of Hawaiʻi*
+
+------------------------------------------------------------------------

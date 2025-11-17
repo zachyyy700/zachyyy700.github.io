@@ -1,0 +1,32 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Zach Loo"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "About"
+        href: about.qmd
+      - text: "CV"
+        href: vitae.qmd
+      - text: "The Blog"
+        href: posts.qmd
+  page-footer: 
+    left: Copyright 2025, Zachary Loo
+    right: This website is built with Quarto and GitHub Pages
+
+format:
+  html:
+    theme: 
+      - minty
+      - styles.scss
+    mainfont: Cormorant Garamond
+    css: styles.css
+    toc: true
+    page-layout: full
+
+editor: visual
+

@@ -1,0 +1,9 @@
+---
+title: "Zach's Epic Blog"
+listing: 
+  contents: posts
+  type: grid
+  sort: "date desc"
+  categories: true
+---
+

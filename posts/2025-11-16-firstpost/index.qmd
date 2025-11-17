@@ -1,0 +1,9 @@
+---
+title: "First Blog Post"
+description: "Post Description"
+date: 11-16-2025
+categories: [Quarto, R, MEDS]
+image: rodrick.jpeg
+---
+
+Super awesome blog text.
