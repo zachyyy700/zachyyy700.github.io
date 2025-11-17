@@ -10,6 +10,8 @@ image: rodrick.jpeg
 
 ::: column
 **Congrats, you’ve made it this deep into my website, I'm so glad you’re here! This first post serves as the very birth of my blog, soooo stay tuned for future posts!! Bye love you!**
+
+Another change.
 :::
 
 ::: column
