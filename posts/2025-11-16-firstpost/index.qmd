@@ -9,7 +9,7 @@ image: rodrick.jpeg
 ::: columns
 
 ::: column
-**Congrats, you’ve made it this deep into my website, I'm so glad you’re here! This first blog post serves as the very birth of my blog. Soooo stay tuned for future posts!! Bye love you!**
+**Congrats, you’ve made it this deep into my website, I'm so glad you’re here! This first post serves as the very birth of my blog, soooo stay tuned for future posts!! Bye love you!**
 :::
 
 ::: column
