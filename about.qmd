@@ -3,18 +3,15 @@ title: "About"
 format: html
 ---
 
-::::: columns
-::: column
+<img src="media/deadmans.png" class = "about-right-image">
+
 I grew up on Oʻahu, Hawaiʻi, surrounded by beautiful landscapes that sparked my passion for the health of our environment through data insights. My first experience with computers and coding was in middle-school, which was learning Minecraft cheat commands & syntax. This began a phase in my life where I started to love learning about the inner-workings of things and seeing how I could tinker them to my liking. Even if the field of interest seemed so vast, I loved learning everything I could. This continued in highschool where I got super into my two AP classes, Calculus & Physics. Although difficult subjects, I saw beauty in the complexity of calculus equations, classical physics, & trig relationships. I also credit my awesome teachers at the time because not only did they make the material easy to learn, but I could tell they also had the same passion for their subject as I did. Towards the end of high-school, I initially wanted to go into the medical field. Once again, I took it upon myself to learn as much as I could about the human body and medicine. Then, I took AP Environmental Science class and thought the field was just as interesting and impactful as medicine.
 
-I earned a B.S. in Global Environmental Science from the University of Hawaiʻi at Mānoa where I received a formal introduction to environmental systems, working with data, and coding.
-:::
+I earned a B.S. in Global Environmental Science from the University of Hawaiʻi at Mānoa where I received a formal introduction to environmental systems, working with data, and coding. 
 
-::: column
-![Hike Views, East Oʻahu](media/deadmans.png){width="80%" style="margin-bottom: 1rem;"}
-![Greenery, Kāneʻohe, Oʻahu](media/hoomaluhia.png){width=80%}
-:::
-:::::
+
+
+
 
 #### Hobbies
 
