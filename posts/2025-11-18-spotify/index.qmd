@@ -1,0 +1,47 @@
+---
+title: "Spotify on Webpages"
+description: "Attempting to get some Spotify data to appear on here."
+date: 11-18-2025
+categories: [R, Music]
+image: spongebob-floating.jpeg
+draft: true
+---
+
+### Full size
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+
+</iframe>
+
+### Compact
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+
+</iframe>
+
+## Using `{spotifyr}` package
+
+```{r}
+library(spotifyr) #API interaction
+library(tidyverse)
+source(here::here("posts/2025-11-18-spotify/keys.R")) # API key
+
+```
+
+```{r eval=FALSE}
+# Setup client ID & Secret
+Sys.setenv(SPOTIFY_CLIENT_ID = SPOTIFY_CLIENT_ID)
+Sys.setenv(SPOTIFY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET)
+```
+
+```{r}
+# Store code & token after setting up id & secret
+auth_code <- get_spotify_authorization_code(scope = scopes()[c(1:19)])
+
+access_token <- get_spotify_access_token()
+```
+
+```{r}
+my_id <- 'zachylooloo'
+my_plists <- get_user_playlists(my_id)
+```

@@ -8,3 +8,6 @@
 /.quarto/
 
 **/*.quarto_ipynb
+
+# Spotify source
+/posts/2025-11-18-spotify/keys.R
