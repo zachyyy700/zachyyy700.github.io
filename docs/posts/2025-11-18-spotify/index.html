@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -172,8 +207,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#full-size" id="toc-full-size" class="nav-link active" data-scroll-target="#full-size">Full size</a></li>
-  <li><a href="#compact" id="toc-compact" class="nav-link" data-scroll-target="#compact">Compact</a></li>
+  <li><a href="#using-spotifyr-package" id="toc-using-spotifyr-package" class="nav-link active" data-scroll-target="#using-spotifyr-package">Using <code>{spotifyr}</code> package</a>
+  <ul class="collapse">
+  <li><a href="#localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025" id="toc-localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025" class="nav-link" data-scroll-target="#localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025">localhost string not allowed in Spotify redirect URI’s as of April 9th, 2025</a></li>
+  </ul></li>
+  <li><a href="#my-top-tracks" id="toc-my-top-tracks" class="nav-link" data-scroll-target="#my-top-tracks">My Top Tracks</a></li>
   </ul>
 </nav>
     </div>
@@ -184,14 +222,84 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="full-size" class="level3">
-<h3 class="anchored" data-anchor-id="full-size">Full size</h3>
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
-</iframe>
+<section id="using-spotifyr-package" class="level2">
+<h2 class="anchored" data-anchor-id="using-spotifyr-package">Using <code>{spotifyr}</code> package</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spotifyr) <span class="co">#API interaction</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr) <span class="co"># Troubleshooting redirect url</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts/2025-11-18-spotify/keys.R"</span>)) <span class="co"># My API keys</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup client ID &amp; Secret in keys.R</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">SPOTIFY_CLIENT_ID =</span> SPOTIFY_CLIENT_ID)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">SPOTIFY_CLIENT_SECRET =</span> SPOTIFY_CLIENT_SECRET)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025" class="level3">
+<h3 class="anchored" data-anchor-id="localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025">localhost string not allowed in Spotify redirect URI’s as of April 9th, 2025</h3>
+<p><a href="https://github.com/charlie86/spotifyr/issues/224">See this GitHub Issue</a></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get_spotify_authorization_code_fixed <span class="ot">&lt;-</span> <span class="cf">function</span> (<span class="at">client_id =</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPOTIFY_CLIENT_ID"</span>), <span class="at">client_secret =</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPOTIFY_CLIENT_SECRET"</span>), </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">scope =</span> <span class="fu">scopes</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>)]) <span class="co"># Trying Sam's scopes in newly defined function</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    endpoint <span class="ot">&lt;-</span> <span class="fu">oauth_endpoint</span>(<span class="at">authorize =</span> <span class="st">"https://accounts.spotify.com/authorize"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">access =</span> <span class="st">"https://accounts.spotify.com/api/token"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    app <span class="ot">&lt;-</span> <span class="fu">oauth_app</span>(<span class="st">"spotifyr"</span>, client_id, client_secret, <span class="at">redirect_uri =</span> <span class="st">"http://127.0.0.1:1410/"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    token <span class="ot">&lt;-</span> (purrr<span class="sc">::</span><span class="fu">safely</span>(<span class="at">.f =</span> oauth2<span class="fl">.0</span>_token))(<span class="at">endpoint =</span> endpoint, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">app =</span> app, <span class="at">scope =</span> scope)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(token<span class="sc">$</span>error)) {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        token<span class="sc">$</span>error</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        token<span class="sc">$</span>result</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>auth_code <span class="ot">&lt;-</span>  <span class="fu">get_spotify_authorization_code_fixed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Use <code>auth_code</code> generated from fixed authorization code function when calling <code>{spotifyr}</code> functions.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get list of my playlists</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>playlists <span class="ot">&lt;-</span> <span class="fu">get_my_playlists</span>(<span class="at">authorization =</span> auth_code)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get top artists</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>top_artists <span class="ot">&lt;-</span> <span class="fu">get_my_top_artists_or_tracks</span>(<span class="at">type =</span> <span class="st">"artists"</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">limit =</span> <span class="dv">10</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">time_range =</span> <span class="st">"medium_term"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">authorization =</span> auth_code)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get top tracks</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>top_tracks <span class="ot">&lt;-</span> <span class="fu">get_my_top_artists_or_tracks</span>(<span class="at">type =</span> <span class="st">"tracks"</span>, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">limit =</span> <span class="dv">5</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">time_range =</span> <span class="st">"medium_term"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">authorization =</span> auth_code)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export top tracks as csv</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in my csv</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>zachs_tracks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'posts'</span>, <span class="st">'2025-11-18-spotify'</span>, <span class="st">'zach_tracks.csv'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>track_ids <span class="ot">&lt;-</span> zachs_tracks<span class="sc">$</span>id</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="compact" class="level3">
-<h3 class="anchored" data-anchor-id="compact">Compact</h3>
+</section>
+<section id="my-top-tracks" class="level2">
+<h2 class="anchored" data-anchor-id="my-top-tracks">My Top Tracks</h2>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/545SZ72OF32Pbej9aQcjtF?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4YUv5XAsZEXq88alNkIXQf?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2DqhE7xzpGNsKYbptqblJg?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
 
 

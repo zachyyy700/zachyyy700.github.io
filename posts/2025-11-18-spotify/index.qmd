@@ -5,19 +5,10 @@ date: 11-18-2025
 categories: [R, Music]
 image: spongebob-floating.jpeg
 draft: true
+execute:
+  message: false
+  warning: false
 ---
-
-### Full size
-
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
-
-</iframe>
-
-### Compact
-
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
-
-</iframe>
 
 ## Using `{spotifyr}` package
 
@@ -29,12 +20,18 @@ source(here::here("posts/2025-11-18-spotify/keys.R")) # My API keys
 
 ```
 
+```{r eval=FALSE}
+# Setup client ID & Secret in keys.R
+Sys.setenv(SPOTIFY_CLIENT_ID = SPOTIFY_CLIENT_ID)
+Sys.setenv(SPOTIFY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET)
+```
+
 ### localhost string not allowed in Spotify redirect URI's as of April 9th, 2025 
 
 [See this GitHub Issue](https://github.com/charlie86/spotifyr/issues/224)
 
-```{r}
-get_spotify_authorization_code2 <- function (client_id = Sys.getenv("SPOTIFY_CLIENT_ID"), client_secret = Sys.getenv("SPOTIFY_CLIENT_SECRET"), 
+```{r eval=FALSE}
+get_spotify_authorization_code_fixed <- function (client_id = Sys.getenv("SPOTIFY_CLIENT_ID"), client_secret = Sys.getenv("SPOTIFY_CLIENT_SECRET"), 
     scope = scopes()[c(1:19)]) # Trying Sam's scopes in newly defined function
 {
     endpoint <- oauth_endpoint(authorize = "https://accounts.spotify.com/authorize", 
@@ -53,25 +50,17 @@ get_spotify_authorization_code2 <- function (client_id = Sys.getenv("SPOTIFY_CLI
 
 
 ```{r eval=FALSE}
-# Setup client ID & Secret
-Sys.setenv(SPOTIFY_CLIENT_ID = SPOTIFY_CLIENT_ID)
-Sys.setenv(SPOTIFY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET)
-
+auth_code <-  get_spotify_authorization_code_fixed()
 ```
 
-```{r}
-auth_code <-  get_spotify_authorization_code2()
-```
+Use `auth_code` generated from fixed authorization code function when calling `{spotifyr}` functions.
 
-
-`get_my_profile()` now works but need to specify fixed authorization function in argument.
-
-```{r}
+```{r eval=FALSE}
 # Get list of my playlists
 playlists <- get_my_playlists(authorization = auth_code)
 ```
 
-```{r}
+```{r eval=FALSE}
 # Get top artists
 top_artists <- get_my_top_artists_or_tracks(type = "artists", 
                                             limit = 10,
@@ -79,12 +68,34 @@ top_artists <- get_my_top_artists_or_tracks(type = "artists",
                                             authorization = auth_code)
 ```
 
-```{r}
+```{r eval=FALSE}
 # Get top tracks
 top_tracks <- get_my_top_artists_or_tracks(type = "tracks", 
-                                            limit = 10,
+                                            limit = 5,
                                             time_range = "medium_term",
                                             authorization = auth_code)
 ```
 
+```{r}
+# Export top tracks as csv
+#write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')
 
+# Read in my csv
+zachs_tracks <- read_csv(here::here('posts', '2025-11-18-spotify', 'zach_tracks.csv'))
+```
+
+``` {r}
+track_ids <- zachs_tracks$id
+```
+
+## My Top Tracks
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/545SZ72OF32Pbej9aQcjtF?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4YUv5XAsZEXq88alNkIXQf?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2DqhE7xzpGNsKYbptqblJg?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
