@@ -2,6 +2,7 @@
 title: "Spotify on Webpages"
 description: "Attempting to get some Spotify data to appear on here."
 date: 11-18-2025
+editor: source
 categories: [R, Music]
 image: spongebob-floating.jpeg
 draft: true
@@ -16,6 +17,7 @@ execute:
 library(spotifyr) #API interaction
 library(tidyverse)
 library(httr) # Troubleshooting redirect url
+library(kableExtra)
 source(here::here("posts/2025-11-18-spotify/keys.R")) # My API keys
 
 ```
@@ -26,7 +28,7 @@ Sys.setenv(SPOTIFY_CLIENT_ID = SPOTIFY_CLIENT_ID)
 Sys.setenv(SPOTIFY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET)
 ```
 
-### localhost string not allowed in Spotify redirect URI's as of April 9th, 2025 
+### localhost string not allowed in Spotify redirect URI's as of April 9th, 2025
 
 [See this GitHub Issue](https://github.com/charlie86/spotifyr/issues/224)
 
@@ -48,7 +50,6 @@ get_spotify_authorization_code_fixed <- function (client_id = Sys.getenv("SPOTIF
 }
 ```
 
-
 ```{r eval=FALSE}
 auth_code <-  get_spotify_authorization_code_fixed()
 ```
@@ -57,7 +58,9 @@ Use `auth_code` generated from fixed authorization code function when calling `{
 
 ```{r eval=FALSE}
 # Get list of my playlists
-playlists <- get_my_playlists(authorization = auth_code)
+playlists <- get_my_playlists(authorization = auth_code) |> 
+  filter(owner.display_name == "zachylooloo") |> 
+  select(c(name, tracks.total))
 ```
 
 ```{r eval=FALSE}
@@ -65,37 +68,67 @@ playlists <- get_my_playlists(authorization = auth_code)
 top_artists <- get_my_top_artists_or_tracks(type = "artists", 
                                             limit = 10,
                                             time_range = "medium_term",
-                                            authorization = auth_code)
+                                            authorization = auth_code) |> 
+  select(c(name, genres, popularity, followers.total))
+
 ```
 
 ```{r eval=FALSE}
 # Get top tracks
 top_tracks <- get_my_top_artists_or_tracks(type = "tracks", 
-                                            limit = 5,
+                                            limit = 10,
                                             time_range = "medium_term",
                                             authorization = auth_code)
 ```
 
 ```{r}
 # Export top tracks as csv
-#write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')
+write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')
+# Export top artists as csv
+write_csv(top_artists, file = 'posts/2025-11-18-spotify/zach_artists.csv')
 
-# Read in my csv
+# Read in my csvs
 zachs_tracks <- read_csv(here::here('posts', '2025-11-18-spotify', 'zach_tracks.csv'))
+zachs_artists <- read_csv(here::here('posts', '2025-11-18-spotify', 'zach_artists.csv'))
 ```
 
-``` {r}
+```{r}
+# Extract list of top 5 track ids
 track_ids <- zachs_tracks$id
 ```
 
+```{r}
+zachs_tracks
+```
+
+```{r}
+zachs_artists |> 
+    select(c(name, genres, popularity, followers.total)) |> 
+  kable()
+```
+
+
 ## My Top Tracks
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</iframe>
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/545SZ72OF32Pbej9aQcjtF?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4YUv5XAsZEXq88alNkIXQf?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</iframe>
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2DqhE7xzpGNsKYbptqblJg?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/545SZ72OF32Pbej9aQcjtF?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+
+</iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4YUv5XAsZEXq88alNkIXQf?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+
+</iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2DqhE7xzpGNsKYbptqblJg?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+
+</iframe>
+
+### Numerous endpoints were deprecated in November 2024, including Get Audio Features.
+

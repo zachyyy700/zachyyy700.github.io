@@ -6,8 +6,7 @@ categories: [Quarto, R, MEDS]
 image: rodrick.jpeg
 ---
 
-::: columns
-
+::::: columns
 ::: column
 **Congrats, you’ve made it this deep into my website, I'm so glad you’re here! This first post serves as the very birth of my blog, soooo stay tuned for future posts!! Bye love you!**
 :::
@@ -15,5 +14,4 @@ image: rodrick.jpeg
 ::: column
 ![](legoman.jpeg)
 :::
-
-:::
+:::::

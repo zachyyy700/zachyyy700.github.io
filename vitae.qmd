@@ -7,11 +7,11 @@ editor: source
 
 # Education
 
-**Master of Environmental Data Science Student - UC Santa Barbara**, Bren School of Environmental Science & Management \| UC Santa Barbara (*2025-Present*)
+**Master of Environmental Data Science Student - UC Santa Barbara**, Bren School of Environmental Science & Management \| UC Santa Barbara (2025-Present)
 
 
 
-**B.S. Global Environmental Science - Environmental Health Sciences** \| University of Hawaiʻi at Mānoa (*2020-2024*)
+**B.S. Global Environmental Science - Environmental Health Sciences** \| University of Hawaiʻi at Mānoa (2020-2024)
 
 
 
@@ -53,14 +53,16 @@ editor: source
 
 # Skills
 
+- **Data Analysis**: Proficient in analyzing large datasets using software such as R and Python to derive meaningful insights and trends for environmental research
+
 ------------------------------------------------------------------------
 
 # Awards & Certificates
 
-**Eagle Scout Award** \| *Scouting America*
+**Eagle Scout Award** \| Scouting America (2017)
 
-**SDG Analytics in R** \| *Chaminade University*
+**SDG Analytics in R** \| Chaminade University (2024)
 
-**Dean's List** \| *University of Hawaiʻi*
+**Dean's List** \| University of Hawaiʻi (2020 - 2024)
 
-------------------------------------------------------------------------
+
