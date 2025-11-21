@@ -1,11 +1,11 @@
-name,genres,popularity,followers.total
-$uicideboy$,,84,9003784
-Masayuki Suzuki,,51,315660
-Ado,,76,6787122
-ILLENIUM,,71,1634846
-Sawano Hiroyuki,,66,733079
-LiSA,,69,3616956
-Ray Volpe,,53,173469
-Crankdat,,53,200310
-SLANDER,,64,594695
-Seven Lions,,59,523848
+name,genre_string,popularity,followers.total
+$uicideboy$,"emo rap, horrorcore, cloud rap, trap metal, underground hip hop",84,9006324
+Masayuki Suzuki,"anime, j-pop, kayokyoku, city pop",51,315706
+Ado,"j-pop, anime, vocaloid, j-rock",76,6790414
+ILLENIUM,"melodic bass, future bass, edm, techno",71,1635229
+Sawano Hiroyuki,"anime, soundtrack",66,733386
+LiSA,"anime, j-pop, j-rock",69,3618103
+Ray Volpe,"dubstep, riddim, deathstep, melodic bass, bass music, edm",53,173553
+Crankdat,"dubstep, riddim, deathstep, edm",53,200462
+SLANDER,"melodic bass, dubstep, future bass, edm",64,594841
+Seven Lions,"melodic bass, future bass, edm, chillstep, dubstep, techno, progressive trance",59,523928

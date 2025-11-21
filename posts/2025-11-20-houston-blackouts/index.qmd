@@ -1,0 +1,19 @@
+---
+title: "2021 Houston Blackouts"
+description: "A post for EDS 223: Geospatial Analysis"
+date: 11-20-2025
+editor: source
+categories: [R, MEDS, Geospatial]
+image: ado.jpeg
+draft: TRUE
+---
+
+# Research Question
+
+How do severe weather events disproportionately affect disadvantaged communities?
+
+# Background
+
+# Data
+
+# Analysis

@@ -1,7 +1,8 @@
 ---
 title: "Spotify on Webpages"
 description: "Attempting to get some Spotify data to appear on here."
-date: 11-18-2025
+date: 11-20-2025
+date-modified: 11-20-2025
 editor: source
 categories: [R, Music]
 image: spongebob-floating.jpeg
@@ -11,16 +12,37 @@ execute:
   warning: false
 ---
 
-## Using `{spotifyr}` package
+# Project Overview
+
+Inspired by [Sam Muir's post](https://shmuir.github.io/projects/2024-04-13-spotify-predictions/#thoughts-and-conclusions), I am interested in extracting and displaying data from my Spotify. Similar to the annual "Spotify Wrapped" information like my top tracks played and top artists can be retrieved. Additionally, trying to get track audio features (track danceability, energy, loudness, key, etc.) like Sam did in their project.
+
+## Using the `{spotifyr}` package
+
+The `{spotifyr}` package requests data from the [Spotify API](https://developer.spotify.com/documentation/web-api) and we are able to load this data into R.
+
+
 
 ```{r}
+# Load packages
 library(spotifyr) #API interaction
 library(tidyverse)
-library(httr) # Troubleshooting redirect url
 library(kableExtra)
+library(httr) # Troubleshooting redirect url
 source(here::here("posts/2025-11-18-spotify/keys.R")) # My API keys
 
 ```
+
+If you'd like to follow along, do this set up:
+
+1. Create a Spotify Developer Account on the [Spotify Developer Website](https://developer.spotify.com/).
+
+2. Create an app with a title, description, and redirect url. 
+
+  - As of April 9th, 2025, localhost string not allowed in Spotify redirect URI's. [See this GitHub Issue](https://github.com/charlie86/spotifyr/issues/224). I set the redirect as http://127.0.0.1:1410/ and I followed the solution in the GitHub Issue.
+
+3. Save your client ID & client secret. 
+
+4. I sourced these keys from a separate R script to keep them private. The following chunk is how to set up the keys as environmental variables in R.
 
 ```{r eval=FALSE}
 # Setup client ID & Secret in keys.R
@@ -28,11 +50,8 @@ Sys.setenv(SPOTIFY_CLIENT_ID = SPOTIFY_CLIENT_ID)
 Sys.setenv(SPOTIFY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET)
 ```
 
-### localhost string not allowed in Spotify redirect URI's as of April 9th, 2025
-
-[See this GitHub Issue](https://github.com/charlie86/spotifyr/issues/224)
-
 ```{r eval=FALSE}
+# From GitHub Issue, re-define authorization function
 get_spotify_authorization_code_fixed <- function (client_id = Sys.getenv("SPOTIFY_CLIENT_ID"), client_secret = Sys.getenv("SPOTIFY_CLIENT_SECRET"), 
     scope = scopes()[c(1:19)]) # Trying Sam's scopes in newly defined function
 {
@@ -50,42 +69,63 @@ get_spotify_authorization_code_fixed <- function (client_id = Sys.getenv("SPOTIF
 }
 ```
 
+Now running the fixed function should work.
+
 ```{r eval=FALSE}
 auth_code <-  get_spotify_authorization_code_fixed()
 ```
 
-Use `auth_code` generated from fixed authorization code function when calling `{spotifyr}` functions.
+Use `auth_code` generated from the fixed authorization code function and we can now call (some) `{spotifyr}` functions!
 
 ```{r eval=FALSE}
-# Get list of my playlists
-playlists <- get_my_playlists(authorization = auth_code) |> 
-  filter(owner.display_name == "zachylooloo") |> 
-  select(c(name, tracks.total))
-```
+# Define function to extract genres from genre list column
+create_genre_string <- function(genre_list) {
+  paste(genre_list, collapse = ", ")
+}
 
-```{r eval=FALSE}
 # Get top artists
 top_artists <- get_my_top_artists_or_tracks(type = "artists", 
                                             limit = 10,
                                             time_range = "medium_term",
                                             authorization = auth_code) |> 
-  select(c(name, genres, popularity, followers.total))
-
+  mutate(genre_string = map_chr(genres, create_genre_string)) |> 
+  select(c(name, genre_string, popularity, followers.total))
+  
 ```
 
 ```{r eval=FALSE}
+# Define function to extract artist names from artist dataframe column
+create_artist_string <- function(artist_df) {
+  paste(artist_df$name, collapse = ", ")
+}
+
 # Get top tracks
 top_tracks <- get_my_top_artists_or_tracks(type = "tracks", 
                                             limit = 10,
                                             time_range = "medium_term",
-                                            authorization = auth_code)
+                                            authorization = auth_code) |> 
+  mutate(artist_list = map_chr(artists, create_artist_string)) |> 
+  select(c(name, artist_list, album.name, album.release_date))
+
 ```
 
+Other cool functions!
+
+```{r eval=FALSE}
+# Get current playing track
+current <- get_my_currently_playing(authorization = auth_code)
+
+# Get recently played tracks
+recents <- get_my_recently_played(limit = 3, authorization = auth_code)
+```
+
+Since I had to source the keys I can't produce a rendered, up to date output. But I'll come back to this post, re-run everything, and see how things change. So instead, I have to export the R objects as a csv and read them in.
+
 ```{r}
-# Export top tracks as csv
-write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')
-# Export top artists as csv
-write_csv(top_artists, file = 'posts/2025-11-18-spotify/zach_artists.csv')
+# # Export top tracks as csv
+# write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')
+# # Export top artists as csv
+# write_csv(top_artists, file = 'posts/2025-11-18-spotify/zach_artists.csv')
 
 # Read in my csvs
 zachs_tracks <- read_csv(here::here('posts', '2025-11-18-spotify', 'zach_tracks.csv'))
@@ -93,28 +133,18 @@ zachs_artists <- read_csv(here::here('posts', '2025-11-18-spotify', 'zach_artist
 ```
 
 ```{r}
-# Extract list of top 5 track ids
-track_ids <- zachs_tracks$id
+zachs_tracks |> 
+  kbl(table.attr = 'class="spotify-table"',
+      col.names = c("Track Name", "Artists", "Album Name", "Album Release Date"))
 ```
 
-```{r}
-zachs_tracks
-```
+## My Top 5 Tracks
 
-```{r}
-zachs_artists |> 
-    select(c(name, genres, popularity, followers.total)) |> 
-  kable()
-```
-
-
-## My Top Tracks
-
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 
 </iframe>
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 
 </iframe>
 
@@ -126,9 +156,32 @@ zachs_artists |>
 
 </iframe>
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2DqhE7xzpGNsKYbptqblJg?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/5mSRLKGJ0Uc7FW7SlJFKaP?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 
 </iframe>
 
+*I put these in manually through the [Creating an Embed](https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed) feature from Spotify.*
+
+```{r}
+zachs_artists |> 
+  mutate(followers.total = scales::comma(followers.total)) |> 
+  kbl(table.attr = 'class="spotify-table"',
+      col.names = c("Artist Name", "Genres", "Popularity", "Total Followers"))
+```
+
+## My Top 5 Artists
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/1VPmR4DJC1PlOtd0IADAO0?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7HRu4Npbza5TBWn74TkAOF?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/6mEQK9m2krja6X1cfsAjfl?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/45eNHdiiabvmbp4erw26rg?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/0Riv2KnFcLZA3JSVryRg4y?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 ### Numerous endpoints were deprecated in November 2024, including Get Audio Features.
+
+
 

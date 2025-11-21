@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Zach Loo">
-<meta name="dcterms.date" content="2025-11-18">
+<meta name="dcterms.date" content="2025-11-20">
 <meta name="description" content="Attempting to get some Spotify data to appear on here.">
 
 <title>Spotify on Webpages – Zach Loo</title>
@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-3bd1e4c571c1b93ffde705d07bbd9cef.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-0e60c0a77aa0816e089f8a364c49d3e2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,6 +106,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <meta name="quarto:status" content="draft">
 
 
@@ -191,10 +193,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 18, 2025</p>
+        <p class="date">November 20, 2025</p>
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">November 20, 2025</p>
+      </div>
+    </div>
       
     </div>
     
@@ -207,13 +215,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#using-spotifyr-package" id="toc-using-spotifyr-package" class="nav-link active" data-scroll-target="#using-spotifyr-package">Using <code>{spotifyr}</code> package</a>
+  <li><a href="#project-overview" id="toc-project-overview" class="nav-link active" data-scroll-target="#project-overview">Project Overview</a>
   <ul class="collapse">
-  <li><a href="#localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025" id="toc-localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025" class="nav-link" data-scroll-target="#localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025">localhost string not allowed in Spotify redirect URI’s as of April 9th, 2025</a></li>
-  </ul></li>
-  <li><a href="#my-top-tracks" id="toc-my-top-tracks" class="nav-link" data-scroll-target="#my-top-tracks">My Top Tracks</a>
+  <li><a href="#using-the-spotifyr-package" id="toc-using-the-spotifyr-package" class="nav-link" data-scroll-target="#using-the-spotifyr-package">Using the <code>{spotifyr}</code> package</a></li>
+  <li><a href="#my-top-5-tracks" id="toc-my-top-5-tracks" class="nav-link" data-scroll-target="#my-top-5-tracks">My Top 5 Tracks</a></li>
+  <li><a href="#my-top-5-artists" id="toc-my-top-5-artists" class="nav-link" data-scroll-target="#my-top-5-artists">My Top 5 Artists</a>
   <ul class="collapse">
   <li><a href="#numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features." id="toc-numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features." class="nav-link" data-scroll-target="#numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features.">Numerous endpoints were deprecated in November 2024, including Get Audio Features.</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -225,98 +234,298 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="using-spotifyr-package" class="level2">
-<h2 class="anchored" data-anchor-id="using-spotifyr-package">Using <code>{spotifyr}</code> package</h2>
+<section id="project-overview" class="level1">
+<h1>Project Overview</h1>
+<p>Inspired by <a href="https://shmuir.github.io/projects/2024-04-13-spotify-predictions/#thoughts-and-conclusions">Sam Muir’s post</a>, I am interested in extracting and displaying data from my Spotify. Similar to the annual “Spotify Wrapped” information like my top tracks played and top artists can be retrieved. Addiontially, getting track audio features like Sam did in their project.</p>
+<section id="using-the-spotifyr-package" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-spotifyr-package">Using the <code>{spotifyr}</code> package</h2>
+<p>The <code>{spotifyr}</code> package requests data from the <a href="https://developer.spotify.com/documentation/web-api">Spotify API</a> and we are able to load this data into R.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spotifyr) <span class="co">#API interaction</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr) <span class="co"># Troubleshooting redirect url</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spotifyr) <span class="co">#API interaction</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts/2025-11-18-spotify/keys.R"</span>)) <span class="co"># My API keys</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr) <span class="co"># Troubleshooting redirect url</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"posts/2025-11-18-spotify/keys.R"</span>)) <span class="co"># My API keys</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>If you’d like to follow along, do this set up:</p>
+<ol type="1">
+<li><p>Create a Spotify Developer Account on the <a href="https://developer.spotify.com/">Spotify Developer Website</a>.</p></li>
+<li><p>Create an app with a title, description, and redirect url.</p></li>
+</ol>
+<ul>
+<li>As of April 9th, 2025, localhost string not allowed in Spotify redirect URI’s. <a href="https://github.com/charlie86/spotifyr/issues/224">See this GitHub Issue</a>. I set the redirect as http://127.0.0.1:1410/ and I followed the solution in the GitHub Issue.</li>
+</ul>
+<ol start="3" type="1">
+<li><p>Save your client ID &amp; client secret.</p></li>
+<li><p>I sourced these keys from a separate R script to keep them private. The following chunk is how to set up the keys as environmental variables in R.</p></li>
+</ol>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup client ID &amp; Secret in keys.R</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">SPOTIFY_CLIENT_ID =</span> SPOTIFY_CLIENT_ID)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">SPOTIFY_CLIENT_SECRET =</span> SPOTIFY_CLIENT_SECRET)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025" class="level3">
-<h3 class="anchored" data-anchor-id="localhost-string-not-allowed-in-spotify-redirect-uris-as-of-april-9th-2025">localhost string not allowed in Spotify redirect URI’s as of April 9th, 2025</h3>
-<p><a href="https://github.com/charlie86/spotifyr/issues/224">See this GitHub Issue</a></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get_spotify_authorization_code_fixed <span class="ot">&lt;-</span> <span class="cf">function</span> (<span class="at">client_id =</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPOTIFY_CLIENT_ID"</span>), <span class="at">client_secret =</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPOTIFY_CLIENT_SECRET"</span>), </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">scope =</span> <span class="fu">scopes</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>)]) <span class="co"># Trying Sam's scopes in newly defined function</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    endpoint <span class="ot">&lt;-</span> <span class="fu">oauth_endpoint</span>(<span class="at">authorize =</span> <span class="st">"https://accounts.spotify.com/authorize"</span>, </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">access =</span> <span class="st">"https://accounts.spotify.com/api/token"</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    app <span class="ot">&lt;-</span> <span class="fu">oauth_app</span>(<span class="st">"spotifyr"</span>, client_id, client_secret, <span class="at">redirect_uri =</span> <span class="st">"http://127.0.0.1:1410/"</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    token <span class="ot">&lt;-</span> (purrr<span class="sc">::</span><span class="fu">safely</span>(<span class="at">.f =</span> oauth2<span class="fl">.0</span>_token))(<span class="at">endpoint =</span> endpoint, </span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">app =</span> app, <span class="at">scope =</span> scope)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(token<span class="sc">$</span>error)) {</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        token<span class="sc">$</span>error</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        token<span class="sc">$</span>result</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># From GitHub Issue, re-define authorization function</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>get_spotify_authorization_code_fixed <span class="ot">&lt;-</span> <span class="cf">function</span> (<span class="at">client_id =</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPOTIFY_CLIENT_ID"</span>), <span class="at">client_secret =</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPOTIFY_CLIENT_SECRET"</span>), </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">scope =</span> <span class="fu">scopes</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>)]) <span class="co"># Trying Sam's scopes in newly defined function</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    endpoint <span class="ot">&lt;-</span> <span class="fu">oauth_endpoint</span>(<span class="at">authorize =</span> <span class="st">"https://accounts.spotify.com/authorize"</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">access =</span> <span class="st">"https://accounts.spotify.com/api/token"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    app <span class="ot">&lt;-</span> <span class="fu">oauth_app</span>(<span class="st">"spotifyr"</span>, client_id, client_secret, <span class="at">redirect_uri =</span> <span class="st">"http://127.0.0.1:1410/"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    token <span class="ot">&lt;-</span> (purrr<span class="sc">::</span><span class="fu">safely</span>(<span class="at">.f =</span> oauth2<span class="fl">.0</span>_token))(<span class="at">endpoint =</span> endpoint, </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">app =</span> app, <span class="at">scope =</span> scope)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(token<span class="sc">$</span>error)) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        token<span class="sc">$</span>error</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        token<span class="sc">$</span>result</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Now running the fixed function should work.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>auth_code <span class="ot">&lt;-</span>  <span class="fu">get_spotify_authorization_code_fixed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Use <code>auth_code</code> generated from fixed authorization code function when calling <code>{spotifyr}</code> functions.</p>
+<p>Use <code>auth_code</code> generated from the fixed authorization code function and we can now call (some) <code>{spotifyr}</code> functions!</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get list of my playlists</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>playlists <span class="ot">&lt;-</span> <span class="fu">get_my_playlists</span>(<span class="at">authorization =</span> auth_code) <span class="sc">|&gt;</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(owner.display_name <span class="sc">==</span> <span class="st">"zachylooloo"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(name, tracks.total))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define function to extract genres from genre list column</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>create_genre_string <span class="ot">&lt;-</span> <span class="cf">function</span>(genre_list) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(genre_list, <span class="at">collapse =</span> <span class="st">", "</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(playlists)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get top artists</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>top_artists <span class="ot">&lt;-</span> <span class="fu">get_my_top_artists_or_tracks</span>(<span class="at">type =</span> <span class="st">"artists"</span>, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">limit =</span> <span class="dv">10</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">time_range =</span> <span class="st">"medium_term"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">authorization =</span> auth_code) <span class="sc">|&gt;</span> </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genre_string =</span> <span class="fu">map_chr</span>(genres, create_genre_string)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(name, genre_string, popularity, followers.total))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get top artists</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>top_artists <span class="ot">&lt;-</span> <span class="fu">get_my_top_artists_or_tracks</span>(<span class="at">type =</span> <span class="st">"artists"</span>, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">limit =</span> <span class="dv">10</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">time_range =</span> <span class="st">"medium_term"</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">authorization =</span> auth_code) <span class="sc">|&gt;</span> </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(name, genres, popularity, followers.total))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(top_artists)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define function to extract artist names from artist dataframe column</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>create_artist_string <span class="ot">&lt;-</span> <span class="cf">function</span>(artist_df) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(artist_df<span class="sc">$</span>name, <span class="at">collapse =</span> <span class="st">", "</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get top tracks</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>top_tracks <span class="ot">&lt;-</span> <span class="fu">get_my_top_artists_or_tracks</span>(<span class="at">type =</span> <span class="st">"tracks"</span>, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">limit =</span> <span class="dv">10</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">time_range =</span> <span class="st">"medium_term"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">authorization =</span> auth_code) <span class="sc">|&gt;</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">artist_list =</span> <span class="fu">map_chr</span>(artists, create_artist_string)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(name, artist_list, album.name, album.release_date))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Other cool functions!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get current playing track</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>current <span class="ot">&lt;-</span> <span class="fu">get_my_currently_playing</span>(<span class="at">authorization =</span> auth_code)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get recently played tracks</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>recents <span class="ot">&lt;-</span> <span class="fu">get_my_recently_played</span>(<span class="at">limit =</span> <span class="dv">3</span>, <span class="at">authorization =</span> auth_code)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since I had to source the keys I can’t produce a rendered, up to date output. But I’ll come back to this post, re-run everything, and see how things change. So instead, I have to export the R objects as a csv and read them in.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Export top tracks as csv</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># # Export top artists as csv</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(top_artists, file = 'posts/2025-11-18-spotify/zach_artists.csv')</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in my csvs</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>zachs_tracks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'posts'</span>, <span class="st">'2025-11-18-spotify'</span>, <span class="st">'zach_tracks.csv'</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>zachs_artists <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'posts'</span>, <span class="st">'2025-11-18-spotify'</span>, <span class="st">'zach_artists.csv'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get top tracks</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>top_tracks <span class="ot">&lt;-</span> <span class="fu">get_my_top_artists_or_tracks</span>(<span class="at">type =</span> <span class="st">"tracks"</span>, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">limit =</span> <span class="dv">5</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">time_range =</span> <span class="st">"medium_term"</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">authorization =</span> auth_code)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>zachs_tracks <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">table.attr =</span> <span class="st">'class="spotify-table"'</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Track Name"</span>, <span class="st">"Artists"</span>, <span class="st">"Album Name"</span>, <span class="st">"Album Release Date"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="spotify-table caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Track Name</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Artists</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Album Name</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Album Release Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Hey you ?, Hey sup ?</td>
+<td style="text-align: left;">Masayuki Suzuki</td>
+<td style="text-align: left;">Snazzy</td>
+<td style="text-align: left;">2024-03-27</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Red Swan</td>
+<td style="text-align: left;">YOSHIKI, HYDE</td>
+<td style="text-align: left;">Red Swan</td>
+<td style="text-align: left;">2018-10-03</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Psychedelic City</td>
+<td style="text-align: left;">Masayuki Suzuki</td>
+<td style="text-align: left;">Snazzy</td>
+<td style="text-align: left;">2024-03-27</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">YOU</td>
+<td style="text-align: left;">JOSS, Kenny Pham, KELIZA</td>
+<td style="text-align: left;">YOU</td>
+<td style="text-align: left;">2025-04-11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Full of Grace (I Refuse to Tend My Own Grave)</td>
+<td style="text-align: left;">$uicideboy$</td>
+<td style="text-align: left;">THY KINGDOM COME</td>
+<td style="text-align: left;">2025-08-01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sakura Biyori and Time Machine with Hatsune Miku</td>
+<td style="text-align: left;">Ado, Hatsune Miku</td>
+<td style="text-align: left;">Ado's Best Adobum</td>
+<td style="text-align: left;">2025-04-08</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Good Things Fall Apart vs. Sad Songs (With Said The Sky feat. Annika Wells)</td>
+<td style="text-align: left;">ILLENIUM, Jon Bellion, Said The Sky, Annika Wells</td>
+<td style="text-align: left;">ASCEND (Tour Edits)</td>
+<td style="text-align: left;">2020-06-12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Whiplash</td>
+<td style="text-align: left;">Crankdat, SOFI</td>
+<td style="text-align: left;">Whiplash</td>
+<td style="text-align: left;">2025-03-14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">風のゆくえ</td>
+<td style="text-align: left;">Ado</td>
+<td style="text-align: left;">ウタの歌 ONE PIECE FILM RED</td>
+<td style="text-align: left;">2022-08-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ichiban no Takaramono - Yui final Ver.</td>
+<td style="text-align: left;">LiSA, VISUAL ARTS / Key</td>
+<td style="text-align: left;">Ichiban no Takaramono -Yui final ver.- / Girls Dead Monster STARRING LiSA</td>
+<td style="text-align: left;">2010-12-08</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export top tracks as csv</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#write_csv(top_tracks, file = 'posts/2025-11-18-spotify/zach_tracks.csv')</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in my csv</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>zachs_tracks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'posts'</span>, <span class="st">'2025-11-18-spotify'</span>, <span class="st">'zach_tracks.csv'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract list of top 5 track ids</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>track_ids <span class="ot">&lt;-</span> zachs_tracks<span class="sc">$</span>id</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-</section>
-<section id="my-top-tracks" class="level2">
-<h2 class="anchored" data-anchor-id="my-top-tracks">My Top Tracks</h2>
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
-</iframe>
+<section id="my-top-5-tracks" class="level2">
+<h2 class="anchored" data-anchor-id="my-top-5-tracks">My Top 5 Tracks</h2>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3xX3PvWutclSNMj2PMlBMq?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0zvN9oq95bIEQjvfcdeZlX?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/545SZ72OF32Pbej9aQcjtF?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4YUv5XAsZEXq88alNkIXQf?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2DqhE7xzpGNsKYbptqblJg?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/5mSRLKGJ0Uc7FW7SlJFKaP?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<p><em>I put these in manually through the <a href="https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed">Creating an Embed</a> feature from Spotify.</em></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>zachs_artists <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">followers.total =</span> scales<span class="sc">::</span><span class="fu">comma</span>(followers.total)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">table.attr =</span> <span class="st">'class="spotify-table"'</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Artist Name"</span>, <span class="st">"Genres"</span>, <span class="st">"Popularity"</span>, <span class="st">"Total Followers"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="spotify-table caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Artist Name</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Genres</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Popularity</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Total Followers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">$uicideboy$</td>
+<td style="text-align: left;">emo rap, horrorcore, cloud rap, trap metal, underground hip hop</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: left;">9,006,324</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Masayuki Suzuki</td>
+<td style="text-align: left;">anime, j-pop, kayokyoku, city pop</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: left;">315,706</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ado</td>
+<td style="text-align: left;">j-pop, anime, vocaloid, j-rock</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">6,790,414</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ILLENIUM</td>
+<td style="text-align: left;">melodic bass, future bass, edm, techno</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">1,635,229</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sawano Hiroyuki</td>
+<td style="text-align: left;">anime, soundtrack</td>
+<td style="text-align: right;">66</td>
+<td style="text-align: left;">733,386</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LiSA</td>
+<td style="text-align: left;">anime, j-pop, j-rock</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: left;">3,618,103</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ray Volpe</td>
+<td style="text-align: left;">dubstep, riddim, deathstep, melodic bass, bass music, edm</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: left;">173,553</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Crankdat</td>
+<td style="text-align: left;">dubstep, riddim, deathstep, edm</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: left;">200,462</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SLANDER</td>
+<td style="text-align: left;">melodic bass, dubstep, future bass, edm</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: left;">594,841</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Seven Lions</td>
+<td style="text-align: left;">melodic bass, future bass, edm, chillstep, dubstep, techno, progressive trance</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: left;">523,928</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="my-top-5-artists" class="level2">
+<h2 class="anchored" data-anchor-id="my-top-5-artists">My Top 5 Artists</h2>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/1VPmR4DJC1PlOtd0IADAO0?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7HRu4Npbza5TBWn74TkAOF?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/6mEQK9m2krja6X1cfsAjfl?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/45eNHdiiabvmbp4erw26rg?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/0Riv2KnFcLZA3JSVryRg4y?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
 <section id="numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features." class="level3">
 <h3 class="anchored" data-anchor-id="numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features.">Numerous endpoints were deprecated in November 2024, including Get Audio Features.</h3>
 
 
+</section>
 </section>
 </section>
 

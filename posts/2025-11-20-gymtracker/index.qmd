@@ -1,0 +1,17 @@
+---
+title: "Good Data Collection & Building a Stats Tracker for the gym"
+description: "A small python project for gym statistics."
+date: 11-20-2025
+editor: source
+categories: [Python, Personal]
+image: cat_loading.jpeg
+draft: TRUE
+---
+
+# Introduction
+
+# Gym Data
+
+# Processing
+
+## Importance of good data collection
