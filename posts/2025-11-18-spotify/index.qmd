@@ -6,7 +6,9 @@ date-modified: 11-20-2025
 editor: source
 categories: [R, Music]
 image: spongebob-floating.jpeg
-draft: true
+citation: 
+  url: https://zachyyy700.github.io/posts/2025-11-18-spotify/
+draft: false
 execute:
   message: false
   warning: false
@@ -14,7 +16,7 @@ execute:
 
 # Project Overview
 
-Inspired by [Sam Muir's post](https://shmuir.github.io/projects/2024-04-13-spotify-predictions/#thoughts-and-conclusions), I am interested in extracting and displaying data from my Spotify. Similar to the annual "Spotify Wrapped" information like my top tracks played and top artists can be retrieved. Additionally, trying to get track audio features (track danceability, energy, loudness, key, etc.) like Sam did in their project.
+Inspired by [@muir2024] who is a MEDS alumni, I want to extract and display data from my Spotify. Similar to the annual *Spotify Wrapped* information like my top tracks played and top artists can be retrieved. Additionally, I wanna try to get track audio features (track danceability, energy, loudness, key, etc.) like Sam did in their project.
 
 ## Using the `{spotifyr}` package
 
@@ -38,7 +40,7 @@ If you'd like to follow along, do this set up:
 
 2. Create an app with a title, description, and redirect url. 
 
-  - As of April 9th, 2025, localhost string not allowed in Spotify redirect URI's. [See this GitHub Issue](https://github.com/charlie86/spotifyr/issues/224). I set the redirect as http://127.0.0.1:1410/ and I followed the solution in the GitHub Issue.
+  - As of April 9th, 2025, localhost string is not allowed in Spotify redirect URI's. [See this {spotifyr} GitHub Issue](https://github.com/charlie86/spotifyr/issues/224). I set the redirect as http://127.0.0.1:1410/ and I followed the solution in the GitHub Issue.
 
 3. Save your client ID & client secret. 
 
@@ -69,7 +71,7 @@ get_spotify_authorization_code_fixed <- function (client_id = Sys.getenv("SPOTIF
 }
 ```
 
-Now running the fixed function should work.
+Now running the fixed function should work to get an authentication code.
 
 ```{r eval=FALSE}
 auth_code <-  get_spotify_authorization_code_fixed()
@@ -160,7 +162,7 @@ zachs_tracks |>
 
 </iframe>
 
-*I put these in manually through the [Creating an Embed](https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed) feature from Spotify.*
+*I'm displaying the above Spotify content manually through the [Creating an Embed](https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed) feature from Spotify.*
 
 ```{r}
 zachs_artists |> 
@@ -181,7 +183,10 @@ zachs_artists |>
 
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/0Riv2KnFcLZA3JSVryRg4y?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-### Numerous endpoints were deprecated in November 2024, including Get Audio Features.
+## Conclusion
 
+Unfortunately, numerous endpoints in the Spotify API were deprecated in November 2024 outlined in this [Spotify for Developers Post](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api?source=post_page-----4808aadccfcb---------------------------------------), including Get Track's Audio Features (for danceability, energy, etc.). This was due to an update in Spotify's policies where they no longer wanted users to input these data into a machine learning/AI model. 
+
+However, this was still a cool project to do a little bit of wrangling in R and also a slight introduction to APIs for me. Again, I'll be re-visiting this blog post and updating it periodically to see how my Spotify stats change. Thanks for tuning in!
 
 

@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -108,7 +128,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -117,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -219,10 +238,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#using-the-spotifyr-package" id="toc-using-the-spotifyr-package" class="nav-link" data-scroll-target="#using-the-spotifyr-package">Using the <code>{spotifyr}</code> package</a></li>
   <li><a href="#my-top-5-tracks" id="toc-my-top-5-tracks" class="nav-link" data-scroll-target="#my-top-5-tracks">My Top 5 Tracks</a></li>
-  <li><a href="#my-top-5-artists" id="toc-my-top-5-artists" class="nav-link" data-scroll-target="#my-top-5-artists">My Top 5 Artists</a>
-  <ul class="collapse">
-  <li><a href="#numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features." id="toc-numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features." class="nav-link" data-scroll-target="#numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features.">Numerous endpoints were deprecated in November 2024, including Get Audio Features.</a></li>
-  </ul></li>
+  <li><a href="#my-top-5-artists" id="toc-my-top-5-artists" class="nav-link" data-scroll-target="#my-top-5-artists">My Top 5 Artists</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -236,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="project-overview" class="level1">
 <h1>Project Overview</h1>
-<p>Inspired by <a href="https://shmuir.github.io/projects/2024-04-13-spotify-predictions/#thoughts-and-conclusions">Sam Muir’s post</a>, I am interested in extracting and displaying data from my Spotify. Similar to the annual “Spotify Wrapped” information like my top tracks played and top artists can be retrieved. Addiontially, getting track audio features like Sam did in their project.</p>
+<p>Inspired by <span class="citation" data-cites="muir2024">(<a href="#ref-muir2024" role="doc-biblioref">Muir 2024</a>)</span> who is a MEDS alumni, I want to extract and display data from my Spotify. Similar to the annual <em>Spotify Wrapped</em> information like my top tracks played and top artists can be retrieved. Additionally, I wanna try to get track audio features (track danceability, energy, loudness, key, etc.) like Sam did in their project.</p>
 <section id="using-the-spotifyr-package" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-spotifyr-package">Using the <code>{spotifyr}</code> package</h2>
 <p>The <code>{spotifyr}</code> package requests data from the <a href="https://developer.spotify.com/documentation/web-api">Spotify API</a> and we are able to load this data into R.</p>
@@ -254,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Create an app with a title, description, and redirect url.</p></li>
 </ol>
 <ul>
-<li>As of April 9th, 2025, localhost string not allowed in Spotify redirect URI’s. <a href="https://github.com/charlie86/spotifyr/issues/224">See this GitHub Issue</a>. I set the redirect as http://127.0.0.1:1410/ and I followed the solution in the GitHub Issue.</li>
+<li>As of April 9th, 2025, localhost string is not allowed in Spotify redirect URI’s. <a href="https://github.com/charlie86/spotifyr/issues/224">See this {spotifyr} GitHub Issue</a>. I set the redirect as http://127.0.0.1:1410/ and I followed the solution in the GitHub Issue.</li>
 </ul>
 <ol start="3" type="1">
 <li><p>Save your client ID &amp; client secret.</p></li>
@@ -283,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Now running the fixed function should work.</p>
+<p>Now running the fixed function should work to get an authentication code.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>auth_code <span class="ot">&lt;-</span>  <span class="fu">get_spotify_authorization_code_fixed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -427,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </iframe>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/5mSRLKGJ0Uc7FW7SlJFKaP?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
-<p><em>I put these in manually through the <a href="https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed">Creating an Embed</a> feature from Spotify.</em></p>
+<p><em>I’m displaying the above Spotify content manually through the <a href="https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed">Creating an Embed</a> feature from Spotify.</em></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>zachs_artists <span class="sc">|&gt;</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">followers.total =</span> scales<span class="sc">::</span><span class="fu">comma</span>(followers.total)) <span class="sc">|&gt;</span> </span>
@@ -521,15 +538,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </iframe>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/artist/0Riv2KnFcLZA3JSVryRg4y?utm_source=generator" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 </iframe>
-<section id="numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features." class="level3">
-<h3 class="anchored" data-anchor-id="numerous-endpoints-were-deprecated-in-november-2024-including-get-audio-features.">Numerous endpoints were deprecated in November 2024, including Get Audio Features.</h3>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Unfortunately, numerous endpoints in the Spotify API were deprecated in November 2024 outlined in this <a href="https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api?source=post_page-----4808aadccfcb---------------------------------------">Spotify for Developers Post</a>, including Get Track’s Audio Features (for danceability, energy, etc.). This was due to an update in Spotify’s policies where they no longer wanted users to input these data into a machine learning/AI model.</p>
+<p>However, this was still a cool project to do a little bit of wrangling in R and also a slight introduction to APIs for me. Again, I’ll be re-visiting this blog post and updating it periodically to see how my Spotify stats change. Thanks for tuning in!</p>
+
 
 
 </section>
 </section>
-</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-muir2024" class="csl-entry" role="listitem">
+Muir, Sam. 2024. <span>“Who’s on <span>AUX?</span> <span>Using</span> Machine Learning to Predict Whose <span>Spotify</span> Playlist a Song Belongs To.”</span> April 13, 2024. <a href="https://shmuir.github.io/projects/2024-04-13-spotify-predictions/">https://shmuir.github.io/projects/2024-04-13-spotify-predictions/</a>.
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{loo2025,
+  author = {Loo, Zach},
+  title = {Spotify on {Webpages}},
+  date = {2025-11-20},
+  url = {https://zachyyy700.github.io/posts/2025-11-18-spotify/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-loo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Loo, Zach. 2025. <span>“Spotify on Webpages.”</span> November 20, 2025.
+<a href="https://zachyyy700.github.io/posts/2025-11-18-spotify/">https://zachyyy700.github.io/posts/2025-11-18-spotify/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
