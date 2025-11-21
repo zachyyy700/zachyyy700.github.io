@@ -1,6 +1,6 @@
 ---
 title: "Spotify on Webpages"
-description: "Attempting to get some Spotify data to appear on here."
+description: "Using an R package to extract my Spotify data."
 date: 11-20-2025
 date-modified: 11-20-2025
 editor: source
