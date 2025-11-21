@@ -4,6 +4,7 @@ description: "Using an R package to extract my Spotify data."
 date: 11-20-2025
 date-modified: 11-20-2025
 editor: source
+bibliography: references.bib
 categories: [R, Music]
 image: spongebob-floating.jpeg
 citation: 

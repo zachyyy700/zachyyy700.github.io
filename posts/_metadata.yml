@@ -5,9 +5,6 @@ freeze: auto
 # enable banner style title blocks
 title-block-banner: true
 
-# References
-bibliography: references.bib
-
 author:
   - name: Zach Loo
     affiliation: Master of Environmental Data Science @ The Bren School, UCSB
