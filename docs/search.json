@@ -4,7 +4,7 @@
     "href": "posts.html",
     "title": "Zach’s Epic Blog",
     "section": "",
-    "text": "Spotify on Webpages\n\n\n\nR\n\nMusic\n\n\n\nUsing an R package to extract my Spotify data.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Blog Post\n\n\n\nQuarto\n\nR\n\nMEDS\n\n\n\nPost Description\n\n\n\nZach Loo\n\n\nNov 16, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "Good Data Collection & Building a Stats Tracker for the gym\n\n\n\nPython\n\nPersonal\n\n\n\nA small python project for gym statistics.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpotify on Webpages\n\n\n\nR\n\nMusic\n\n\n\nUsing an R package to extract my Spotify data.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n2021 Houston Blackouts\n\n\n\nR\n\nMEDS\n\nGeospatial\n\n\n\nA post for EDS 223: Geospatial Analysis\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Blog Post\n\n\n\nQuarto\n\nR\n\nMEDS\n\n\n\nPost Description\n\n\n\nZach Loo\n\n\nNov 16, 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -68,5 +68,26 @@
     "title": "Spotify on Webpages",
     "section": "",
     "text": "Unfortunately, numerous endpoints in the Spotify API were deprecated in November 2024 outlined in this Spotify for Developers Post, including Get Track’s Audio Features (for danceability, energy, etc.). This was due to an update in Spotify’s policies where they no longer wanted users to input these data into a machine learning/AI model.\nHowever, this was still a cool project to do a little bit of wrangling in R and also a slight introduction to APIs for me. Again, I’ll be re-visiting this blog post and updating it periodically to see how my Spotify stats change. Thanks for tuning in!"
+  },
+  {
+    "objectID": "posts/2025-11-20-houston-blackouts/index.html",
+    "href": "posts/2025-11-20-houston-blackouts/index.html",
+    "title": "2021 Houston Blackouts",
+    "section": "",
+    "text": "How do severe weather events disproportionately affect disadvantaged communities?"
+  },
+  {
+    "objectID": "posts/2025-11-20-houston-blackouts/index.html#night-light-intensity-before-after-the-storm",
+    "href": "posts/2025-11-20-houston-blackouts/index.html#night-light-intensity-before-after-the-storm",
+    "title": "2021 Houston Blackouts",
+    "section": "Night Light Intensity Before & After the Storm",
+    "text": "Night Light Intensity Before & After the Storm\nThere are four night-lights data files used in this analysis. One pair of tiles is for before the storm, February 7th, 2021 and the second pair of tiles is for after the storm, February 16th, 2021. Since Houston sits on the border of two tiles, two tiles per day are needed.\n\n# Load lights data\nlights_07_1 &lt;- read_stars(here::here('data', 'VNP46A1', 'VNP46A1.A2021038.h08v05.001.2021039064328.tif'))\n\nlights_07_2 &lt;- read_stars(here::here('data', 'VNP46A1', 'VNP46A1.A2021038.h08v06.001.2021039064329.tif'))\n\nlights_16_1 &lt;- read_stars(here::here('data', 'VNP46A1', 'VNP46A1.A2021047.h08v05.001.2021048091106.tif'))\n\nlights_16_2 &lt;- read_stars(here::here('data', 'VNP46A1', 'VNP46A1.A2021047.h08v06.001.2021048091105.tif'))\n\n\n# Merge Feb 7th rasters\nlights_07 &lt;- st_mosaic(lights_07_1, lights_07_2)\n\n# Merge Feb 16th rasters\nlights_16 &lt;- st_mosaic(lights_16_1, lights_16_2)\n\n\n# Create Houston bounding box\nhouston_bbox &lt;- st_bbox(c(xmin = -96.5,xmax = -94.5, ymin = 29, ymax = 30.5),\n                          crs = \"EPSG:4326\")\n\n# CRS check before cropping\nif (st_crs(houston_bbox) == st_crs(lights_07)){\n  print(\"CRS Match. Ready to crop.\")\n} else {\n  warning(\"Converting Houston bbox to lights CRS:\\n\", st_crs(lights_07))\n  \n  houston_bbox &lt;- st_transform(houston_bbox, crs = st_crs(lights_07))\n}\n\n[1] \"CRS Match. Ready to crop.\"\n\n# Crop 07 raster\ncropped_07 &lt;- st_crop(lights_07, houston_bbox)\n# Crop 16 raster\ncropped_16 &lt;- st_crop(lights_16, houston_bbox)\n\nReady to plot night-lights.\n\n\nCode\n# Plot before & after maps\nmap_07 &lt;- tm_shape(cropped_07) +\n  tm_raster(col.scale = tm_scale_continuous(values = '-brewer.greys'),\n            col.legend = tm_legend(show = TRUE, \n                                   title = expression(Luminance ~ (Nw ~ cm^{-2} ~ sr^{-1})), \n                                   orientation = 'landscape',\n                                   width = 42)) +\ntm_title(text = \"Houston lights before storm (Feb. 7th)\", \n         position = c(0.03, 1), \n         color = \"white\")\n\nmap_16 &lt;- tm_shape(cropped_16) +\n  tm_raster(col.scale = tm_scale_continuous(values = '-brewer.greys'),\n            col.legend = tm_legend(show = TRUE, \n                                   title = expression(Luminance ~ (Nw ~ cm^{-2} ~ sr^{-1})),\n                                   orientation = 'landscape')) +\ntm_title(text = \"Houston lights after storm (Feb. 16th)\", \n         position = c(0.03, 1), \n         color = \"white\") +\ntm_compass(position = c('left', 'bottom'),\n           size = 3,\n           text.size = 0.9,\n           color.dark = 'grey50',\n           text.color = 'white') +\ntm_scalebar(position = c('left', 'bottom'),\n            text.size = 0.8,\n            color.dark = 'grey50',\n            text.color = 'white')\n\ntmap_arrange(map_07, map_16, nrow = 1)\n\n\n\n\n\n\n\n\nFigure 1: Comparison of Houston Lights Before & After the February 2021 Severe Winter Storm."
+  },
+  {
+    "objectID": "posts/2025-11-20-houston-blackouts/index.html#create-blackout-mask",
+    "href": "posts/2025-11-20-houston-blackouts/index.html#create-blackout-mask",
+    "title": "2021 Houston Blackouts",
+    "section": "Create blackout mask",
+    "text": "Create blackout mask\n\n# Get raster difference\nlights_diff &lt;- cropped_16 - cropped_07\n\n\n# Create houston blackout mask\nlights_diff[lights_diff &gt; -200] &lt;- NA\n\n\n# Vectorize mask\nblackout_areas &lt;- lights_diff |&gt; \n  st_as_sf() |&gt; \n  st_make_valid() |&gt; \n  st_transform(\"EPSG:3083\") # Re-project to new crs\n\n# Rename first column name\ncolnames(blackout_areas)[1] &lt;- \"light_difference\""
   }
 ]
