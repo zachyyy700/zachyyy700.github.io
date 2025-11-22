@@ -1,0 +1,17 @@
+terra
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+tmap
+kableExtra
+abind
+sf
+stars
+maptiles

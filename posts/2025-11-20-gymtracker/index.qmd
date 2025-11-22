@@ -5,7 +5,7 @@ date: 11-20-2025
 editor: source
 categories: [Python, Personal]
 image: cat_loading.jpeg
-draft: TRUE
+draft: true
 ---
 
 # Introduction
@@ -14,4 +14,6 @@ draft: TRUE
 
 # Processing
 
-## Importance of good data collection
+Libraries used in this project.
+
+# Importance of good data collection

@@ -70,6 +70,8 @@ lights_07 <- st_mosaic(lights_07_1, lights_07_2)
 lights_16 <- st_mosaic(lights_16_1, lights_16_2)
 ```
 
+Before cropping to the Houston area, the Coordinate Reference Systems (CRS) of the bounding box & the night-lights rasters must match.
+
 ```{r}
 # Create Houston bounding box
 houston_bbox <- st_bbox(c(xmin = -96.5,xmax = -94.5, ymin = 29, ymax = 30.5),
@@ -129,17 +131,27 @@ tm_scalebar(position = c('left', 'bottom'),
 tmap_arrange(map_07, map_16, nrow = 1)
 ```
 
-## Create blackout mask
+## Identify Blackout Areas
+
+To find places that had blackouts, a mask should be created that indicates whether a cell in the lights raster had a blackout or not.
+
+1. First, find the change in night-light intensity
 
 ```{r}
 # Get raster difference
 lights_diff <- cropped_16 - cropped_07
 ```
 
+2. Second, assign `NA` to cells that experienced a change greater than -200 nW cm^-2^sr^-1^.
+
 ```{r}
 # Create houston blackout mask
 lights_diff[lights_diff > -200] <- NA
 ```
+
+- Values in the raster are now only < -200, indicating a significant drop in luminosity.
+
+3. Last, the raster will need to be converted to an `sf` object for spatial operations later.
 
 ```{r}
 # Vectorize mask
@@ -150,4 +162,222 @@ blackout_areas <- lights_diff |>
 
 # Rename first column name
 colnames(blackout_areas)[1] <- "light_difference"
+```
+
+## Exclude Highways from Blackout Areas
+
+```{r}
+# Load roads data but only highways with SQL query
+roads <- st_read(here::here('data', 'gis_osm_roads_free_1.gpkg'), query = "SELECT * FROM gis_osm_roads_free_1 WHERE fclass='motorway'", quiet = TRUE) |> 
+  st_transform("EPSG:3083")
+```
+
+Due to light pollution from highways, locations within 200 meters of highways should be excluded.
+
+```{r}
+# Create 200m buffer
+roads_buffer <- st_buffer(roads, dist = 200)
+```
+
+```{r}
+# Combine road geometries first
+roads_buffer_union <- st_union(roads_buffer)
+
+# CRS check before finding difference
+if (st_crs(blackout_areas) == st_crs(roads_buffer_union)){
+  print("CRS Match. Ready to find difference.")
+} else {
+  warning("Converting blackout_areas to roads CRS:\n", st_crs(roads_buffer_union))
+  
+  blackout_areas <- st_transform(blackout_areas, crs = st_crs(roads_buffer_union))
+}
+```
+
+```{r}
+# Find areas NOT within buffer
+blackout_far_areas <- st_difference(blackout_areas, roads_buffer_union)
+```
+
+## Identify Homes Impacted by Blackouts
+
+```{r}
+# Read homes data with SQL query
+homes <- st_read(
+  here::here("data", "gis_osm_buildings_a_free_1.gpkg"),
+  query = "
+    SELECT * FROM gis_osm_buildings_a_free_1
+    WHERE (type IS NULL AND name IS NULL)
+       OR type IN ('residential', 'apartments', 'house', 'static_caravan', 'detached')", quiet = TRUE) |> 
+  st_transform("EPSG:3083")
+```
+
+```{r}
+# CRS check before filtering
+if (st_crs(homes) == st_crs(blackout_far_areas)){
+  print("CRS Match. Ready to filter.")
+} else {
+  warning("Converting homes to blackout_far_areas CRS:\n", st_crs(blackout_far_areas))
+  
+  homes <- st_transform(homes, crs = st_crs(blackout_far_areas))
+}
+```
+
+```{r}
+# Find homes in blackout areas
+homes_blackout <- homes |> 
+  st_filter(y = st_union(blackout_far_areas))
+
+```
+
+```{r fig.height=6, fig.width=7}
+#| label: fig-blackout-homes
+#| fig-cap: "Map of Homes That Lost Power."
+  
+tm_shape(homes_blackout) +
+  tm_polygons(col = 'blue') +
+  tm_basemap('CartoDB.VoyagerNoLabels') +
+  tm_graticules(x = seq(-96.4, -94.8, 0.4), alpha = 0.2) +
+
+tm_add_legend(labels = c("Homes That Lost Power"),
+              fill = c('blue'),
+              type = 'polygons',
+              position = c('left', 'top')) +
+
+
+tm_layout(bg.color = 'grey90')
+```
+
+```{r}
+# Table of homes that experienced blackouts
+homes_df <- homes_blackout |> 
+  group_by(type) |> 
+  summarise(count = n(),
+            percent = round((n() / nrow(homes_blackout)) * 100, digits = 2)) |>
+  st_drop_geometry()
+
+# Add total row
+homes_df <- homes_df |> 
+  add_row(type = 'Total', count = sum(homes_df$count)) 
+
+# Change type NA to character string
+homes_df$type[6] <- "NA"
+
+```
+
+```{r}
+#| label: tbl-homes
+#| tbl-cap: "Estimate of Homes That Experienced Blackouts by Home Type"
+
+# Display kable table
+options(knitr.kable.NA = "")
+kbl(homes_df,
+    table.attr = 'class="custom-table"', # For custom html styling
+    col.names = c("Home Type", "Count", "Percentage (%)"),
+    align = 'c')
+```
+
+## Identify Census Tracts Impacted by Blackouts
+
+```{r}
+# View layers in gdb file
+#st_layers(here::here('data', 'ACS_2019_5YR_TRACT_48_TEXAS.gdb'))
+
+# Extract income layer
+income <- st_read(here::here('data', 'ACS_2019_5YR_TRACT_48_TEXAS.gdb'),
+                  layer = 'X19_INCOME', quiet = TRUE) |> 
+  dplyr::select(c(GEOID, B19013e1, B19013m1))
+
+# Extract census tract layer
+census <- st_read(here::here('data', 'ACS_2019_5YR_TRACT_48_TEXAS.gdb'),
+                  layer = 'ACS_2019_5YR_TRACT_48_TEXAS', quiet = TRUE) |> 
+  dplyr::select(-c(GEOID)) |> # Drop GEOID column
+  rename(GEOID = GEOID_Data) |>  # Rename GEOID_Data for joining
+  st_transform("EPSG:3083")
+```
+
+```{r}
+# Find how many census tracts in houston bbox
+houston_tracts_number <- census |> 
+  st_crop(st_transform(houston_bbox, crs = "EPSG:3083")) |> 
+  nrow()
+
+paste0("Number of Houston census tracts: ", houston_tracts_number) 
+```
+
+```{r}
+# Transform Houston bbox before joining
+#houston_bbox <- st_transform(houston_bbox, crs = "EPSG:3083")
+
+# CRS check before joining & cropping
+if (st_crs(houston_bbox) == st_crs(census)){
+  print("CRS Match. Ready to find difference.")
+} else {
+  warning("Converting houston_bbox CRS to census CRS:\n", st_crs(census))
+  
+  houston_bbox <- st_transform(houston_bbox, crs = st_crs(census))
+}
+
+# Join census & income data
+census_income <- left_join(x = census, y = income, by = "GEOID") |> 
+  st_crop(houston_bbox) |> 
+  filter(ALAND != 0) |>  # Filter out ocean geometries
+  dplyr::select(c("GEOID", "B19013e1", "B19013m1")) |> 
+  rename(median_hh_income_est = B19013e1,
+         median_hh_income_moe = B19013m1)
+```
+
+```{r}
+# Filter to census tracts that lost power
+census_blackouts <- census_income |>
+  st_filter(y = blackout_far_areas, .predicate = st_intersects) |> 
+  mutate(blackout = TRUE) # Add blackout column
+
+# Create blackout GEOID for filtering census_income & joining later
+blackout_ids <- census_blackouts$GEOID
+
+# Print number of census tracts that experienced blackouts
+paste0("Number of Houston census tracts that experienced blackouts: ", nrow(census_blackouts))
+```
+
+```{r}
+#| label: fig-census-blackouts
+#| fig-cap: "Houston Census Tracts That Lost Power."
+
+# Plot blackout areas with census blackouts
+tm_shape(census_income) + # Census layer
+  tm_polygons() +
+tm_shape(census_blackouts) + # Census blackout layer
+  tm_polygons(fill = 'orange') +
+  
+tm_compass(position = c(0.92, 0.32)) +
+tm_scalebar(position = c(0.76, 0.18)) +
+tm_add_legend(labels = c("Tracts That Lost Power"),
+              fill = c('orange'),
+              type = 'polygons',
+              position = c('right', 'bottom')) 
+```
+
+```{r}
+# Create boolean column whether tract had a blackout or not
+census_blackout_tf <- census_income |> 
+  mutate(blackout = GEOID %in% blackout_ids)
+
+# Get value counts for blackout column
+table(census_blackout_tf$blackout)
+```
+
+```{r}
+#| label: fig-income
+#| fig-cap: "Distribution of Median Household Income for Census Tracts per Blackout Group."
+
+# Median household income plot
+ggplot(census_blackout_tf, aes(blackout, median_hh_income_est)) +
+  geom_boxplot() +
+  
+  scale_x_discrete(labels = c('No Blackout', 'Blackout')) +
+  labs(y = "Median Household Income (Estimate) in Census Tract") +
+  
+  theme_classic() +
+  theme(panel.grid.major.y = element_line(color = 'grey'),
+        axis.title.x = element_blank()) 
 ```
