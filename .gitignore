@@ -14,3 +14,6 @@
 
 # data
 data/
+
+# blog jupyter checkpoints
+posts/*/.ipynb_checkpoints/
