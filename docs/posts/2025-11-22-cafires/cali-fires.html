@@ -210,15 +210,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#visualizing-california-fires-with-false-color-images" id="toc-visualizing-california-fires-with-false-color-images" class="nav-link active" data-scroll-target="#visualizing-california-fires-with-false-color-images">Visualizing California Fires with False Color Images</a>
+  <li><a href="#about" id="toc-about" class="nav-link active" data-scroll-target="#about"><strong>About</strong></a></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a>
   <ul class="collapse">
-  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><strong>About</strong></a></li>
-  <li><a href="#fire-perimeter-data-exploration" id="toc-fire-perimeter-data-exploration" class="nav-link" data-scroll-target="#fire-perimeter-data-exploration">2. Fire Perimeter Data Exploration</a></li>
-  <li><a href="#landsat-data-exploration" id="toc-landsat-data-exploration" class="nav-link" data-scroll-target="#landsat-data-exploration">3. Landsat Data Exploration</a></li>
-  <li><a href="#restoring-geospatial-info" id="toc-restoring-geospatial-info" class="nav-link" data-scroll-target="#restoring-geospatial-info">4. Restoring geospatial info</a></li>
-  <li><a href="#true-color-image" id="toc-true-color-image" class="nav-link" data-scroll-target="#true-color-image">5. True color image</a></li>
-  <li><a href="#false-color-image" id="toc-false-color-image" class="nav-link" data-scroll-target="#false-color-image">6. False color image</a></li>
-  <li><a href="#map" id="toc-map" class="nav-link" data-scroll-target="#map">7. Map</a></li>
+  <li><a href="#fire-perimeter-data-exploration" id="toc-fire-perimeter-data-exploration" class="nav-link" data-scroll-target="#fire-perimeter-data-exploration">Fire Perimeter Data Exploration</a></li>
+  <li><a href="#landsat-data-exploration" id="toc-landsat-data-exploration" class="nav-link" data-scroll-target="#landsat-data-exploration">Landsat Data Exploration</a></li>
+  <li><a href="#restoring-geospatial-info" id="toc-restoring-geospatial-info" class="nav-link" data-scroll-target="#restoring-geospatial-info">Restoring Geospatial Info</a></li>
+  <li><a href="#true-color-image" id="toc-true-color-image" class="nav-link" data-scroll-target="#true-color-image">True Color Image</a></li>
+  <li><a href="#false-color-image" id="toc-false-color-image" class="nav-link" data-scroll-target="#false-color-image">False Color Image</a></li>
+  <li><a href="#combined-map" id="toc-combined-map" class="nav-link" data-scroll-target="#combined-map">Combined Map</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -230,11 +230,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="visualizing-california-fires-with-false-color-images" class="level1">
-<h1>Visualizing California Fires with False Color Images</h1>
 <p><a href="https://github.com/zachyyy700/eds220-hwk4">GitHub Repository Link</a></p>
-<section id="about" class="level2">
-<h2 class="anchored" data-anchor-id="about"><strong>About</strong></h2>
+<section id="about" class="level1">
+<h1><strong>About</strong></h1>
 <ul>
 <li><p>Purpose: Practice working with <strong>xarray</strong> data and creating images from remote sensing data.</p></li>
 <li><p>Highlights:</p>
@@ -253,6 +251,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>References</strong></p>
 <p>Earth Resources Observation and Science (EROS) Center. (2025). Landsat 8-9 Operational Land Imager / Thermal Infrared Sensor Level-2, Collection 2 [dataset]. U.S. Geological Survey. <a href="">https://doi.org/10.5066/P9OGBGM6</a>. Accessed November 16, 2025, via Microsoft Planetary Computer: <a href="">https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2</a>.</p>
 <p>CAL FIRE / California Department of Forestry and Fire Protection. (2025). California Fire Perimeters (all) [dataset]. State of California. Accessed November 16, 2025, from <a href="">https://data.ca.gov/dataset/california-fire-perimeters-all</a></p>
+</section>
+<section id="analysis" class="level1">
+<h1>Analysis</h1>
 <div id="1d8db790" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -275,9 +276,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fp2 <span class="op">=</span> os.path.join(<span class="st">"data"</span>, <span class="st">"landsat8-2025-02-23-palisades-eaton.nc"</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>landsat_data <span class="op">=</span> xr.open_dataset(fp2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
 <section id="fire-perimeter-data-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="fire-perimeter-data-exploration">2. Fire Perimeter Data Exploration</h2>
+<h2 class="anchored" data-anchor-id="fire-perimeter-data-exploration">Fire Perimeter Data Exploration</h2>
 <div id="88240684" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>perimeter_data[<span class="st">'decades'</span>]<span class="sc">.</span>value_counts()<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>perimeter_data<span class="sc">.</span>crs<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
@@ -318,7 +318,7 @@ True</code></pre>
 </div>
 </section>
 <section id="landsat-data-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="landsat-data-exploration">3. Landsat Data Exploration</h2>
+<h2 class="anchored" data-anchor-id="landsat-data-exploration">Landsat Data Exploration</h2>
 <div id="bf6e00c6" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check landsat type</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(landsat_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -751,7 +751,7 @@ FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></pre>
 <p><strong>Landsat description</strong>: Preliminary exploration of the landsat data yielded information on the data’s dimensions, coordinates, and variables. This is an xarray Dataset, thus it contains 2D numpy arrays for each variable present in the data. These variables are each a spectral band collected by the Landsat 8 satellite. The coordinates of the variables are also included in the data and these are geospatial x and y coordinates. Given that they’re in scientific notation like “3.799e+06”, these coordinates are likely in meters. Additionally, there is a time coordinate but there is only one value since this data is only from one point in time. This time value was extracted and the data is from February 23, 2025. Last, the dimensions of the variables were found and they have a length of 2742 in the x coordinate and 1418 in the y coordinate.</p>
 </section>
 <section id="restoring-geospatial-info" class="level2">
-<h2 class="anchored" data-anchor-id="restoring-geospatial-info">4. Restoring geospatial info</h2>
+<h2 class="anchored" data-anchor-id="restoring-geospatial-info">Restoring Geospatial Info</h2>
 <div id="a18bf0ae" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print dataset crs</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(landsat_data.rio.crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1176,7 +1176,7 @@ Data variables:
 </div>
 </section>
 <section id="true-color-image" class="level2">
-<h2 class="anchored" data-anchor-id="true-color-image">5. True color image</h2>
+<h2 class="anchored" data-anchor-id="true-color-image">True Color Image</h2>
 <div id="1dfa7a02" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select red, green, blue variables</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'red'</span>, <span class="st">'green'</span>, <span class="st">'blue'</span>]].to_array().plot.imshow()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1241,7 +1241,7 @@ green band has 1 nan values</code></pre>
 <p><strong>Initial and final plot comparison:</strong> Initially trying to plot the true color image came with two issues. One, extreme values (mainly clouds) in the landsat data were affecting the color plotting. To fix this, setting the robust parameter to True made xarray ignore the top and bottom 2% extreme color values and the true color image could be seen. Next, invalid values were also present in the data. These were np.nan values and xarray doesn’t know what to do with these. Instead, we replace these with 0 and we end up with a final true color plot with no warnings.</p>
 </section>
 <section id="false-color-image" class="level2">
-<h2 class="anchored" data-anchor-id="false-color-image">6. False color image</h2>
+<h2 class="anchored" data-anchor-id="false-color-image">False Color Image</h2>
 <div id="f730dc28" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input different bands into rgb channels for false color image</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'swir22'</span>, <span class="st">'nir08'</span>, <span class="st">'red'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(robust<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1254,8 +1254,8 @@ green band has 1 nan values</code></pre>
 </div>
 </div>
 </section>
-<section id="map" class="level2">
-<h2 class="anchored" data-anchor-id="map">7. Map</h2>
+<section id="combined-map" class="level2">
+<h2 class="anchored" data-anchor-id="combined-map">Combined Map</h2>
 <div id="e668fc71" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set crs of fire perimeter data to match landsat data</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>palisades_eaton <span class="op">=</span> palisades_eaton.to_crs(<span class="st">"EPSG:32611"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
