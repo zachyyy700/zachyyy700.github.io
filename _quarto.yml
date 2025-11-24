@@ -1,6 +1,10 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "*.ipynb"
+    - "!data/gym_data/*"
 
 website:
   title: "Zach Loo"
@@ -28,5 +32,5 @@ format:
     toc: true
     page-layout: full
 
-editor: visual
+editor: source
 
