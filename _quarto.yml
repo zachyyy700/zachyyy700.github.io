@@ -8,7 +8,10 @@ project:
 
 website:
   title: "Zach Loo"
+  favicon: media/ZL_favi_final.png
   navbar:
+    title: false
+    logo: media/ZL_favi_final.png
     left:
       - text: "Home"
         href: index.qmd
