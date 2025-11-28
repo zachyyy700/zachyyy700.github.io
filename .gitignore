@@ -15,5 +15,8 @@
 # data
 data/
 
+# posts data
+posts/*/data/
+
 # blog jupyter checkpoints
 posts/*/.ipynb_checkpoints/
