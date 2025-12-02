@@ -1,2 +1,1632 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"></html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Zach Loo">
+<meta name="dcterms.date" content="2025-11-23">
+<meta name="description" content="Using Python to extract my gym data insights and lessons learned.">
+
+<title>My Gym Data &amp; Good Data Collection – Zach Loo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../media/ZL_favi_final.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d273991ecc7fecb2b87bf745b9432437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<meta name="quarto:status" content="draft">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../media/ZL_favi_final.png" alt="" class="navbar-logo light-content">
+    <img src="../../media/ZL_favi_final.png" alt="" class="navbar-logo dark-content">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../vitae.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html"> 
+<span class="menu-text">The Blog</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title">My Gym Data &amp; Good Data Collection</h1>
+                  <div>
+        <div class="description">
+          Using Python to extract my gym data insights and lessons learned.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Python</div>
+              </div>
+                  </div>
+  </div>
+    
+  <div class="quarto-title-meta-author column-page">
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Affiliation</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author">Zach Loo </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              Master of Environmental Data Science @ The Bren School, UCSB
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta column-page">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 23, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+
+
+
+
+
+<div id="ae831711" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="941f35c7" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gym_data_path <span class="op">=</span> os.path.join(<span class="st">"../../data/gym_data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="8109827c" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of filenames</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>filename_list <span class="op">=</span> os.listdir(path<span class="op">=</span>gym_data_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="3a929151" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test for one file</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>testpath <span class="op">=</span> os.path.join(gym_data_path, filename_list[<span class="dv">118</span>])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>testopened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>testpath, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>testread <span class="op">=</span> testopened.read()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(testread)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># leg front 1/24
+
+Date: January 24, 2024
+
+angled smith squat quad (35)☠️
+
+9
+
+6
+
+6
+
+leg extend (70)
+
+6
+
+death
+
+machine should press front(40)
+
+11
+
+10
+
+10
+
+8
+
+rear delt fly (50)
+
+9
+
+8</code></pre>
+</div>
+</div>
+<div id="c38120b3" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of lines from testread</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>test_split <span class="op">=</span> testread.splitlines()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print date line as string</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>date_str <span class="op">=</span> test_split[<span class="dv">2</span>]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>date_sliced <span class="op">=</span> date_str[<span class="dv">6</span>:]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to datetime</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>date <span class="op">=</span> pd.to_datetime(date_sliced, <span class="bu">format</span><span class="op">=</span><span class="st">"%B </span><span class="sc">%d</span><span class="st">, %Y"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="77a89ae7" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create function to extract date from file</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_file_date(filename):</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get path of file</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    opened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>path, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    read <span class="op">=</span> opened.read()</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> read.splitlines()</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    date_str <span class="op">=</span> split[<span class="dv">2</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    date_sliced <span class="op">=</span> date_str[<span class="dv">6</span>:]</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    date <span class="op">=</span> pd.to_datetime(date_sliced, <span class="bu">format</span><span class="op">=</span><span class="st">"%B </span><span class="sc">%d</span><span class="st">, %Y"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> date</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="1ec33efb" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test on first file in data/kys</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>extract_file_date(<span class="st">'5 25 d326c23d60cf4e46bc594120503e0e55.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>Timestamp('2023-05-25 00:00:00')</code></pre>
+</div>
+</div>
+<div id="d6d0dcf8" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check all files for valid date lines</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>datetime_list <span class="op">=</span> []</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># IndexError suspicion: one of the files don't have a date</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> filename_list:</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        file_date <span class="op">=</span> extract_file_date(i)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        datetime_list.append(file_date)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Error in file: </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Error in file: Untitled 27d3a7b1c7ab80db80d9c1c8ff9d663e.md
+Error in file: Untitled 452615b6407b4babaea70da4f210c64b.md
+Error in file: Untitled 21f3a7b1c7ab80fbbf59e16ba0db9a3d.md
+Error in file: Pull 1 5bd444803d2e46e38c98bbea33ad0f91.md</code></pre>
+</div>
+</div>
+<div id="a0de4f25" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>gym_data <span class="op">=</span> pd.Series(datetime_list, name<span class="op">=</span><span class="st">'date'</span>).sort_values().reset_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="1ccd39c1" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create series of gym dates</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gym_data.drop(labels<span class="op">=</span><span class="st">'index'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2023-05-25</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2023-05-27</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2023-05-28</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2023-05-29</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2023-05-31</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">...</th>
+<td>...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">126</th>
+<td>2025-10-17</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">127</th>
+<td>2025-10-22</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">128</th>
+<td>2025-10-29</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">129</th>
+<td>2025-11-03</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">130</th>
+<td>2025-11-10</td>
+</tr>
+</tbody>
+</table>
+
+<p>131 rows × 1 columns</p>
+</div>
+</div>
+</div>
+<div id="0c1e22d3" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Trying: iterate through split file, classify specific exercise into less specific exercise name</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Test for one file</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>testpath <span class="op">=</span> os.path.join(gym_data_path, filename_list[<span class="dv">118</span>])</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>testopened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>testpath, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>testread <span class="op">=</span> testopened.read()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>test_split <span class="op">=</span> testread.splitlines()</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>test_split</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>['# leg front 1/24',
+ '',
+ 'Date: January 24, 2024',
+ '',
+ 'angled smith squat quad (35)☠️',
+ '',
+ '9',
+ '',
+ '6',
+ '',
+ '6',
+ '',
+ 'leg extend (70)',
+ '',
+ '6',
+ '',
+ 'death',
+ '',
+ 'machine should press front(40)',
+ '',
+ '11',
+ '',
+ '10',
+ '',
+ '10',
+ '',
+ '8',
+ '',
+ 'rear delt fly (50)',
+ '',
+ '9',
+ '',
+ '8']</code></pre>
+</div>
+</div>
+<div id="08b84067" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test on one element if alphabetical</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>stripped <span class="op">=</span> test_split[<span class="dv">4</span>].strip()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>stripped[<span class="dv">0</span>].isalpha()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div id="4b5bda74" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test on stripped if contains ()</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'hi'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>hi</code></pre>
+</div>
+</div>
+<div id="ed5f248b" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create function to extract exercise lines</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_exercises(filename):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get path, open, read, &amp; split</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    opened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>path, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    read <span class="op">=</span> opened.read()</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> read.splitlines()</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    exercise_list <span class="op">=</span> []</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> split:</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        stripped <span class="op">=</span> i.strip()</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>            exercise_list.append(i)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    exercise_series <span class="op">=</span> pd.Series(exercise_list).rename(index<span class="op">=</span><span class="st">'exercise'</span>)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> exercise_series</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="93830cb7" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test function on one file</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>extract_exercises(<span class="st">'upper a 5 27 2003a7b1c7ab80a7a6d8deaa62f0a9aa.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>0                    inc (30)
+1                lat pd (110)
+2                    fly (90)
+3        front delt mach (60)
+4                   tbar (70)
+5               preacher (15)
+6                tri ext (10)
+7    rear delt (16) diff mach
+8    side delt (11) diff mach
+Name: exercise, dtype: object</code></pre>
+</div>
+</div>
+<p>Try next: get dates assigned to exercises in dataframe</p>
+<div id="9d2c38b9" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'date'</span>: pd.Series(extract_file_date(<span class="st">'upper a 5 27 2003a7b1c7ab80a7a6d8deaa62f0a9aa.md'</span>)),</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>     <span class="st">'exercise'</span>:extract_exercises(<span class="st">'upper a 5 27 2003a7b1c7ab80a7a6d8deaa62f0a9aa.md'</span>)}</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(data<span class="op">=</span>d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">exercise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2025-05-27</td>
+<td>inc (30)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>NaT</td>
+<td>lat pd (110)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>NaT</td>
+<td>fly (90)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>NaT</td>
+<td>front delt mach (60)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>NaT</td>
+<td>tbar (70)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>NaT</td>
+<td>preacher (15)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>NaT</td>
+<td>tri ext (10)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>NaT</td>
+<td>rear delt (16) diff mach</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>NaT</td>
+<td>side delt (11) diff mach</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Trying: combine extract date &amp; extract exercises into one function</p>
+<ul>
+<li>Returns filled dataframe of one file</li>
+</ul>
+<div id="1fc07093" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> df_date_exercises(filename):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get path, open, read, &amp; split</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    opened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>path, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    read <span class="op">=</span> opened.read()</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> read.splitlines()</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract exercises first to get length</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    exercise_list <span class="op">=</span> []</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> split:</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>        stripped <span class="op">=</span> i.strip()</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>            exercise_list.append(i)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    exercise_series <span class="op">=</span> pd.Series(exercise_list).rename(index<span class="op">=</span><span class="st">'exercise'</span>)</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract date of file</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>        date_str <span class="op">=</span> split[<span class="dv">2</span>]</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        date_sliced <span class="op">=</span> date_str[<span class="dv">6</span>:]</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        date <span class="op">=</span> pd.to_datetime(date_sliced, <span class="bu">format</span><span class="op">=</span><span class="st">"%B </span><span class="sc">%d</span><span class="st">, %Y"</span>)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fill date series to match the length of exercise_series</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Using pd.Series([date] * len(exercise_series)) ensures the series has the same length</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>        date_series <span class="op">=</span> pd.Series([date] <span class="op">*</span> <span class="bu">len</span>(exercise_series), name<span class="op">=</span><span class="st">'date'</span>)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Build and return a DataFrame with the date repeated for each exercise</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.DataFrame({<span class="st">'date'</span>: date_series, <span class="st">'exercise'</span>: exercise_series.reset_index(drop<span class="op">=</span><span class="va">True</span>)})</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> df</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Error Reading File Date"</span>)</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="449e4476" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test on one file</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df_date_exercises(<span class="st">'upper a 8 3 2443a7b1c7ab80949c76c31a1ac44501.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">exercise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2025-08-03</td>
+<td>lat pd (120)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2025-08-03</td>
+<td>fly (85)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2025-08-03</td>
+<td>tbar (i no like)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2025-08-03</td>
+<td>shoulder press (35)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Trying: from our exercise column above, extract the weight in-between the parentheses</p>
+<div id="fa9ad2de" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test regex extracting on one string</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>string_test <span class="op">=</span> <span class="st">'angled smith squat quad (35)☠️'</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> re.search(<span class="vs">r'</span><span class="ch">\(</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="ch">\)</span><span class="vs">'</span>, string_test)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>weight <span class="op">=</span> <span class="bu">int</span>(m.group(<span class="dv">1</span>)) <span class="cf">if</span> m <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(weight)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>35</code></pre>
+</div>
+</div>
+<div id="34d1dcb0" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try to build independent function to extract weight</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_weight(filename):</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get path, open, read, &amp; split</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    opened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>path, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    read <span class="op">=</span> opened.read()</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> read.splitlines()</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    weight_list <span class="op">=</span> []</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> split:</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        stripped <span class="op">=</span> i.strip()</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>            m <span class="op">=</span> re.search(<span class="vs">r'</span><span class="ch">\(</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="ch">\)</span><span class="vs">'</span>, stripped)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>            weight <span class="op">=</span> <span class="bu">int</span>(m.group(<span class="dv">1</span>)) <span class="cf">if</span> m <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>            weight_list.append(weight)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    weight_series <span class="op">=</span> pd.Series(weight_list).rename(index<span class="op">=</span><span class="st">'weight'</span>)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> weight_series</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>            </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="17723b55" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>extract_weight(<span class="st">'upper a 8 3 2443a7b1c7ab80949c76c31a1ac44501.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>0    120.0
+1     85.0
+2      NaN
+3     35.0
+Name: weight, dtype: float64</code></pre>
+</div>
+</div>
+<p>Trying: Add weight column to combined dataframe</p>
+<div id="5df1da5a" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> df_weight(filename):</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get path, open, read, &amp; split</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    opened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>path, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    read <span class="op">=</span> opened.read()</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> read.splitlines()</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract exercises &amp; weight first to get length</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    exercise_list <span class="op">=</span> []</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    weight_list <span class="op">=</span> []</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> split:</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>        stripped <span class="op">=</span> i.strip()</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Append entire exercise string</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>            exercise_list.append(i)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Extract weight in-between parenthesis</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>            m <span class="op">=</span> re.search(<span class="vs">r'</span><span class="ch">\(</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="ch">\)</span><span class="vs">'</span>, stripped)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>            weight <span class="op">=</span> <span class="bu">int</span>(m.group(<span class="dv">1</span>)) <span class="cf">if</span> m <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>            weight_list.append(weight)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    exercise_series <span class="op">=</span> pd.Series(exercise_list).rename(index<span class="op">=</span><span class="st">'exercise'</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>    weight_series <span class="op">=</span> pd.Series(weight_list).rename(index<span class="op">=</span><span class="st">'weight'</span>)</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract date of file</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>        date_str <span class="op">=</span> split[<span class="dv">2</span>]</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>        date_sliced <span class="op">=</span> date_str[<span class="dv">6</span>:]</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>        date <span class="op">=</span> pd.to_datetime(date_sliced, <span class="bu">format</span><span class="op">=</span><span class="st">"%B </span><span class="sc">%d</span><span class="st">, %Y"</span>)</span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fill date series to match the length of exercise_series</span></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Using pd.Series([date] * len(exercise_series)) ensures the series has the same length</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>        date_series <span class="op">=</span> pd.Series([date] <span class="op">*</span> <span class="bu">len</span>(exercise_series), name<span class="op">=</span><span class="st">'date'</span>)</span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Build and return a DataFrame with the date repeated for each exercise</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.DataFrame({<span class="st">'date'</span>: date_series, </span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'exercise'</span>: exercise_series.reset_index(drop<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'weight'</span>: weight_series.reset_index(drop<span class="op">=</span><span class="va">True</span>)})</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> df</span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Error Reading File Date"</span>)</span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="34bbd48d" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df_weight(<span class="st">'upper a 8 3 2443a7b1c7ab80949c76c31a1ac44501.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">exercise</th>
+<th data-quarto-table-cell-role="th">weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2025-08-03</td>
+<td>lat pd (120)</td>
+<td>120.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2025-08-03</td>
+<td>fly (85)</td>
+<td>85.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2025-08-03</td>
+<td>tbar (i no like)</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2025-08-03</td>
+<td>shoulder press (35)</td>
+<td>35.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Trying: Extract number of reps for each exercise</p>
+<div id="cb8ad9e6" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_sets(filename):</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    opened <span class="op">=</span> <span class="bu">open</span>(<span class="bu">file</span><span class="op">=</span>path, mode<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    read <span class="op">=</span> opened.read()</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> read.splitlines()</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> {}</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> index, i <span class="kw">in</span> <span class="bu">enumerate</span>(split):</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>        stripped <span class="op">=</span> i.strip()</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># detect exercise lines like "machine fly (80)"</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>            sets <span class="op">=</span> []  <span class="co"># list to store all set numbers</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># look ahead through subsequent lines</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> next_line <span class="kw">in</span> split[index <span class="op">+</span> <span class="dv">1</span>:]:</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>                next_line <span class="op">=</span> next_line.strip()</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> next_line:  <span class="co"># skip blank lines</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">continue</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> next_line[<span class="dv">0</span>].isdigit():  <span class="co"># starts with a digit → a set number</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">try</span>:</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>                        sets.append(<span class="bu">int</span>(next_line))  <span class="co"># convert to int if possible</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">except</span> <span class="pp">ValueError</span>:</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>                        sets.append(next_line)  <span class="co"># if not pure number, keep as string</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">continue</span></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>                <span class="co"># if we hit another exercise before finding more sets, stop</span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> next_line <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> next_line:</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>            <span class="co"># if no sets found, store None instead of empty list</span></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>            results[stripped] <span class="op">=</span> sets <span class="cf">if</span> sets <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print results nicely</span></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># for exercise, sets in results.items():</span></span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     print(f"{exercise} -&gt; {sets}")</span></span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(results.items())</span></span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(results).melt(var_name<span class="op">=</span><span class="st">"exercise"</span>, value_name<span class="op">=</span><span class="st">"reps"</span>)</span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="7ef2b472" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>extract_sets(<span class="st">'upper a 8 3 2443a7b1c7ab80949c76c31a1ac44501.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">exercise</th>
+<th data-quarto-table-cell-role="th">reps</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>lat pd (120)</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>lat pd (120)</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>fly (85)</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>fly (85)</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>tbar (i no like)</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>tbar (i no like)</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>shoulder press (35)</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>shoulder press (35)</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Trying: get exercises &amp; sets into a dataframe</p>
+<div id="93c0a06b" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_exercise_allinfo(filename):</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(gym_data_path, filename)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(path, <span class="st">"r"</span>) <span class="im">as</span> opened:</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>        split <span class="op">=</span> opened.read().splitlines()</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- extract date from the 3rd line ---</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>        date_str <span class="op">=</span> split[<span class="dv">2</span>]</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>        date_sliced <span class="op">=</span> date_str[<span class="dv">6</span>:]  <span class="co"># adjust slicing as needed</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>        date <span class="op">=</span> pd.to_datetime(date_sliced, <span class="bu">format</span><span class="op">=</span><span class="st">"%B </span><span class="sc">%d</span><span class="st">, %Y"</span>)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>        date <span class="op">=</span> <span class="va">None</span>  <span class="co"># fallback if parsing fails</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []   <span class="co"># will store: {"exercise": ..., "weight": ..., "reps": ...}</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> index, i <span class="kw">in</span> <span class="bu">enumerate</span>(split):</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>        stripped <span class="op">=</span> i.strip()</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># detect exercise lines like "machine fly (80)"</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> stripped <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> stripped:</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>            <span class="co"># --- extract weight ---</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>            m <span class="op">=</span> re.search(<span class="vs">r'</span><span class="ch">\(</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="ch">\)</span><span class="vs">'</span>, stripped)</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>            weight <span class="op">=</span> <span class="bu">int</span>(m.group(<span class="dv">1</span>)) <span class="cf">if</span> m <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>            <span class="co"># --- clean exercise name ---</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>            exercise_name <span class="op">=</span> re.sub(<span class="vs">r'</span><span class="dv">\s</span><span class="op">*</span><span class="ch">\(</span><span class="dv">\d</span><span class="op">+</span><span class="ch">\)</span><span class="vs">'</span>, <span class="st">''</span>, stripped)</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>            <span class="co"># collect sets</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>            sets <span class="op">=</span> []</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> next_line <span class="kw">in</span> split[index <span class="op">+</span> <span class="dv">1</span>:]:</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>                next_line <span class="op">=</span> next_line.strip()</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> next_line:</span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">continue</span></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> next_line[<span class="dv">0</span>].isdigit():</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">try</span>:</span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>                        sets.append(<span class="bu">int</span>(next_line))</span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">except</span> <span class="pp">ValueError</span>:</span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>                        sets.append(next_line)</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">continue</span></span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>                <span class="co"># stop when next exercise encountered</span></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="st">'('</span> <span class="kw">in</span> next_line <span class="kw">and</span> <span class="st">')'</span> <span class="kw">in</span> next_line:</span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span></span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a>            <span class="co"># if no sets, still create one row with reps=None</span></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> sets:</span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>                rows.append({</span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"date"</span>:date,</span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"exercise"</span>: exercise_name,</span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"weight"</span>: weight,</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"reps"</span>: <span class="va">None</span></span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>                })</span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>                <span class="co"># normal case: one row per set</span></span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> rep <span class="kw">in</span> sets:</span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a>                    rows.append({</span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"date"</span>:date,</span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"exercise"</span>: exercise_name,</span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"weight"</span>: weight,</span>
+<span id="cb35-63"><a href="#cb35-63" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"reps"</span>: rep</span>
+<span id="cb35-64"><a href="#cb35-64" aria-hidden="true" tabindex="-1"></a>                    })</span>
+<span id="cb35-65"><a href="#cb35-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-66"><a href="#cb35-66" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb35-67"><a href="#cb35-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="9690e929" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>extract_exercise_allinfo(<span class="st">'upper b 7 13 22f3a7b1c7ab80279f08e774a1a21e07.md'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">exercise</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">reps</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2025-07-13</td>
+<td>inc</td>
+<td>35.0</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2025-07-13</td>
+<td>inc</td>
+<td>35.0</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2025-07-13</td>
+<td>unilat pd</td>
+<td>12.0</td>
+<td>7 9</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2025-07-13</td>
+<td>front delt mach</td>
+<td>60.0</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2025-07-13</td>
+<td>preacher ez</td>
+<td>40.0</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2025-07-13</td>
+<td>preacher ez</td>
+<td>40.0</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>2025-07-13</td>
+<td>kenta tri (2 down)</td>
+<td>NaN</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>2025-07-13</td>
+<td>kenta tri (2 down)</td>
+<td>NaN</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="8c5f53a0" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df_list <span class="op">=</span> []</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>empty <span class="op">=</span> []</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> filename_list:</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> extract_exercise_allinfo(<span class="bu">file</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> df.shape[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>        empty.append(<span class="bu">file</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>        df_list.append(df)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Empty:"</span>, empty)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>full_df <span class="op">=</span> pd.concat(df_list, ignore_index<span class="op">=</span><span class="va">True</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Empty: ['cardio 21d3a7b1c7ab804db437fc93c9ee3ead.md', 'Legs Glute c44d9f1e8b514e2c87fa563a1618f774.md', 'Untitled 27d3a7b1c7ab80db80d9c1c8ff9d663e.md', 'cardio 5 29 2023a7b1c7ab80eb8e86fc3bd40c4c71.md', 'Untitled 452615b6407b4babaea70da4f210c64b.md', 'upper a 10 22 2943a7b1c7ab807bbecef9608753d13f.md', 'Untitled 21f3a7b1c7ab80fbbf59e16ba0db9a3d.md', '7 4 Push 18f17e48bfba4149b31fd352e40ff6b2.md', 'Pull 1 5bd444803d2e46e38c98bbea33ad0f91.md']</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/th/h57j9xd51jz6jynj6ycrqdqm0000gn/T/ipykernel_26804/2617480483.py:12: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  full_df = pd.concat(df_list, ignore_index=True)</code></pre>
+</div>
+</div>
+<div id="096abda0" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>full_df[<span class="st">'exercise'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>array(['incline press', 'flat smith bench', 'machine delt raise',
+       'machine fly', 'front delt machine', 'tricep cable unitlat',
+       'Incline bench', 'Machine Press', 'Fly', 'cable pulldown',
+       'tbar wide', 'seated row wide', 'unilat pulldown (8down) up it',
+       'bicep curl', 'free squat', 'flat lev press', 'machine row lats',
+       'leg ext upstairs', 'side delt cable raise',
+       'death machine narrow stance', 'tbar (90‼️)', 'calf raise',
+       'cable pulldown + 11', 't bar upper -15',
+       'machine unilat pulldown (6down) up 1 both',
+       'cable unilat rear delt', 'machine lever row +5',
+       'machine unilat preacher', 'inc', 'unilat pd', 'front delt mach',
+       'preacher ez', 'kenta tri (2 down)', 'black death',
+       'glute press went 100 (go higher still)', 'smith ass squat',
+       'leg curl', 'calf raise up it next time', 'leg press', 'leg ext',
+       'backshots', 'glute push', 'squat', 'ext', '(+25)',
+       'incline machine -5', 'bench', 'bi curl', 'LegCurl', 'Leg Press',
+       'flat bar bench', 'chest cables high to low', 'lev chest press +',
+       'lat pulldown machine (idk)', 'front shoulder press machine',
+       'Incline Bench', 'Horizontal Hammer',
+       'S3: 10 , do a plate next time', 'Machine Fly', 'Flat DB Bench',
+       'THAR', 'BB shrug (plate)', 'Leverage', 'Rear delt', 'row machine',
+       'hammer inc', 'fly', 'wide tbar', 'mach inc', 'mach fly',
+       'flat mach bench', 'side delt mach', 'unilat cable tri',
+       'machine row t handles', 'pulldown machine+', 'tricep ext',
+       'uni seated row 3rd one down lol', 'rear delt fly',
+       'unilat pd up it', 'side delt cable metal d handle',
+       'rear delt cable arm locked , 45°', 'preacher (12.5)', 'cable tri',
+       '# chest (1/31)', 'front should press', 'lev decline press',
+       'Seated chest machine', 'Seat should press', 'Dips',
+       'Flat Smith Bench (PLATEEEE) [135]', 'unilat pd up it lol',
+       'tri ext og mach', 'side delt new mach', 'rear delt new mach',
+       'reverse fore (21.5) don’t use add on weight lmao, go more than 22 next time',
+       'preacher', 'unilat nya downstairs cable', 'tbar', 'lat pd',
+       'preacher (bar + 5)', 'side delt metal handle, leaning',
+       'rear delt (16.5)', 'cross tri (16.5) right elbow sore', 'Tbar',
+       'Lat Pulldown', 'Shrugs', 'Rear Delt', '# lower a (10/13)',
+       'hacjsquat', 'hip thrust', 'hyperext', 'cable uni tri',
+       'mach front delt', 'mach side delt', 'mach flat',
+       'incline smith press', 'front delt machine +', 'tricep ext+',
+       'lev press flat +', 't bar wide', 'unilat pull (8down)',
+       'seated row machine', 'seated press', 'machine side delt',
+       'dumbbell front press', 'machine incline',
+       'unilat tricep cable ext', 'quad smith squat',
+       'unilat pulley (7 down) +', 'Machine Side Delts (40??)',
+       'Leg Curl', 'Shoulder Press', 'Death Machine',
+       'inc up by 5 next time', 'cable side delt', '# legs front (2/3)',
+       'leg press +++++', 'quad smith squat ++', 'deltoid raise machine',
+       'lev shoulder press', 'side delt machine', 'leg ext startrac',
+       'unilat tri ext', 'inc press',
+       'front delt press up to 60 for 2nd set', 'cable side delt NOT 5lb',
+       'cable tri 2nd', 'cable rear delt', 'tri ext',
+       'rear delt diff mach', 'side delt diff mach', 'death machine',
+       'glute press ☠️☠️☠️', 'curl -20', 'ext up it next time', 't bar',
+       'leverage dec press', 'row', 'lat pd up by 5', 'side delt cable',
+       'cross tri cable (16.5)', 'preacher (17.5)', 'reverse fore',
+       'nyas', 'lev inc', 'smith quad squat +10',
+       'cable delt raise (1 ting)', 'CROSS tri ext (16.5) diff mach',
+       'side delt cable dm', 'reverse fore downstairs cable',
+       'unilat nya', 'Incline Machine', 'Flat Bench', 'Machine fly',
+       'Side deltoid raise', 'Front delt raise', 'calf raise went 80',
+       '# upper a (10/12)', 'wide row + 10', 'narrow row',
+       'machine press', 'wide row machine +5 +5', 'tbar wide {fast pace}',
+       'unilat cable', 'rear delt machine', 'deltoid machine',
+       'front should press downstairs btw', 'unilat cable tri(1down)',
+       '(3 down)', 'curl up it', 'back shot hinge',
+       'death machine () prob just gonna do smith squats next',
+       'unilat nya downstairs', '# legs 4/25',
+       'unilat cable tri (5L 10R)', 'flat press mach', 'row machine + 5',
+       'kenta tris', 'unilat side delt', 'assist dips', 'curl',
+       'reverse fore (16.5) still gotta lock that weight , maybe up?',
+       'unilat side nyas (27.5)', 'inc bench', 'shoulder press', 'LF fly',
+       'kenta tris (22.5)', 'side lat cable (7.5)', '# legs/arm/should',
+       'overhead tri', 'mach rd fly', 'mach sd', 'mach fd raise',
+       'tricep push down (38.5)', 'lat pulldown machine+', 'machine row',
+       'bicep lev', 'standing calf', 'leg ext hoist +10', 'Lay Pull-down',
+       'S2: 11', 'T Bar', 'Leverage Row', 'S2: 10', 'Pullovers (38.5)',
+       'S2: 8', 'Assisted Dips', 'Seated Leg Curl (100 S1 - 155 S2&amp;3)',
+       'Overhead Machine Press (50 S1 - 65 S2&amp;3)',
+       'Dumbbell Flat Bench (27.5)', 'Hammer Press', 'Leg Press up it',
+       'RDL', 'Hamstring Curl up it', 'Glute Press', '# pull (2/1)',
+       'uni lat seated row', 'machine side delts', 'rear machine delt',
+       'lat pullover (38.5)', 'hacksquat', 'seated curl',
+       'unilat pd up it lmao', 'cable side delt different machine',
+       'cable rear delt diff mach',
+       'reverse foreplay (3dowj) dual pulley', 'Overhead Press',
+       'Flat DB Bench (27.5) ?????', 'free smith squat', 'smith rdl',
+       'glute press', 'lat pd mach seems questionable , maybe ? idk',
+       'cable side delt metal d handle', 'tbar (i no like)',
+       'chest press machine +', 'lev chest press + DO A PLATE',
+       'side machine delt', 'machine incline +5', 'db front should ☠️',
+       'tricep rope pushdown', 'Incline machine', 'Chest fly',
+       'lev incline machine', 'machine fly +10', 'front delt machine +5',
+       'lev flat press', 'preacher curl', '# legs 4/14',
+       'cross tri (16.5)', 'side delt cable old machine', 'TAbr',
+       'Leverage up it', 'mach shoulder press', 'L Press',
+       'lat pd weird machine , will try another', 'chest fly',
+       'DOUBLE PREACHER (35+5)', 'pulldown', 'wide mach row +10',
+       'rear delt fly cable -5 lmao', 'preacher (7.5)', 'Pull down',
+       'Unilat Row', 'Pull over (38.5)', 'tbar +10', 'machine pull down',
+       'uni lat pulley (lvl 8)', 'Press', 'Extension', 'Calf raise',
+       'chest sup row t', 'front should machine', 'smith squat quad',
+       'tbar do 85 next time', 'machine row ++', 'rear delt fly +',
+       'tricep ext +', 'Leverage row', 'seated uni row', 'inc chest',
+       'unilat pulldown', 'nya', '', 'wide mach row',
+       'preacher (5L , 7.5R)', 'side delt cake metal handle',
+       'overheard tri ext (2 down)', 'Lat Pdown', 'Pullovers',
+       'narrow row + 15', 'wide row', 'hammer inc press + 5',
+       'front delt machine + 5', 'chest mach',
+       'dynamic row i don’t like this', 'Seated row', 'Assist pull ups',
+       'Pull downs', 'Dumbbell front press', 'Cable lateral (11 💀)',
+       'TBar', 'Unilat Pulldown', 'Wide Bar Row',
+       'Chest Support Seated Row', 'MTS Row',
+       'side delt leaning, metal handle', 'preacher (35+5)',
+       'side delt metal handle, not leaning', 'preacher ez (bar + 5)',
+       'mach wide row +5', 'maxh rear delt', 'mach preach (5L , 7.5R)',
+       'cable pulldown +5', 'tbar wide -25', 'uni lat narrow (6down) +1',
+       'v row', 'face pulls sitting (37.5)', 'kenta tri (22.5)',
+       'squat rack', 'Tricep Ext', 'Flys', 'front delt press + 5',
+       'decline press', 'cable hammer curl', 'kenta tri + 5',
+       'angled smith squat quad☠️', 'leg extend',
+       'machine should press front', 'lat pulldown machine', 'Seated Row',
+       'Standing Pullovers', 'smith glutes', 'smith glute bridge',
+       'pulldown (99+5: 104)', '# pull (2/7)', 'machine row + 5 + 5',
+       'rear delt fly +5  + 5', 'lat pulldown', 'wide row ?¿', 'S3: 3',
+       '5.5 speed (100 cals)', 'leg press+', 'smith squat',
+       'machine chest press (idk)', 'leg ext +', 'incline machine +5',
+       'cross tri ext (16.5)',
+       'side delt cable for left side don’t lean until you get stronger',
+       'front delt', 'preacher up it', 'treadmill run (100cal)',
+       'glute smith squat', 'rdl', 'machine row lower bias',
+       'calf raise + 20'], dtype=object)</code></pre>
+</div>
+</div>
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{loo2025,
+  author = {Loo, Zach},
+  title = {My {Gym} {Data} \&amp; {Good} {Data} {Collection}},
+  date = {2025-11-23},
+  url = {http://zachyyy700.github.io/posts/2025-11-23-gymtracker/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-loo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Loo, Zach. 2025. <span>“My Gym Data &amp; Good Data Collection.”</span>
+November 23, 2025. <a href="http://zachyyy700.github.io/posts/2025-11-23-gymtracker/">http://zachyyy700.github.io/posts/2025-11-23-gymtracker/</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Zachary Loo</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This website is built with Quarto and GitHub Pages</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
