@@ -1,19 +1,19 @@
 ---
-title: "2021 Houston Blackouts"
+title: "2021 Houston Freeze"
 description: "Analyzing socio-economic impacts of severe weather."
 date: 11-20-2025
 editor: source
 categories: [MEDS, R, Geospatial]
-image: ado.jpeg
+image: texas_snow.jpg
 execute:
   warning: false
   message: false
 code-fold: true
 ---
 
-# Research Question
+# Question
 
-How do severe weather events disproportionately affect disadvantaged communities?
+How did the 2021 severe winter storm disproportionately affect disadvantaged communities in Houston, Texas?
 
 # Background
 
@@ -299,18 +299,6 @@ census <- st_read(here::here('data', 'ACS_2019_5YR_TRACT_48_TEXAS.gdb'),
 ```
 
 ```{r}
-# Find how many census tracts in houston bbox
-houston_tracts_number <- census |> 
-  st_crop(st_transform(houston_bbox, crs = "EPSG:3083")) |> 
-  nrow()
-
-paste0("Number of Houston census tracts: ", houston_tracts_number) 
-```
-
-```{r}
-# Transform Houston bbox before joining
-#houston_bbox <- st_transform(houston_bbox, crs = "EPSG:3083")
-
 # CRS check before joining & cropping
 if (st_crs(houston_bbox) == st_crs(census)){
   print("CRS Match. Ready to find difference.")
@@ -337,10 +325,26 @@ census_blackouts <- census_income |>
 
 # Create blackout GEOID for filtering census_income & joining later
 blackout_ids <- census_blackouts$GEOID
-
-# Print number of census tracts that experienced blackouts
-paste0("Number of Houston census tracts that experienced blackouts: ", nrow(census_blackouts))
 ```
+
+```{r}
+# Create boolean column whether tract had a blackout or not
+census_blackout_tf <- census_income |> 
+  mutate(blackout = GEOID %in% blackout_ids)
+# Get value counts for blackout column & display table
+blackout_table <- census_blackout_tf |> 
+  st_drop_geometry() |> 
+  group_by(blackout) |> 
+  summarise(count = n()) |> 
+  pivot_wider(names_from = blackout,
+              values_from = count) |> 
+  mutate(total = rowSums(across(everything())))
+
+blackout_table |> 
+  kbl(col.names = c("No Blackout", "Blackout", "Total Census Tracts"),
+      align = 'c')
+```
+
 
 ```{r}
 #| label: fig-census-blackouts
@@ -358,15 +362,6 @@ tm_add_legend(labels = c("Tracts That Lost Power"),
               fill = c('orange'),
               type = 'polygons',
               position = c('right', 'bottom')) 
-```
-
-```{r}
-# Create boolean column whether tract had a blackout or not
-census_blackout_tf <- census_income |> 
-  mutate(blackout = GEOID %in% blackout_ids)
-
-# Get value counts for blackout column
-table(census_blackout_tf$blackout)
 ```
 
 ```{r}
