@@ -1,9 +1,9 @@
 ---
-title: "Statistics Final: Gamma Regression"
-description: "Using Gamma Regression"
+title: "Gamma Models for Pollution Concentrations"
+description: "Learning & using gamma regression for EDS 222 - Statistics for Environmental Data Science."
 date: 12-03-2025
 editor: source
-categories: [R, Statistics]
+categories: [R, MEDS, Statistics]
 image: lake.jpg
 citation: 
   url: https://zachyyy700.github.io/posts/2025-12-3-stats-final/
@@ -95,9 +95,9 @@ ggplot(lakes |> filter(parameter != "spCond.uS_cm"), aes(parameter, result)) +
 
 **Model in statistical notation:**
 
-$$PConcentration \sim Gamma(\mu, \phi)$$ 
+$$\text{PConcentration} \sim \text{Gamma}(\mu, \phi)$$ 
 
-$$\log(\mu) = \beta_0 + \beta_1 * SecchiDepth$$
+$$\log(\mu) = \beta_0 + \beta_1 * \text{SecchiDepth}$$
 
 -   Response Family: Gamma
 
@@ -163,10 +163,10 @@ The response:
 
 - This is the dependent variable. `rgamma()` was again used to pick random values from a Gamma distribution. However, the scale parameter is set to `exp(beta0 + beta1 * predictor) / phi` which sets the relationship between our predictor and response. This scale gives the mean of the response for each observation which we want to change as the predictor changes, defined in the initial model notation: 
 
-$$\log(\mu)=\beta_0 + \beta_1 * predictor$$
+$$\log(\mu)=\beta_0 + \beta_1 * \text{predictor}$$
 Exponentiating both sides gives:
 
-$$\mu = e^{\beta_0 + \beta_1 * predictor}$$
+$$\mu = e^{\beta_0 + \beta_1 * \text{predictor}}$$
 which was used in the scale argument as defined in Eq. 6.
 
 ```{r}

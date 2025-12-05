@@ -8,9 +8,9 @@
 
 <meta name="author" content="Zach Loo">
 <meta name="dcterms.date" content="2025-12-03">
-<meta name="description" content="Using Gamma Regression">
+<meta name="description" content="Learning &amp; using gamma regression for EDS 222 - Statistics for Environmental Data Science.">
 
-<title>Statistics Final: Gamma Regression – Zach Loo</title>
+<title>Gamma Models for Pollution Concentrations – Zach Loo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f8be71511868aa965a08c98a53284b57.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-40c57afdaa84c71996320073af63b330.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -191,14 +191,15 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page-left">
-      <h1 class="title">Statistics Final: Gamma Regression</h1>
+      <h1 class="title">Gamma Models for Pollution Concentrations</h1>
                   <div>
         <div class="description">
-          Using Gamma Regression
+          Learning &amp; using gamma regression for EDS 222 - Statistics for Environmental Data Science.
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">R</div>
+                <div class="quarto-category">MEDS</div>
                 <div class="quarto-category">Statistics</div>
               </div>
                   </div>
@@ -331,8 +332,8 @@ window.Quarto = {
 </ul></li>
 </ul>
 <p><strong>Model in statistical notation:</strong></p>
-<p><span class="math display">\[PConcentration \sim Gamma(\mu, \phi)\]</span></p>
-<p><span class="math display">\[\log(\mu) = \beta_0 + \beta_1 * SecchiDepth\]</span></p>
+<p><span class="math display">\[\text{PConcentration} \sim \text{Gamma}(\mu, \phi)\]</span></p>
+<p><span class="math display">\[\log(\mu) = \beta_0 + \beta_1 * \text{SecchiDepth}\]</span></p>
 <ul>
 <li><p>Response Family: Gamma</p></li>
 <li><p>Link Function: log()</p></li>
@@ -381,8 +382,8 @@ window.Quarto = {
 <ul>
 <li>This is the dependent variable. <code>rgamma()</code> was again used to pick random values from a Gamma distribution. However, the scale parameter is set to <code>exp(beta0 + beta1 * predictor) / phi</code> which sets the relationship between our predictor and response. This scale gives the mean of the response for each observation which we want to change as the predictor changes, defined in the initial model notation:</li>
 </ul>
-<p><span class="math display">\[\log(\mu)=\beta_0 + \beta_1 * predictor\]</span> Exponentiating both sides gives:</p>
-<p><span class="math display">\[\mu = e^{\beta_0 + \beta_1 * predictor}\]</span> which was used in the scale argument as defined in Eq. 6.</p>
+<p><span class="math display">\[\log(\mu)=\beta_0 + \beta_1 * \text{predictor}\]</span> Exponentiating both sides gives:</p>
+<p><span class="math display">\[\mu = e^{\beta_0 + \beta_1 * \text{predictor}}\]</span> which was used in the scale argument as defined in Eq. 6.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulated response with changing mean</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="at">n =</span> n, <span class="at">shape =</span> phi, <span class="at">scale =</span> <span class="fu">exp</span>(beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> predictor) <span class="sc">/</span> phi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -440,16 +441,16 @@ Table&nbsp;1: Returned coefficients from running model on simulated data
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">1.06</td>
+<td style="text-align: center;">1.05</td>
 <td style="text-align: center;">0.06</td>
-<td style="text-align: center;">18.69</td>
+<td style="text-align: center;">18.08</td>
 <td style="text-align: center;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">predictor</td>
-<td style="text-align: center;">-0.83</td>
-<td style="text-align: center;">0.07</td>
-<td style="text-align: center;">-11.29</td>
+<td style="text-align: center;">-0.75</td>
+<td style="text-align: center;">0.08</td>
+<td style="text-align: center;">-9.81</td>
 <td style="text-align: center;">0</td>
 </tr>
 </tbody>
@@ -629,14 +630,14 @@ Table&nbsp;1: Returned coefficients from running model on simulated data
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{loo2025,
   author = {Loo, Zach},
-  title = {Statistics {Final:} {Gamma} {Regression}},
+  title = {Gamma {Models} for {Pollution} {Concentrations}},
   date = {2025-12-03},
   url = {https://zachyyy700.github.io/posts/2025-12-3-stats-final/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-loo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Loo, Zach. 2025. <span>“Statistics Final: Gamma Regression.”</span>
-December 3, 2025. <a href="https://zachyyy700.github.io/posts/2025-12-3-stats-final/">https://zachyyy700.github.io/posts/2025-12-3-stats-final/</a>.
+Loo, Zach. 2025. <span>“Gamma Models for Pollution
+Concentrations.”</span> December 3, 2025. <a href="https://zachyyy700.github.io/posts/2025-12-3-stats-final/">https://zachyyy700.github.io/posts/2025-12-3-stats-final/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
