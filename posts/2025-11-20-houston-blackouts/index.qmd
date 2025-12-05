@@ -1,14 +1,14 @@
 ---
 title: "2021 Houston Blackouts"
-description: "A post for EDS 223: Geospatial Analysis"
+description: "Analyzing socio-economic impacts of severe weather."
 date: 11-20-2025
 editor: source
-categories: [R, MEDS, Geospatial]
+categories: [MEDS, R, Geospatial]
 image: ado.jpeg
-draft: true
 execute:
   warning: false
   message: false
+code-fold: true
 ---
 
 # Research Question
@@ -29,7 +29,7 @@ Severe weather events are increasing in frequency and intensity as antropogenic 
 
 - Buildings: Also from Geofabrik, data contained are houses in the Houston area.
 
-- Socioeconomic: Obtained from the U.S. Census Bureau's American Community Survey for census tracts in 2019. Used for combining census attribute data to OSM geospatial data.
+- Socio-economic: Obtained from the U.S. Census Bureau's American Community Survey for census tracts in 2019. Used for combining census attribute data to OSM geospatial data.
 
 # Analysis
 
@@ -43,7 +43,6 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 library(stars)
-library(maptiles)
 ```
 
 ## Night Light Intensity Before & After the Storm
@@ -179,6 +178,8 @@ Due to light pollution from highways, locations within 200 meters of highways sh
 roads_buffer <- st_buffer(roads, dist = 200)
 ```
 
+Ensure CRS match between roads and blackout areas.
+
 ```{r}
 # Combine road geometries first
 roads_buffer_union <- st_union(roads_buffer)
@@ -210,6 +211,8 @@ homes <- st_read(
        OR type IN ('residential', 'apartments', 'house', 'static_caravan', 'detached')", quiet = TRUE) |> 
   st_transform("EPSG:3083")
 ```
+
+Ensure CRS match between homes and blackout areas (excluding highways).
 
 ```{r}
 # CRS check before filtering
@@ -381,3 +384,17 @@ ggplot(census_blackout_tf, aes(blackout, median_hh_income_est)) +
   theme(panel.grid.major.y = element_line(color = 'grey'),
         axis.title.x = element_blank()) 
 ```
+
+## Summary
+
+Winter storm Uri hit Texas in February 2021 and impacted over 100,000 homes within about 900 census tracts. It is documented that impacted census tracts did in fact have lower median household incomes on average, indicating that low-income communities in Texas were disproportionately affected by the storm [(Lee et al. 2022)](https://pubmed.ncbi.nlm.nih.gov/36187845/). However, the boxplots in @fig-income don't show the expected results. One possible cause for this was the limited amount of data of only 2 days that was used in creating the blackout mask. Perhaps if we had more night light data spanning a range of dates, we could have a more accurate picture of what areas experienced blackouts, thus leading to a more historically accurate conclusion. Additionally, Lee et al. 2022 also faced data limitations as detailed power outage data was not available. Instead, the authors used data from Mapbox Population Activity, the 311 Houston Service Helpline, and SafeGraph POI Visit Data, along with the ACS census tract data to assess community impacts. While night light data provides a broad view of power outages across large areas, the alternative datsets in Lee et al. 2022 proved more effective in revealing the fine details and impacts of the storm.
+
+## References
+
+-   Román, M.O., Wang, Z., Sun, Q., Kalb, V.L., Miller, S.D., Molthan, A., Schultz, L., Bell, J., Stokes, E.C., Pandey, B., et al. (2018). NASA’s Black Marble nighttime lights product suite (VNP46). Remote Sensing of Environment, 210, 113-143. <https://doi.org/10.1016/j.rse.2018.03.017>
+
+-   OpenStreetMap Contributors (2025). OpenStreetMap database. Retrieved from <https://www.openstreetmap.org>. Distributed by Geofabrik GmbH, Karlsruhe, Germany. Available at <https://download.geofabrik.de/>
+
+-   U.S. Census Bureau. (2020). TIGER/Line Shapefiles and American Community Survey 2019 (5-Year Estimates), Texas — Census Tract Level (ACS_2019_5YR_TRACT_48_TEXAS) \[Data set\]. U.S. Department of Commerce. Available from <https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-data.html>
+
+-   Lee CC, Maron M, Mostafavi A. Community-scale big data reveals disparate impacts of the Texas winter storm of 2021 and its managed power outage. Humanit Soc Sci Commun. 2022;9(1):335. doi:10.1057/s41599-022-01353-8. Epub 2022 Sep 24. PMID: 36187845; PMCID: PMC9510185.
