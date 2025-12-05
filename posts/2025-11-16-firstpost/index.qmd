@@ -2,7 +2,7 @@
 title: "First Blog Post"
 description: "Post Description"
 date: 11-16-2025
-categories: [R, MEDS]
+categories: [MEDS, R]
 image: rodrick.jpeg
 ---
 

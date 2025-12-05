@@ -1,9 +1,9 @@
 ---
 title: "Gamma Models for Pollution Concentrations"
-description: "Learning & using gamma regression for EDS 222 - Statistics for Environmental Data Science."
+description: "Learning & using gamma regression."
 date: 12-03-2025
 editor: source
-categories: [R, MEDS, Statistics]
+categories: [MEDS, R, Statistics]
 image: lake.jpg
 citation: 
   url: https://zachyyy700.github.io/posts/2025-12-3-stats-final/
