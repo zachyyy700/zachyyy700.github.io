@@ -1,6 +1,6 @@
 ---
-title: "2021 Houston Freeze"
-description: "Analyzing socio-economic impacts of severe weather."
+title: "2021 Texas Power Crisis"
+description: "Assessing the socio-economic impacts of severe weather events."
 date: 11-20-2025
 editor: source
 categories: [MEDS, R, Geospatial]
