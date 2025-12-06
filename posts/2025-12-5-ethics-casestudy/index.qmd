@@ -1,0 +1,18 @@
+---
+title: "Bias in Environmental Health Studies"
+description: "Environmental ethics case study reflection."
+date: 12-05-2025
+editor: source
+categories: [MEDS, R, Ethics]
+image: texas_snow.jpg
+execute:
+  warning: false
+  message: false
+code-fold: true
+---
+
+
+
+# Reference
+
+Shafran-Nathan, R., Levy, I., Levin, N., & Broday, D. (2016). Ecological bias in environmental health studies: the problem of aggregation of multiple data sources. Air Qual Atmos Health 10, 411–420 (2017). https://doi.org/10.1007/s11869-016-0436-x
