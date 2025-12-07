@@ -137,8 +137,7 @@ zachs_artists <- read_csv(here::here('posts', '2025-11-18-spotify', 'zach_artist
 
 ```{r}
 zachs_tracks |> 
-  kbl(table.attr = 'class="spotify-table"',
-      col.names = c("Track Name", "Artists", "Album Name", "Album Release Date"))
+  kbl(col.names = c("Track Name", "Artists", "Album Name", "Album Release Date"))
 ```
 
 ## My Top 5 Tracks
@@ -168,8 +167,7 @@ zachs_tracks |>
 ```{r}
 zachs_artists |> 
   mutate(followers.total = scales::comma(followers.total)) |> 
-  kbl(table.attr = 'class="spotify-table"',
-      col.names = c("Artist Name", "Genres", "Popularity", "Total Followers"))
+  kbl(col.names = c("Artist Name", "Genres", "Popularity", "Total Followers"))
 ```
 
 ## My Top 5 Artists
