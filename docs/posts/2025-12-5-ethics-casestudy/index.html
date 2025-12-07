@@ -8,7 +8,7 @@
 
 <meta name="author" content="Zach Loo">
 <meta name="dcterms.date" content="2025-12-05">
-<meta name="description" content="Environmental ethics case study reflection.">
+<meta name="description" content="A dive into the nuances in spatial resolutions for environmental epidemiology.">
 
 <title>Bias in Environmental Health Studies – Zach Loo</title>
 <style>
@@ -23,7 +23,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -44,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-40c57afdaa84c71996320073af63b330.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f9b042f506b58b3e3f177d7fcfb1d31c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -125,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
       <h1 class="title">Bias in Environmental Health Studies</h1>
                   <div>
         <div class="description">
-          Environmental ethics case study reflection.
+          A dive into the nuances in spatial resolutions for environmental epidemiology.
         </div>
       </div>
                           <div class="quarto-categories">
@@ -172,7 +192,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#reference" id="toc-reference" class="nav-link active" data-scroll-target="#reference">Reference</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#case-study-description" id="toc-case-study-description" class="nav-link" data-scroll-target="#case-study-description">Case Study Description</a></li>
+  <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   </ul>
 </nav>
     </div>
@@ -183,14 +206,34 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="reference" class="level1">
-<h1>Reference</h1>
-<p>Shafran-Nathan, R., Levy, I., Levin, N., &amp; Broday, D. (2016). Ecological bias in environmental health studies: the problem of aggregation of multiple data sources. Air Qual Atmos Health 10, 411–420 (2017). https://doi.org/10.1007/s11869-016-0436-x</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>As upcoming data scientists, we are taught about spatial resolution when working with geospatial data. Essentially, this is the spatial scale which geospatial data is aggregated. These could be set grid cells of 1km x 1km or other administrative boundaries like census tract and city neighborhoods. Each unit of this spatial resolution represents a sector of space, one that environmental health related studies try and relate environmental risk factors and health outcomes.</p>
+<p>Environmental health studies combine these data from different sources, each containing different spatial scales. This spatial mismatch has been documented as a severe limitation in environmental epidemiology <span class="citation" data-cites="sheppard_2012">(<a href="#ref-sheppard_2012" role="doc-biblioref">Sheppard et al. 2012</a>)</span>. For example, environmental data may be aggregated on a fine, 100 meter grid, while socioeconomic data could be grouped together at the census tract level and health data at the neighborhood level. When researchers combine these data layers, the statistical relationships between them can change or disappear entirely, simply because of how the data resolutions were reshaped.</p>
+<p>This is the problem Shafran-Nation et al., 2017 discusses and will be our focus for this blog’s case study: ecological bias in environmental health studies <span class="citation" data-cites="shafran-nathan_2017">(<a href="#ref-shafran-nathan_2017" role="doc-biblioref">Shafran-Nathan et al. 2017</a>)</span>. The way we choose to aggregate data, the polygons and resolutions we use, can alter the conclusions about what communities face environmental health risks. Understanding the nuances in this bias is crucial to environmental health studies as they inform policy decisions that affect real communities.</p>
+</section>
+<section id="case-study-description" class="level1">
+<h1>Case Study Description</h1>
+</section>
+<section id="reflection" class="level1">
+<h1>Reflection</h1>
+</section>
+<section id="solutions" class="level1">
+<h1>Solutions</h1>
+<p>Solution</p>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-shafran-nathan_2017" class="csl-entry" role="listitem">
+Shafran-Nathan, Rakefet, Ilan Levy, Noam Levin, and David M. Broday. 2017. <span>“Ecological Bias in Environmental Health Studies: The Problem of Aggregation of Multiple Data Sources.”</span> <em>Air Quality, Atmosphere &amp; Health</em> 10 (4): 411–20. <a href="https://doi.org/10.1007/s11869-016-0436-x">https://doi.org/10.1007/s11869-016-0436-x</a>.
+</div>
+<div id="ref-sheppard_2012" class="csl-entry" role="listitem">
+Sheppard, Lianne, Richard T. Burnett, Adam A. Szpiro, Sun-Young Kim, Michael Jerrett, C Arden Pope, and Bert Brunekreef. 2012. <span>“Confounding and Exposure Measurement Error in Air Pollution Epidemiology.”</span> <em>Air Quality, Atmosphere &amp; Health</em> 5 (2): 203–16. <a href="https://doi.org/10.1007/s11869-011-0140-9">https://doi.org/10.1007/s11869-011-0140-9</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
