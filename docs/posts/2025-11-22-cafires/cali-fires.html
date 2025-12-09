@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-40c57afdaa84c71996320073af63b330.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f9b042f506b58b3e3f177d7fcfb1d31c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -299,8 +299,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load-packages-and-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-packages-and-data">Load packages and data</h2>
 <div id="1d8db790" class="cell" data-execution_count="82">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -312,29 +310,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> janitor <span class="im">import</span> clean_names</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> contextily <span class="im">as</span> ctx</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.lines <span class="im">import</span> Line2D</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 <div id="52796d53" class="cell" data-execution_count="83">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fp1 <span class="op">=</span> os.path.join(<span class="st">"data"</span>, <span class="st">"California_Historic_Fire_Perimeters_-5643920427189821347.geojson"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>perimeter_data <span class="op">=</span> gpd.read_file(fp1).clean_names()</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fp2 <span class="op">=</span> os.path.join(<span class="st">"data"</span>, <span class="st">"landsat8-2025-02-23-palisades-eaton.nc"</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>landsat_data <span class="op">=</span> xr.open_dataset(fp2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 </section>
 <section id="fire-perimeter-data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="fire-perimeter-data-exploration">Fire Perimeter Data Exploration</h2>
 <div id="88240684" class="cell" data-execution_count="84">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Decades Value Counts:</span><span class="ch">\n</span><span class="sc">{</span>perimeter_data[<span class="st">'decades'</span>]<span class="sc">.</span>value_counts()<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Coordinates Reference System (CRS): </span><span class="sc">{</span>perimeter_data<span class="sc">.</span>crs<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Is this CRS projected?: </span><span class="sc">{</span>perimeter_data<span class="sc">.</span>crs<span class="sc">.</span>is_projected<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Decades Value Counts:
 decades
@@ -357,15 +348,12 @@ Is this CRS projected?: True</code></pre>
 <section id="fire-perimeters-initial-plot" class="level3">
 <h3 class="anchored" data-anchor-id="fire-perimeters-initial-plot">Fire Perimeters Initial Plot</h3>
 <div id="a4990397" class="cell" data-execution_count="110">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter perimeter data to fires of interest</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>palisades_eaton <span class="op">=</span> perimeter_data[(perimeter_data[<span class="st">'fire_name'</span>].isin([<span class="st">'PALISADES'</span>, <span class="st">'EATON'</span>])) <span class="op">&amp;</span> </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                  (perimeter_data[<span class="st">'year_'</span>] <span class="op">==</span> <span class="dv">2025</span>)]</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial plot</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>palisades_eaton.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -379,13 +367,10 @@ Is this CRS projected?: True</code></pre>
 <section id="landsat-data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="landsat-data-exploration">Landsat Data Exploration</h2>
 <div id="e63efbf3" class="cell" data-execution_count="87">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>landsat_data<span class="sc">.</span>data_vars<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>landsat_data<span class="sc">.</span>coords<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time Value: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>time<span class="sc">.</span>values<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dimensions: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>dims<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data variables:
     red          (y, x) float32 16MB ...
@@ -410,36 +395,27 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="restoring-geospatial-info" class="level2">
 <h2 class="anchored" data-anchor-id="restoring-geospatial-info">Restoring Geospatial Info</h2>
 <div id="a18bf0ae" class="cell" data-execution_count="88">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print dataset crs</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Current CRS: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>rio<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Current CRS: None</code></pre>
 </div>
 </div>
 <p>Currently, the geospatial information like Coordinate Reference System (CRS) isn’t loaded correctly into the data, indicated by “None” output in the above cell. However, this CRS information is stored within the data variable <code>spatial_ref</code> and can be accessed.</p>
 <div id="44fa595e" class="cell" data-execution_count="89">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print spatial ref variable crs</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(landsat_data.spatial_ref.crs_wkt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>PROJCS["WGS 84 / UTM zone 11N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32611"]]</code></pre>
 </div>
 </div>
 <p>Now the <code>.spatial_ref.crs_wkt</code> can be applied with <code>.rio.write_crs()</code> and the DataSet’s geospatial information will be loaded correctly and it’s ready to be mapped.</p>
 <div id="f1952ea3" class="cell" data-execution_count="111">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set dataset CRS</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>landsat_data <span class="op">=</span> landsat_data.rio.write_crs(landsat_data.spatial_ref.crs_wkt)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print newly assigned crs</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Current CRS: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>rio<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Current CRS: EPSG:32611</code></pre>
 </div>
@@ -448,8 +424,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="true-color-image" class="level2">
 <h2 class="anchored" data-anchor-id="true-color-image">True Color Image</h2>
 <div id="31fb97da" class="cell" data-execution_count="117">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill nans with 0 &amp; plot</span></span>
@@ -457,7 +431,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"True Color Image - LA County"</span>)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -471,8 +444,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="false-color-image" class="level2">
 <h2 class="anchored" data-anchor-id="false-color-image">False Color Image</h2>
 <div id="f730dc28" class="cell" data-execution_count="119">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Input different bands into rgb channels for false color image</span></span>
@@ -480,7 +451,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"False Color Image - LA County"</span>)</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -494,8 +464,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="combined-map" class="level2">
 <h2 class="anchored" data-anchor-id="combined-map">Combined Map</h2>
 <div id="2329e89d" class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set crs of fire perimeter data to match landsat data</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>palisades_eaton <span class="op">=</span> palisades_eaton.to_crs(<span class="st">"EPSG:32611"</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -520,7 +488,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Post Palisades/Eaton Fire, February 2025: False Color Image"</span>)</span>
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -537,34 +504,26 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="load-eji-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-eji-data">Load EJI Data</h2>
 <div id="2398b8bf" class="cell" data-execution_count="99">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from gdb file</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fp3 <span class="op">=</span> os.path.join(<span class="st">"data"</span>, <span class="st">"EJI_2024_California"</span>, <span class="st">"EJI_2024_California.gdb"</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>eji_data <span class="op">=</span> gpd.read_file(fp3).clean_names()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 </section>
 <section id="polygon-intersection" class="level2">
 <h2 class="anchored" data-anchor-id="polygon-intersection">Polygon Intersection</h2>
 <p>Before plotting the fire perimeter boundaries on top of the census data. The CRSs of the two datasets must match.</p>
 <div id="567a42bd" class="cell" data-execution_count="100">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change EJI CRS before joining</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> perimeter_data.crs <span class="op">!=</span> eji_data.crs:</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"No CRS match. Matching now to </span><span class="sc">{</span>perimeter_data<span class="sc">.</span>crs<span class="sc">}</span><span class="ss"> "</span>)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    eji_data <span class="op">=</span> eji_data.to_crs(perimeter_data.crs)</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"CRS match."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>No CRS match. Matching now to EPSG:3857 </code></pre>
 </div>
 </div>
 <div id="d2f20a4e" class="cell" data-execution_count="101">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to 2025 Palisades</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>palisades_perimeter <span class="op">=</span> perimeter_data[(perimeter_data[<span class="st">'fire_name'</span>] <span class="op">==</span> <span class="st">"PALISADES"</span>) <span class="op">&amp;</span> (perimeter_data[<span class="st">'year_'</span>] <span class="op">==</span> <span class="dv">2025</span>)]</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>palisades_census <span class="op">=</span> gpd.sjoin(left_df<span class="op">=</span>eji_data, right_df<span class="op">=</span>palisades_perimeter, how<span class="op">=</span><span class="st">'inner'</span>)</span>
@@ -587,7 +546,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Census Tracts Intersecting Fire Perimeters"</span>, size <span class="op">=</span> <span class="dv">20</span>, weight <span class="op">=</span> <span class="st">"bold"</span>)</span>
 <span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -600,8 +558,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="polygon-clipping" class="level2">
 <h2 class="anchored" data-anchor-id="polygon-clipping">Polygon Clipping</h2>
 <div id="97425ab0" class="cell" data-execution_count="102">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>palisades_clip <span class="op">=</span> gpd.clip(gdf<span class="op">=</span>palisades_census, mask<span class="op">=</span>palisades_perimeter)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>eaton_clip <span class="op">=</span> gpd.clip(gdf<span class="op">=</span>eaton_census, mask<span class="op">=</span>eaton_perimeter)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -617,7 +573,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Census Tracts Clipped by Fire Perimeters"</span>, size<span class="op">=</span><span class="dv">20</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
 <span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -630,8 +585,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="visualize-with-basemap" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-with-basemap">Visualize with Basemap</h2>
 <div id="8f8a66c8" class="cell" data-execution_count="103">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">12</span>))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -651,7 +604,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -665,8 +617,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <section id="visualize-with-eji-data" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-with-eji-data">Visualize with EJI Data</h2>
 <div id="9fe9cdca" class="cell" data-execution_count="123">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
@@ -708,7 +658,6 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'Persons Age &gt; 65 (%)'</span>, size<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
