@@ -4,7 +4,7 @@ description: "A dive into the nuances in spatial resolutions for environmental e
 date: 12-05-2025
 editor: source
 categories: [MEDS, R, Ethics]
-draft: true
+draft: false
 image: air2.jpg
 bibliography: citations.bib
 ---
