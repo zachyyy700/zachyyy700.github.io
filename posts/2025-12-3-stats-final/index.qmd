@@ -29,6 +29,41 @@ theme_set(theme_classic())
 lakes <- read_csv(here::here('data', "Timeseries_v6_forEDI.csv"))
 ```
 
+**Variables Description:**
+
+::: {#tbl-panel layout-ncol="2"}
+| Variables | Description |
+|------------------------------------|------------------------------------|
+| DOW | DNR Lake Number |
+| sampleDate | Date which sample was collected on |
+| parameter | Water quality parameter |
+| result | Value of parameter |
+| gtlt | Greater than less than, indicates if values are above or below detection limits |
+| dataSource | Source of original data |
+| county | County which lake is located in |
+
+: Variables Overview {#tbl-first}
+
+| Parameters         | Description                                 |
+|--------------------|---------------------------------------------|
+| chla.nonPcorr.ug_L | Chlorophyll a, not corrected for pheophytin |
+| chla.Pcorr.ug_L    | Chlorophyll a, corrected for pheophytin     |
+| Cl.mg_L            | Chlorine                                    |
+| NH4.mg_L           | Ammonium                                    |
+| nitrate.mg_L       | Nitrate                                     |
+| nitrite.mg_L       | Nitrite                                     |
+| NOX.mg_L           | Nitrate & Nitrite                           |
+| secchi.m           | Secchi depth                                |
+| spCond.uS_cm       | Specific conductivity                       |
+| TKN.mg_L           | Total Kjeldahl nitrogen                     |
+| TN.mg_L            | Total nitrogen                              |
+| TP.mg_L            | Total phosphorus                            |
+
+: Parameters {#tbl-second}
+
+Dataset Overview
+:::
+
 ```{r}
 ggplot(lakes, aes(result)) +
   geom_histogram() +
@@ -62,7 +97,6 @@ graph TD
   class Date,County,Secchi,TN,TP whitebox;
 ```
 
-
 ```{r}
 #| include: false
 
@@ -95,7 +129,7 @@ ggplot(lakes |> filter(parameter != "spCond.uS_cm"), aes(parameter, result)) +
 
 **Model in statistical notation:**
 
-$$\text{PConcentration} \sim \text{Gamma}(\mu, \phi)$$ 
+$$\text{PConcentration} \sim \text{Gamma}(\mu, \phi)$$
 
 $$\log(\mu) = \beta_0 + \beta_1 * \text{SecchiDepth}$$
 
@@ -119,27 +153,25 @@ $$\log(\mu) = \beta_0 + \beta_1 * \text{SecchiDepth}$$
 
 Traditionally, the Gamma distribution is parameterized as follows:
 
-1. Shape: $\alpha$
+1.  Shape: $\alpha$
 
-2. Scale: $\theta$
+2.  Scale: $\theta$
 
-3. Mean: $\mu = \alpha\theta$
+3.  Mean: $\mu = \alpha\theta$
 
-4. Variance: $\sigma^2 = \alpha\theta^2$
+4.  Variance: $\sigma^2 = \alpha\theta^2$
 
 The parameterization can also be defined in terms of $\phi$ as:
 
-5. Shape: $\phi$
+5.  Shape: $\phi$
 
-6. Scale: $\mu / \phi$
+6.  Scale: $\mu / \phi$
 
-7. Mean: $\mu = \alpha\theta = \phi*(\frac{\mu}{\phi}) = \mu$
+7.  Mean: $\mu = \alpha\theta = \phi*(\frac{\mu}{\phi}) = \mu$
 
-8. Variance: $\sigma^2 = \alpha\theta^2=\phi(\frac{\mu}{\phi})^2=\mu^2 / \phi$
+8.  Variance: $\sigma^2 = \alpha\theta^2=\phi(\frac{\mu}{\phi})^2=\mu^2 / \phi$
 
 When picking initial parameters to simulate, we also define $\phi$ in addition to our $\beta$s.
-
-
 
 ```{r}
 n <- 200
@@ -148,26 +180,26 @@ beta1 <- -0.7 # Simulate log response decrease as predictor increases
 phi <- 3
 ```
 
+To confirm our understanding of the model and system, we create simulated data with pre-defined coefficients, run the model and expect our coefficients to be returned.
+
 **Generating simulated data:**
 
-The predictor: 
+The predictor:
 
-- This is the independent variable. `rgamma()` was used to pick random values from a Gamma distribution with a shape of 1 & scale of 0.5. Choosing these parameters, gave the predictor a mean of 0.5 (Eq. 3). A Gamma distribution was chosen to add realism since the real pollution concentration data in this post are also Gamma distributed.
+-   This is the independent variable. `rgamma()` was used to pick random values from a Gamma distribution with a shape of 1 & scale of 0.5. Choosing these parameters, gave the predictor a mean of 0.5 (Eq. 3). A Gamma distribution was chosen to add realism since the real pollution concentration data in this post are also Gamma distributed.
 
 ```{r}
 # Simulated predictor with a mean of 0.5
 predictor <- rgamma(n = n, shape = 1, scale = 0.5)
 ```
 
-The response: 
+The response:
 
-- This is the dependent variable. `rgamma()` was again used to pick random values from a Gamma distribution. However, the scale parameter is set to `exp(beta0 + beta1 * predictor) / phi` which sets the relationship between our predictor and response. This scale gives the mean of the response for each observation which we want to change as the predictor changes, defined in the initial model notation: 
+-   This is the dependent variable. `rgamma()` was again used to pick random values from a Gamma distribution. However, the scale parameter is set to `exp(beta0 + beta1 * predictor) / phi` which sets the relationship between our predictor and response. This scale gives the mean of the response for each observation which we want to change as the predictor changes, defined in the initial model notation:
 
-$$\log(\mu)=\beta_0 + \beta_1 * \text{predictor}$$
-Exponentiating both sides gives:
+$$\log(\mu)=\beta_0 + \beta_1 * \text{predictor}$$ Exponentiating both sides gives:
 
-$$\mu = e^{\beta_0 + \beta_1 * \text{predictor}}$$
-which was used in the scale argument as defined in Eq. 6.
+$$\mu = e^{\beta_0 + \beta_1 * \text{predictor}}$$ which was used in the scale argument as defined in Eq. 6.
 
 ```{r}
 # Simulated response with changing mean
@@ -192,9 +224,20 @@ sim_model <- glm(response ~ predictor, data = sim_df, family = Gamma(link = "log
 # Create grid (one predictor for now)
 sim_grid <- tibble(predictor = seq(0, 4, length.out = 500))
 
-# Generate predictions
-sim_grid <- sim_grid |> 
-  mutate(predicted_response = predict(sim_model, newdata = sim_grid, type = "response"))
+# Generate predictions with standard error in link space
+sim_se <- predict(sim_model, newdata = sim_grid, type = "link", se.fit = TRUE)
+
+# Undo link & add confidence intervals
+sim_ci <- sim_grid |> 
+  mutate(log_response = sim_se$fit,
+         log_response_se = sim_se$se.fit,
+         log_response_lower = qnorm(0.025, log_response, log_response_se),
+         log_response_upper = qnorm(0.975, log_response, log_response_se),
+         # Mean
+         predicted_mean = exp(log_response),
+         # Mean CI
+         mean_lower = exp(log_response_lower),
+         mean_upper = exp(log_response_upper))
 ```
 
 ```{r}
@@ -211,7 +254,8 @@ coef(sim_sum) |>
 # Plot simulated data with model fit
 ggplot() + 
   geom_point(data = sim_df, aes(predictor, response), alpha = 0.3) +
-  geom_line(data = sim_grid, aes(predictor, predicted_response), color = 'red', linewidth = 1)
+  geom_line(data = sim_ci, aes(predictor, predicted_mean), color = 'red', linewidth = 1) +
+  geom_ribbon(data = sim_ci, aes(predictor, ymin = mean_lower, ymax = mean_upper), alpha = 0.5)
 ```
 
 ## Fit model to real data
@@ -220,7 +264,6 @@ ggplot() +
 # Raw scatterplot
 ggplot(lakes_wide, aes(secchi.m, TP.mg_L)) + geom_point(alpha = 0.1)
 ```
-
 
 ```{r}
 # Run model on real data
@@ -289,6 +332,35 @@ rownames(ci_table) <- c("(Intercept)", "secchi.m")
 # Display table
 ci_table |> kbl(col.names = c("Link Estimate", "Response Estimate", "CI Lower Bound", "CI Upper Bound"), digits = 3, align = 'c')
 ```
+
+# Extend model to other parameters
+
+```{r}
+response_vars <- lakes_wide |> 
+  select(NOX.mg_L:TN.mg_L) |> 
+  colnames()
+
+lakes_nonzero <- lakes_wide |> 
+  filter(spCond.uS_cm > 0) |>
+  filter(NH4.mg_L > 0) |>
+  filter(chla.Pcorr.ug_L > 0)
+```
+
+```{r}
+response_df <- map_df(response_vars, ~{
+  model <- glm(as.formula(paste(.x, "~ secchi.m")), data = lakes_nonzero, family = Gamma(link = "log"))
+  model_sum <- summary(model)
+  
+  tibble(
+    response = .x,
+    term = names(coef(model)),
+    estimate = coef(model),
+    p_val = coef(model_sum)[, 4]
+  )
+  
+})
+```
+
 
 # Inference
 
