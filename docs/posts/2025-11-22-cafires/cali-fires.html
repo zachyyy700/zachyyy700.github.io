@@ -523,7 +523,7 @@ Is this CRS projected?: True</code></pre>
 <p><strong>Fire perimeter description</strong>: The fire perimeter data was downloaded from CAL FIRE hosted by California’s Open Data Portal. Some preliminary findings about the data included the unique observation counts of the <code>decades</code> variable. This shows how many observations of wildfires there are for each decade group in the data. Next, the CRS was shown to be <strong>EPSG:3857</strong> and it is also a <strong>projected CRS</strong>, meaning it is two-dimensional as opposed to geographic CRSs which use a three-dimensional spherical surface.</p>
 <section id="fire-perimeters-initial-plot" class="level3">
 <h3 class="anchored" data-anchor-id="fire-perimeters-initial-plot">Fire Perimeters Initial Plot</h3>
-<div id="a4990397" class="cell" data-execution_count="5">
+<div id="a4990397" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter perimeter data to fires of interest</span></span>
@@ -533,23 +533,15 @@ Is this CRS projected?: True</code></pre>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial plot</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>palisades_eaton.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/zachloo/opt/anaconda3/envs/eds220-env/lib/python3.11/site-packages/IPython/core/pylabtools.py:77: DeprecationWarning: backend2gui is deprecated since IPython 8.24, backends are managed in matplotlib and can be externally registered.
-  warnings.warn(
-/Users/zachloo/opt/anaconda3/envs/eds220-env/lib/python3.11/site-packages/IPython/core/pylabtools.py:77: DeprecationWarning: backend2gui is deprecated since IPython 8.24, backends are managed in matplotlib and can be externally registered.
-  warnings.warn(
-/Users/zachloo/opt/anaconda3/envs/eds220-env/lib/python3.11/site-packages/IPython/core/pylabtools.py:77: DeprecationWarning: backend2gui is deprecated since IPython 8.24, backends are managed in matplotlib and can be externally registered.
-  warnings.warn(</code></pre>
-</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="cali-fires_files/figure-html/cell-6-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="cali-fires_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Above is the initial map of the wildfire perimeters of interest: Palisades and Eaton.</p>
+<p>Above is the initial map of the wildfire perimeters of interest: Palisades (left) and Eaton (right).</p>
 </section>
 </section>
 <section id="landsat-data-exploration" class="level2">
@@ -557,10 +549,10 @@ Is this CRS projected?: True</code></pre>
 <div id="e63efbf3" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>landsat_data<span class="sc">.</span>data_vars<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>landsat_data<span class="sc">.</span>coords<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time Value: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>time<span class="sc">.</span>values<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dimensions: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>dims<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>landsat_data<span class="sc">.</span>data_vars<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>landsat_data<span class="sc">.</span>coords<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time Value: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>time<span class="sc">.</span>values<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dimensions: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>dims<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data variables:
@@ -588,8 +580,8 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="a18bf0ae" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print dataset crs</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Current CRS: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>rio<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print dataset crs</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Current CRS: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>rio<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Current CRS: None</code></pre>
@@ -599,8 +591,8 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="44fa595e" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print spatial ref variable crs</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(landsat_data.spatial_ref.crs_wkt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print spatial ref variable crs</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(landsat_data.spatial_ref.crs_wkt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>PROJCS["WGS 84 / UTM zone 11N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32611"]]</code></pre>
@@ -610,11 +602,11 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="f1952ea3" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set dataset CRS</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>landsat_data <span class="op">=</span> landsat_data.rio.write_crs(landsat_data.spatial_ref.crs_wkt)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print newly assigned crs</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Current CRS: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>rio<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set dataset CRS</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>landsat_data <span class="op">=</span> landsat_data.rio.write_crs(landsat_data.spatial_ref.crs_wkt)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print newly assigned crs</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Current CRS: </span><span class="sc">{</span>landsat_data<span class="sc">.</span>rio<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Current CRS: EPSG:32611</code></pre>
@@ -627,13 +619,13 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="31fb97da" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill nans with 0 &amp; plot</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'red'</span>, <span class="st">'green'</span>, <span class="st">'blue'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(robust<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"True Color Image - LA County"</span>)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill nans with 0 &amp; plot</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'red'</span>, <span class="st">'green'</span>, <span class="st">'blue'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(robust<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"True Color Image - LA County"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -651,13 +643,13 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="f730dc28" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Input different bands into rgb channels for false color image</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'swir22'</span>, <span class="st">'nir08'</span>, <span class="st">'red'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(robust<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"False Color Image - LA County"</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Input different bands into rgb channels for false color image</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'swir22'</span>, <span class="st">'nir08'</span>, <span class="st">'red'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(robust<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"False Color Image - LA County"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -675,30 +667,30 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="2329e89d" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set crs of fire perimeter data to match landsat data</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>palisades_eaton <span class="op">=</span> palisades_eaton.to_crs(<span class="st">"EPSG:32611"</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize figure</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>))</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn off axes</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot landsat false color</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'swir22'</span>, <span class="st">'nir08'</span>, <span class="st">'red'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(ax<span class="op">=</span>ax, robust<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot fire perimeters on top of false color image</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>palisades_eaton.plot(ax<span class="op">=</span>ax, facecolor<span class="op">=</span><span class="st">'None'</span>, edgecolor<span class="op">=</span><span class="st">'fuchsia'</span>)</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add fire text</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=</span><span class="dv">340000</span>, y<span class="op">=</span><span class="dv">3775000</span>, s<span class="op">=</span><span class="st">"Palisades"</span>, fontsize<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span><span class="st">'darkblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=</span><span class="dv">390000</span>, y<span class="op">=</span><span class="dv">3780000</span>, s<span class="op">=</span><span class="st">"Eaton"</span>, fontsize<span class="op">=</span><span class="dv">18</span>, color<span class="op">=</span><span class="st">'midnightblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom legend</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>custom_line <span class="op">=</span> [Line2D([<span class="dv">0</span>], [<span class="dv">0</span>], color<span class="op">=</span><span class="st">'fuchsia'</span>, lw<span class="op">=</span><span class="dv">4</span>)]</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>fig.legend(custom_line, [<span class="st">'Fire Perimeter'</span>],  loc<span class="op">=</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>), fontsize<span class="op">=</span><span class="dv">10</span>, shadow<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Post Palisades/Eaton Fire, February 2025: False Color Image"</span>)</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set crs of fire perimeter data to match landsat data</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>palisades_eaton <span class="op">=</span> palisades_eaton.to_crs(<span class="st">"EPSG:32611"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize figure</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>))</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn off axes</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot landsat false color</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>landsat_data[[<span class="st">'swir22'</span>, <span class="st">'nir08'</span>, <span class="st">'red'</span>]].fillna(value<span class="op">=</span><span class="dv">0</span>).to_array().plot.imshow(ax<span class="op">=</span>ax, robust<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot fire perimeters on top of false color image</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>palisades_eaton.plot(ax<span class="op">=</span>ax, facecolor<span class="op">=</span><span class="st">'None'</span>, edgecolor<span class="op">=</span><span class="st">'fuchsia'</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add fire text</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=</span><span class="dv">340000</span>, y<span class="op">=</span><span class="dv">3775000</span>, s<span class="op">=</span><span class="st">"Palisades"</span>, fontsize<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span><span class="st">'darkblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=</span><span class="dv">390000</span>, y<span class="op">=</span><span class="dv">3780000</span>, s<span class="op">=</span><span class="st">"Eaton"</span>, fontsize<span class="op">=</span><span class="dv">18</span>, color<span class="op">=</span><span class="st">'midnightblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom legend</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>custom_line <span class="op">=</span> [Line2D([<span class="dv">0</span>], [<span class="dv">0</span>], color<span class="op">=</span><span class="st">'fuchsia'</span>, lw<span class="op">=</span><span class="dv">4</span>)]</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>fig.legend(custom_line, [<span class="st">'Fire Perimeter'</span>],  loc<span class="op">=</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>), fontsize<span class="op">=</span><span class="dv">10</span>, shadow<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Post Palisades/Eaton Fire, February 2025: False Color Image"</span>)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -718,9 +710,9 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="2398b8bf" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from gdb file</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fp3 <span class="op">=</span> os.path.join(<span class="st">"data"</span>, <span class="st">"EJI_2024_California"</span>, <span class="st">"EJI_2024_California.gdb"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>eji_data <span class="op">=</span> gpd.read_file(fp3).clean_names()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from gdb file</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fp3 <span class="op">=</span> os.path.join(<span class="st">"data"</span>, <span class="st">"EJI_2024_California"</span>, <span class="st">"EJI_2024_California.gdb"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>eji_data <span class="op">=</span> gpd.read_file(fp3).clean_names()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -730,12 +722,12 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="567a42bd" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change EJI CRS before joining</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> perimeter_data.crs <span class="op">!=</span> eji_data.crs:</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"No CRS match. Matching now to </span><span class="sc">{</span>perimeter_data<span class="sc">.</span>crs<span class="sc">}</span><span class="ss"> "</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    eji_data <span class="op">=</span> eji_data.to_crs(perimeter_data.crs)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"CRS match."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change EJI CRS before joining</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> perimeter_data.crs <span class="op">!=</span> eji_data.crs:</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"No CRS match. Matching now to </span><span class="sc">{</span>perimeter_data<span class="sc">.</span>crs<span class="sc">}</span><span class="ss"> "</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    eji_data <span class="op">=</span> eji_data.to_crs(perimeter_data.crs)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"CRS match."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>No CRS match. Matching now to EPSG:3857 </code></pre>
@@ -745,28 +737,28 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="d2f20a4e" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to 2025 Palisades</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>palisades_perimeter <span class="op">=</span> perimeter_data[(perimeter_data[<span class="st">'fire_name'</span>] <span class="op">==</span> <span class="st">"PALISADES"</span>) <span class="op">&amp;</span> (perimeter_data[<span class="st">'year_'</span>] <span class="op">==</span> <span class="dv">2025</span>)]</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>palisades_census <span class="op">=</span> gpd.sjoin(left_df<span class="op">=</span>eji_data, right_df<span class="op">=</span>palisades_perimeter, how<span class="op">=</span><span class="st">'inner'</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to 2025 Eaton</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>eaton_perimeter <span class="op">=</span> perimeter_data[(perimeter_data[<span class="st">'fire_name'</span>] <span class="op">==</span> <span class="st">"EATON"</span>) <span class="op">&amp;</span> (perimeter_data[<span class="st">'year_'</span>] <span class="op">==</span> <span class="dv">2025</span>)]</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>eaton_census <span class="op">=</span> gpd.sjoin(left_df<span class="op">=</span>eji_data, right_df<span class="op">=</span>eaton_perimeter, how<span class="op">=</span><span class="st">'inner'</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>palisades_census.plot(ax<span class="op">=</span>ax1)</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>palisades_perimeter.boundary.plot(ax<span class="op">=</span>ax1, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>)</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>eaton_census.plot(ax<span class="op">=</span>ax2)</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>eaton_perimeter.boundary.plot(ax<span class="op">=</span>ax2, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>)</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Census Tracts Intersecting Fire Perimeters"</span>, size <span class="op">=</span> <span class="dv">20</span>, weight <span class="op">=</span> <span class="st">"bold"</span>)</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to 2025 Palisades</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>palisades_perimeter <span class="op">=</span> perimeter_data[(perimeter_data[<span class="st">'fire_name'</span>] <span class="op">==</span> <span class="st">"PALISADES"</span>) <span class="op">&amp;</span> (perimeter_data[<span class="st">'year_'</span>] <span class="op">==</span> <span class="dv">2025</span>)]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>palisades_census <span class="op">=</span> gpd.sjoin(left_df<span class="op">=</span>eji_data, right_df<span class="op">=</span>palisades_perimeter, how<span class="op">=</span><span class="st">'inner'</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to 2025 Eaton</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>eaton_perimeter <span class="op">=</span> perimeter_data[(perimeter_data[<span class="st">'fire_name'</span>] <span class="op">==</span> <span class="st">"EATON"</span>) <span class="op">&amp;</span> (perimeter_data[<span class="st">'year_'</span>] <span class="op">==</span> <span class="dv">2025</span>)]</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>eaton_census <span class="op">=</span> gpd.sjoin(left_df<span class="op">=</span>eji_data, right_df<span class="op">=</span>eaton_perimeter, how<span class="op">=</span><span class="st">'inner'</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>palisades_census.plot(ax<span class="op">=</span>ax1)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>palisades_perimeter.boundary.plot(ax<span class="op">=</span>ax1, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>eaton_census.plot(ax<span class="op">=</span>ax2)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>eaton_perimeter.boundary.plot(ax<span class="op">=</span>ax2, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Census Tracts Intersecting Fire Perimeters"</span>, size <span class="op">=</span> <span class="dv">20</span>, weight <span class="op">=</span> <span class="st">"bold"</span>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -783,21 +775,21 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="97425ab0" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>palisades_clip <span class="op">=</span> gpd.clip(gdf<span class="op">=</span>palisades_census, mask<span class="op">=</span>palisades_perimeter)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>eaton_clip <span class="op">=</span> gpd.clip(gdf<span class="op">=</span>eaton_census, mask<span class="op">=</span>eaton_perimeter)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>palisades_clip.plot(ax<span class="op">=</span>ax1)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>eaton_clip.plot(ax<span class="op">=</span>ax2)</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Census Tracts Clipped by Fire Perimeters"</span>, size<span class="op">=</span><span class="dv">20</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>palisades_clip <span class="op">=</span> gpd.clip(gdf<span class="op">=</span>palisades_census, mask<span class="op">=</span>palisades_perimeter)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>eaton_clip <span class="op">=</span> gpd.clip(gdf<span class="op">=</span>eaton_census, mask<span class="op">=</span>eaton_perimeter)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>palisades_clip.plot(ax<span class="op">=</span>ax1)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>eaton_clip.plot(ax<span class="op">=</span>ax2)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Census Tracts Clipped by Fire Perimeters"</span>, size<span class="op">=</span><span class="dv">20</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -813,25 +805,25 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="8f8a66c8" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">12</span>))</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD FIRE PERIMETERS: UPDATE FILL TRANSPARENCY AND COLOR</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>palisades_clip.plot(ax<span class="op">=</span>ax, facecolor<span class="op">=</span><span class="st">'fuchsia'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>eaton_clip.plot(ax<span class="op">=</span>ax, facecolor<span class="op">=</span><span class="st">'fuchsia'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add basemap using contextily</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>ctx.add_basemap(ax, source<span class="op">=</span>ctx.providers.OpenStreetMap.Mapnik)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD LEGEND OR ANNOTATION TO IDENTIFY EACH FIRE</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=-</span><span class="dv">13215000</span>, y<span class="op">=</span><span class="dv">4045000</span>, s<span class="op">=</span><span class="st">"Palisades"</span>, fontsize<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">'darkblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=-</span><span class="dv">13160000</span>, y<span class="op">=</span><span class="dv">4060000</span>, s<span class="op">=</span><span class="st">"Eaton"</span>, fontsize<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">'midnightblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD TITLE</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">12</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD FIRE PERIMETERS: UPDATE FILL TRANSPARENCY AND COLOR</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>palisades_clip.plot(ax<span class="op">=</span>ax, facecolor<span class="op">=</span><span class="st">'fuchsia'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>eaton_clip.plot(ax<span class="op">=</span>ax, facecolor<span class="op">=</span><span class="st">'fuchsia'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add basemap using contextily</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>ctx.add_basemap(ax, source<span class="op">=</span>ctx.providers.OpenStreetMap.Mapnik)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD LEGEND OR ANNOTATION TO IDENTIFY EACH FIRE</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=-</span><span class="dv">13215000</span>, y<span class="op">=</span><span class="dv">4045000</span>, s<span class="op">=</span><span class="st">"Palisades"</span>, fontsize<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">'darkblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>ax.text(x<span class="op">=-</span><span class="dv">13160000</span>, y<span class="op">=</span><span class="dv">4060000</span>, s<span class="op">=</span><span class="st">"Eaton"</span>, fontsize<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">'midnightblue'</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD TITLE</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -848,45 +840,45 @@ Dimensions: FrozenMappingWarningOnValuesAccess({'y': 1418, 'x': 2742})</code></p
 <div id="9fe9cdca" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set EJI variable</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>eji_variable <span class="op">=</span> <span class="st">'e_age65'</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Find common min/max for legend range</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>vmin <span class="op">=</span> <span class="bu">min</span>(palisades_census[eji_variable].<span class="bu">min</span>(), eaton_census[eji_variable].<span class="bu">min</span>())</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>vmax <span class="op">=</span> <span class="bu">max</span>(palisades_census[eji_variable].<span class="bu">max</span>(), eaton_census[eji_variable].<span class="bu">max</span>())</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Palisades perimeter</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>palisades_clip.plot(column<span class="op">=</span> eji_variable, vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax, legend<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax1, cmap<span class="op">=</span><span class="st">'PuBu'</span>)</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>palisades_perimeter.boundary.plot(ax<span class="op">=</span>ax1, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Palisades Census Tracts'</span>, size<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Eaton perimeter</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>eaton_clip.plot(column<span class="op">=</span>eji_variable, vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax, legend<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax2, cmap<span class="op">=</span><span class="st">'PuBu'</span>)</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>eaton_perimeter.boundary.plot(ax<span class="op">=</span>ax2, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Eaton Census Tracts'</span>, size<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add overall title</span></span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'People Age &gt; 65: Fire Areas</span><span class="ch">\n</span><span class="st">Comparison By Census Tract'</span>, size<span class="op">=</span><span class="dv">30</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom legend</span></span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>custom_line <span class="op">=</span> [Line2D([<span class="dv">0</span>], [<span class="dv">0</span>], color<span class="op">=</span><span class="st">'red'</span>, lw<span class="op">=</span><span class="dv">4</span>)]</span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>fig.legend(custom_line, [<span class="st">'Fire Perimeter'</span>], bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="fl">0.15</span>), loc<span class="op">=</span><span class="st">'center'</span>, fontsize<span class="op">=</span><span class="dv">10</span>, shadow<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Add shared colorbar at the bottom</span></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable(norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax), cmap<span class="op">=</span><span class="st">'PuBu'</span>)</span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>cbar_ax <span class="op">=</span> fig.add_axes([<span class="fl">0.16</span>, <span class="fl">0.08</span>, <span class="fl">0.7</span>, <span class="fl">0.02</span>])  <span class="co"># [left, bottom, width, height]</span></span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(sm, cax<span class="op">=</span>cbar_ax, orientation<span class="op">=</span><span class="st">'horizontal'</span>)</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'Persons Age &gt; 65 (%)'</span>, size<span class="op">=</span><span class="dv">15</span>)</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> (ax1, ax2):</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set EJI variable</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>eji_variable <span class="op">=</span> <span class="st">'e_age65'</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Find common min/max for legend range</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>vmin <span class="op">=</span> <span class="bu">min</span>(palisades_census[eji_variable].<span class="bu">min</span>(), eaton_census[eji_variable].<span class="bu">min</span>())</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>vmax <span class="op">=</span> <span class="bu">max</span>(palisades_census[eji_variable].<span class="bu">max</span>(), eaton_census[eji_variable].<span class="bu">max</span>())</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Palisades perimeter</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>palisades_clip.plot(column<span class="op">=</span> eji_variable, vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax, legend<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax1, cmap<span class="op">=</span><span class="st">'PuBu'</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>palisades_perimeter.boundary.plot(ax<span class="op">=</span>ax1, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Palisades Census Tracts'</span>, size<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Eaton perimeter</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>eaton_clip.plot(column<span class="op">=</span>eji_variable, vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax, legend<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax2, cmap<span class="op">=</span><span class="st">'PuBu'</span>)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>eaton_perimeter.boundary.plot(ax<span class="op">=</span>ax2, edgecolor<span class="op">=</span><span class="st">'red'</span>, linewidth<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Eaton Census Tracts'</span>, size<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add overall title</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'People Age &gt; 65: Fire Areas</span><span class="ch">\n</span><span class="st">Comparison By Census Tract'</span>, size<span class="op">=</span><span class="dv">30</span>, weight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom legend</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>custom_line <span class="op">=</span> [Line2D([<span class="dv">0</span>], [<span class="dv">0</span>], color<span class="op">=</span><span class="st">'red'</span>, lw<span class="op">=</span><span class="dv">4</span>)]</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>fig.legend(custom_line, [<span class="st">'Fire Perimeter'</span>], bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="fl">0.15</span>), loc<span class="op">=</span><span class="st">'center'</span>, fontsize<span class="op">=</span><span class="dv">10</span>, shadow<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Add shared colorbar at the bottom</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable(norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax), cmap<span class="op">=</span><span class="st">'PuBu'</span>)</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>cbar_ax <span class="op">=</span> fig.add_axes([<span class="fl">0.16</span>, <span class="fl">0.08</span>, <span class="fl">0.7</span>, <span class="fl">0.02</span>])  <span class="co"># [left, bottom, width, height]</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(sm, cax<span class="op">=</span>cbar_ax, orientation<span class="op">=</span><span class="st">'horizontal'</span>)</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'Persons Age &gt; 65 (%)'</span>, size<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
