@@ -209,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#question" id="toc-question" class="nav-link active" data-scroll-target="#question">Question</a></li>
+  <li><a href="#question-motivation" id="toc-question-motivation" class="nav-link active" data-scroll-target="#question-motivation">Question &amp; Motivation</a></li>
   <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a>
@@ -232,22 +232,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="question" class="level1">
-<h1>Question</h1>
-<p>How did the 2021 severe winter storm disproportionately affect disadvantaged communities in Houston, Texas?</p>
+<section id="question-motivation" class="level1">
+<h1>Question &amp; Motivation</h1>
+<p><strong>How did the 2021 severe winter storm disproportionately affect disadvantaged communities in Houston, Texas?</strong></p>
+<p>The February 2021 winter storm triggered a widespread power outage in Texas, leaving many without heat or electricity. However, the impacts of this crisis were not felt equally. Long-standing disparities in housing quality, infrastructure, and socioeconomic conditions affected which neighborhoods were vulnerable to blackouts. This blog post investigates how these inequities influenced outages in Houston, using geospatial data to better understand how disadvantaged communities were disproportionately affected by the storm.</p>
 </section>
 <section id="background" class="level1">
 <h1>Background</h1>
-<p>Severe weather events are increasing in frequency and intensity as antropogenic climate change worsens. In Februaray 2021, a severe winter storm swept through the United States and caused a major power crisis in Houston, Texas. Additionally, it is documented that areas in Houston with lower median household income were dispropotionately affected and experienced more blackouts. This analysis will investigate winter storm Uri and the resulting socioeconomic impacts.</p>
-<p><a href="https://science.nasa.gov/earth/climate-change/extreme-makeover-human-activities-are-making-some-extreme-events-more-frequent-or-intense/">NASA</a></p>
+<p>Severe weather events are increasing in frequency and intensity as anthropogenic climate change worsens <a href="https://science.nasa.gov/earth/climate-change/extreme-makeover-human-activities-are-making-some-extreme-events-more-frequent-or-intense/">(NASA, 2021)</a>. In Februaray 2021, a severe winter storm swept through the United States and caused a major power crisis in Houston, Texas. Additionally, it is documented that areas in Houston with lower median household income were disproportionately affected and experienced more blackouts <a href="https://doi.org/10.1057/s41599-022-01353-8">(Lee et al., 2022)</a>. Since utilties do not release house-level outage information, there is no official documentation showing exactly which homes lost power or which communities were affected. Using publicly available satellite night lights, building polygons, and socioeconomic indicators, this analysis will investigate winter storm Uri and the resulting socioeconomic impacts.</p>
 </section>
 <section id="data" class="level1">
 <h1>Data</h1>
 <ul>
-<li><p>Night lights: Data used is from February 7th &amp; 16th, 2021, showing the before and after of the February 2021 Texas winter storm. The Visible Infrared Imaging Radiometer Suite (VIIRS) data is from NASA’s Level-1 and Atmospheric Archive &amp; Distribution System Distributed Active Archive Center (LAADS DAAC). The .tif files were downloaded and prepared by the instructors. LAADS DAAC Website</p></li>
-<li><p>Roads: From Geofabrik downloads site where OpenStreetMap (OSM) data can be extracted. Geofabrik Website</p></li>
-<li><p>Buildings: Also from Geofabrik, data contained are houses in the Houston area.</p></li>
-<li><p>Socio-economic: Obtained from the U.S. Census Bureau’s American Community Survey for census tracts in 2019. Used for combining census attribute data to OSM geospatial data.</p></li>
+<li><p>Night lights: Data used is from February 7th &amp; 16th, 2021, showing the before and after of the February 2021 Texas winter storm. The Visible Infrared Imaging Radiometer Suite (VIIRS) data is from NASA’s Level-1 and Atmospheric Archive &amp; Distribution System Distributed Active Archive Center (LAADS DAAC). The .tif files were downloaded and prepared by the instructors. <a href="https://ladsweb.modaps.eosdis.nasa.gov/">LAADS DAAC Website</a></p></li>
+<li><p>Roads: From Geofabrik downloads site where OpenStreetMap (OSM) data can be extracted. This dataset contains geometries for major highways and streets in the Houston area. Used to account for night light interference from highway light pollution. <a href="https://download.geofabrik.de/">Geofabrik Website</a></p></li>
+<li><p>Buildings: Also from Geofabrik, data contained are polygons for houses, commercial structures, and other buildings in the Houston area. Used to calculate an estimate of residential homes impacted by blackouts.</p></li>
+<li><p>Socio-economic: Obtained from the U.S. Census Bureau’s American Community Survey for census tracts in 2019. This data contains variables like income, race, age, and other demographic information. Used for combining census attribute data to OSM geospatial data to evaluate which communities were impacted by the storm.</p></li>
 </ul>
 </section>
 <section id="analysis" class="level1">
@@ -416,7 +416,7 @@ Figure&nbsp;1: Comparison of Houston Lights Before &amp; After the February 2021
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">"EPSG:3083"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>Due to light pollution from highways, locations within 200 meters of highways should be excluded.</p>
+<p>Here, we use the road data to account for the influence of light pollution on blackout detection. Major highways produce significant lighting that can interfere with night light differences so only highway segments tagged as <code>motorway</code> are selected for analysis. As a result, locations within 200 meters of highways should be excluded.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -454,6 +454,7 @@ Figure&nbsp;1: Comparison of Houston Lights Before &amp; After the February 2021
 </section>
 <section id="identify-homes-impacted-by-blackouts" class="level2">
 <h2 class="anchored" data-anchor-id="identify-homes-impacted-by-blackouts">Identify Homes Impacted by Blackouts</h2>
+<p>Next, we’ll use the homes data to identify homes within our previously defined blackout areas. This enables us to retrieve an estimated number of homes that lost power and a map of impacted homes.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -504,9 +505,8 @@ Figure&nbsp;1: Comparison of Houston Lights Before &amp; After the February 2021
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="fu">c</span>(<span class="st">'blue'</span>),</span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">type =</span> <span class="st">'polygons'</span>,</span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">position =</span> <span class="fu">c</span>(<span class="st">'left'</span>, <span class="st">'top'</span>)) <span class="sc">+</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_layout</span>(<span class="at">bg.color =</span> <span class="st">'grey90'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_title</span>(<span class="st">"Map of Impacted Houston Homes"</span>) <span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_layout</span>(<span class="at">bg.color =</span> <span class="st">'grey90'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-blackout-homes" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -545,9 +545,8 @@ Figure&nbsp;2: Map of Homes That Lost Power.
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display kable table</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">knitr.kable.NA =</span> <span class="st">""</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(homes_df,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.attr =</span> <span class="st">'class="custom-table"'</span>, <span class="co"># For custom html styling</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Home Type"</span>, <span class="st">"Count"</span>, <span class="st">"Percentage (%)"</span>),</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="st">'c'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Home Type"</span>, <span class="st">"Count"</span>, <span class="st">"Percentage (%)"</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="st">'c'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-homes" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -556,7 +555,7 @@ Table&nbsp;1: Estimate of Homes That Experienced Blackouts by Home Type
 </figcaption>
 <div aria-describedby="tbl-homes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="custom-table do-not-create-environment cell caption-top table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: center;" data-quarto-table-cell-role="th">Home Type</th>
@@ -610,6 +609,7 @@ Table&nbsp;1: Estimate of Homes That Experienced Blackouts by Home Type
 </section>
 <section id="identify-census-tracts-impacted-by-blackouts" class="level2">
 <h2 class="anchored" data-anchor-id="identify-census-tracts-impacted-by-blackouts">Identify Census Tracts Impacted by Blackouts</h2>
+<p>In the same way as finding homes impacted, we use census data and our blackout areas to estimate the number of census tracts impacted and map them.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -675,14 +675,24 @@ Table&nbsp;1: Estimate of Homes That Experienced Blackouts by Home Type
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> blackout,</span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> count) <span class="sc">|&gt;</span> </span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">everything</span>())))</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>blackout_table <span class="sc">|&gt;</span> </span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"No Blackout"</span>, <span class="st">"Blackout"</span>, <span class="st">"Total Census Tracts"</span>),</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">'c'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">everything</span>())))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>blackout_table <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"No Blackout"</span>, <span class="st">"Blackout"</span>, <span class="st">"Total Census Tracts"</span>),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">'c'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="tbl-census-blackouts" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-census-blackouts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Estimate of Impacted and Non-impacted Census Tracts
+</figcaption>
+<div aria-describedby="tbl-census-blackouts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: center;" data-quarto-table-cell-role="th">No Blackout</th>
@@ -700,21 +710,25 @@ Table&nbsp;1: Estimate of Homes That Experienced Blackouts by Home Type
 </table>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot blackout areas with census blackouts</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(census_income) <span class="sc">+</span> <span class="co"># Census layer</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(census_blackouts) <span class="sc">+</span> <span class="co"># Census blackout layer</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">'orange'</span>) <span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_compass</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.92</span>, <span class="fl">0.32</span>)) <span class="sc">+</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_scalebar</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.76</span>, <span class="fl">0.18</span>)) <span class="sc">+</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_add_legend</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Tracts That Lost Power"</span>),</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="fu">c</span>(<span class="st">'orange'</span>),</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">type =</span> <span class="st">'polygons'</span>,</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">position =</span> <span class="fu">c</span>(<span class="st">'right'</span>, <span class="st">'bottom'</span>)) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot blackout areas with census blackouts</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(census_income) <span class="sc">+</span> <span class="co"># Census layer</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(census_blackouts) <span class="sc">+</span> <span class="co"># Census blackout layer</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">'orange'</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_compass</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.92</span>, <span class="fl">0.32</span>)) <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_scalebar</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.76</span>, <span class="fl">0.18</span>)) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_add_legend</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Tracts That Lost Power"</span>),</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="fu">c</span>(<span class="st">'orange'</span>),</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">type =</span> <span class="st">'polygons'</span>,</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">position =</span> <span class="fu">c</span>(<span class="st">'right'</span>, <span class="st">'bottom'</span>)) <span class="sc">+</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_title</span>(<span class="st">"Map of Impacted Houston Census Tracts"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-census-blackouts" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -729,19 +743,21 @@ Figure&nbsp;3: Houston Census Tracts That Lost Power.
 </div>
 </div>
 </div>
+<p>Combining median household income of each census tract and our impacted/non-impacted census tracts, we can display the distribution of income for each group.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Median household income plot</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(census_blackout_tf, <span class="fu">aes</span>(blackout, median_hh_income_est)) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">'No Blackout'</span>, <span class="st">'Blackout'</span>)) <span class="sc">+</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Median Household Income (Estimate) in Census Tract"</span>) <span class="sc">+</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">'grey'</span>),</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>()) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Median household income plot</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(census_blackout_tf, <span class="fu">aes</span>(blackout, median_hh_income_est)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">'No Blackout'</span>, <span class="st">'Blackout'</span>)) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Median Household Income for Census Tract Blackout Groups"</span>, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Median Household Income (Estimate) in Census Tract"</span>) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">'grey'</span>),</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>()) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-income" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -764,10 +780,11 @@ Figure&nbsp;4: Distribution of Median Household Income for Census Tracts per Bla
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
 <ul>
-<li><p>Román, M.O., Wang, Z., Sun, Q., Kalb, V.L., Miller, S.D., Molthan, A., Schultz, L., Bell, J., Stokes, E.C., Pandey, B., et al.&nbsp;(2018). NASA’s Black Marble nighttime lights product suite (VNP46). Remote Sensing of Environment, 210, 113-143. <a href="https://doi.org/10.1016/j.rse.2018.03.017" class="uri">https://doi.org/10.1016/j.rse.2018.03.017</a></p></li>
+<li><p>Lee CC, Maron M, Mostafavi A. (2022). Community-scale big data reveals disparate impacts of the Texas winter storm of 2021 and its managed power outage. Humanit Soc Sci Commun. 2022;9(1):335. doi:10.1057/s41599-022-01353-8. Epub 2022 Sep 24. PMID: 36187845; PMCID: PMC9510185.</p></li>
+<li><p>NASA. Extreme Makeover: Human Activities Are Making Some Extreme Events More Frequent or Intense - NASA Science. 8 Nov.&nbsp;2021, https://science.nasa.gov/earth/climate-change/extreme-makeover-human-activities-are-making-some-extreme-events-more-frequent-or-intense/.</p></li>
 <li><p>OpenStreetMap Contributors (2025). OpenStreetMap database. Retrieved from <a href="https://www.openstreetmap.org" class="uri">https://www.openstreetmap.org</a>. Distributed by Geofabrik GmbH, Karlsruhe, Germany. Available at <a href="https://download.geofabrik.de/" class="uri">https://download.geofabrik.de/</a></p></li>
+<li><p>Román, M.O., Wang, Z., Sun, Q., Kalb, V.L., Miller, S.D., Molthan, A., Schultz, L., Bell, J., Stokes, E.C., Pandey, B., et al.&nbsp;(2018). NASA’s Black Marble nighttime lights product suite (VNP46). Remote Sensing of Environment, 210, 113-143. <a href="https://doi.org/10.1016/j.rse.2018.03.017" class="uri">https://doi.org/10.1016/j.rse.2018.03.017</a></p></li>
 <li><p>U.S. Census Bureau. (2020). TIGER/Line Shapefiles and American Community Survey 2019 (5-Year Estimates), Texas — Census Tract Level (ACS_2019_5YR_TRACT_48_TEXAS) [Data set]. U.S. Department of Commerce. Available from <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-data.html" class="uri">https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-data.html</a></p></li>
-<li><p>Lee CC, Maron M, Mostafavi A. Community-scale big data reveals disparate impacts of the Texas winter storm of 2021 and its managed power outage. Humanit Soc Sci Commun. 2022;9(1):335. doi:10.1057/s41599-022-01353-8. Epub 2022 Sep 24. PMID: 36187845; PMCID: PMC9510185.</p></li>
 </ul>
 
 

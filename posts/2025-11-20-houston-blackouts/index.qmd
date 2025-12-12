@@ -11,25 +11,25 @@ execute:
 code-fold: true
 ---
 
-# Question
+# Question & Motivation
 
-How did the 2021 severe winter storm disproportionately affect disadvantaged communities in Houston, Texas?
+**How did the 2021 severe winter storm disproportionately affect disadvantaged communities in Houston, Texas?**
+
+The February 2021 winter storm triggered a widespread power outage in Texas, leaving many without heat or electricity. However, the impacts of this crisis were not felt equally. Long-standing disparities in housing quality, infrastructure, and socioeconomic conditions affected which neighborhoods were vulnerable to blackouts. This blog post investigates how these inequities influenced outages in Houston, using geospatial data to better understand how disadvantaged communities were disproportionately affected by the storm.
 
 # Background
 
-Severe weather events are increasing in frequency and intensity as antropogenic climate change worsens. In Februaray 2021, a severe winter storm swept through the United States and caused a major power crisis in Houston, Texas. Additionally, it is documented that areas in Houston with lower median household income were dispropotionately affected and experienced more blackouts. This analysis will investigate winter storm Uri and the resulting socioeconomic impacts.
-
-[NASA](https://science.nasa.gov/earth/climate-change/extreme-makeover-human-activities-are-making-some-extreme-events-more-frequent-or-intense/)
+Severe weather events are increasing in frequency and intensity as anthropogenic climate change worsens [(NASA, 2021)](https://science.nasa.gov/earth/climate-change/extreme-makeover-human-activities-are-making-some-extreme-events-more-frequent-or-intense/). In Februaray 2021, a severe winter storm swept through the United States and caused a major power crisis in Houston, Texas. Additionally, it is documented that areas in Houston with lower median household income were disproportionately affected and experienced more blackouts [(Lee et al., 2022)](https://doi.org/10.1057/s41599-022-01353-8). Since utilties do not release house-level outage information, there is no official documentation showing exactly which homes lost power or which communities were affected. Using publicly available satellite night lights, building polygons, and socioeconomic indicators, this analysis will investigate winter storm Uri and the resulting socioeconomic impacts.
 
 # Data
 
-- Night lights: Data used is from February 7th & 16th, 2021, showing the before and after of the February 2021 Texas winter storm. The Visible Infrared Imaging Radiometer Suite (VIIRS) data is from NASA's Level-1 and Atmospheric Archive & Distribution System Distributed Active Archive Center (LAADS DAAC). The .tif files were downloaded and prepared by the instructors. LAADS DAAC Website
+- Night lights: Data used is from February 7th & 16th, 2021, showing the before and after of the February 2021 Texas winter storm. The Visible Infrared Imaging Radiometer Suite (VIIRS) data is from NASA's Level-1 and Atmospheric Archive & Distribution System Distributed Active Archive Center (LAADS DAAC). The .tif files were downloaded and prepared by the instructors. [LAADS DAAC Website](https://ladsweb.modaps.eosdis.nasa.gov/)
 
-- Roads: From Geofabrik downloads site where OpenStreetMap (OSM) data can be extracted. Geofabrik Website
+- Roads: From Geofabrik downloads site where OpenStreetMap (OSM) data can be extracted. This dataset contains geometries for major highways and streets in the Houston area. Used to account for night light interference from highway light pollution. [Geofabrik Website](https://download.geofabrik.de/)
 
-- Buildings: Also from Geofabrik, data contained are houses in the Houston area.
+- Buildings: Also from Geofabrik, data contained are polygons for houses, commercial structures, and other buildings in the Houston area. Used to calculate an estimate of residential homes impacted by blackouts.
 
-- Socio-economic: Obtained from the U.S. Census Bureau's American Community Survey for census tracts in 2019. Used for combining census attribute data to OSM geospatial data.
+- Socio-economic: Obtained from the U.S. Census Bureau's American Community Survey for census tracts in 2019. This data contains variables like income, race, age, and other demographic information. Used for combining census attribute data to OSM geospatial data to evaluate which communities were impacted by the storm.
 
 # Analysis
 
@@ -171,7 +171,7 @@ roads <- st_read(here::here('data', 'gis_osm_roads_free_1.gpkg'), query = "SELEC
   st_transform("EPSG:3083")
 ```
 
-Due to light pollution from highways, locations within 200 meters of highways should be excluded.
+Here, we use the road data to account for the influence of light pollution on blackout detection. Major highways produce significant lighting that can interfere with night light differences so only highway segments tagged as `motorway` are selected for analysis. As a result, locations within 200 meters of highways should be excluded.
 
 ```{r}
 # Create 200m buffer
@@ -200,6 +200,8 @@ blackout_far_areas <- st_difference(blackout_areas, roads_buffer_union)
 ```
 
 ## Identify Homes Impacted by Blackouts
+
+Next, we'll use the homes data to identify homes within our previously defined blackout areas. This enables us to retrieve an estimated number of homes that lost power and a map of impacted homes. 
 
 ```{r}
 # Read homes data with SQL query
@@ -245,8 +247,7 @@ tm_add_legend(labels = c("Homes That Lost Power"),
               fill = c('blue'),
               type = 'polygons',
               position = c('left', 'top')) +
-
-
+tm_title("Map of Impacted Houston Homes") +
 tm_layout(bg.color = 'grey90')
 ```
 
@@ -274,12 +275,13 @@ homes_df$type[6] <- "NA"
 # Display kable table
 options(knitr.kable.NA = "")
 kbl(homes_df,
-    table.attr = 'class="custom-table"', # For custom html styling
     col.names = c("Home Type", "Count", "Percentage (%)"),
     align = 'c')
 ```
 
 ## Identify Census Tracts Impacted by Blackouts
+
+In the same way as finding homes impacted, we use census data and our blackout areas to estimate the number of census tracts impacted and map them.
 
 ```{r}
 # View layers in gdb file
@@ -339,7 +341,11 @@ blackout_table <- census_blackout_tf |>
   pivot_wider(names_from = blackout,
               values_from = count) |> 
   mutate(total = rowSums(across(everything())))
+```
 
+```{r}
+#| label: tbl-census-blackouts
+#| tbl-cap: "Estimate of Impacted and Non-impacted Census Tracts"
 blackout_table |> 
   kbl(col.names = c("No Blackout", "Blackout", "Total Census Tracts"),
       align = 'c')
@@ -361,8 +367,11 @@ tm_scalebar(position = c(0.76, 0.18)) +
 tm_add_legend(labels = c("Tracts That Lost Power"),
               fill = c('orange'),
               type = 'polygons',
-              position = c('right', 'bottom')) 
+              position = c('right', 'bottom')) +
+tm_title("Map of Impacted Houston Census Tracts")
 ```
+
+Combining median household income of each census tract and our impacted/non-impacted census tracts, we can display the distribution of income for each group.
 
 ```{r}
 #| label: fig-income
@@ -373,7 +382,8 @@ ggplot(census_blackout_tf, aes(blackout, median_hh_income_est)) +
   geom_boxplot() +
   
   scale_x_discrete(labels = c('No Blackout', 'Blackout')) +
-  labs(y = "Median Household Income (Estimate) in Census Tract") +
+  labs(title = "Distribution of Median Household Income for Census Tract Blackout Groups", 
+       y = "Median Household Income (Estimate) in Census Tract") +
   
   theme_classic() +
   theme(panel.grid.major.y = element_line(color = 'grey'),
@@ -386,10 +396,12 @@ Winter storm Uri hit Texas in February 2021 and impacted over 100,000 homes with
 
 ## References
 
--   Román, M.O., Wang, Z., Sun, Q., Kalb, V.L., Miller, S.D., Molthan, A., Schultz, L., Bell, J., Stokes, E.C., Pandey, B., et al. (2018). NASA’s Black Marble nighttime lights product suite (VNP46). Remote Sensing of Environment, 210, 113-143. <https://doi.org/10.1016/j.rse.2018.03.017>
+-   Lee CC, Maron M, Mostafavi A. (2022). Community-scale big data reveals disparate impacts of the Texas winter storm of 2021 and its managed power outage. Humanit Soc Sci Commun. 2022;9(1):335. doi:10.1057/s41599-022-01353-8. Epub 2022 Sep 24. PMID: 36187845; PMCID: PMC9510185.
+
+- NASA. Extreme Makeover: Human Activities Are Making Some Extreme Events More Frequent or Intense - NASA Science. 8 Nov. 2021, https://science.nasa.gov/earth/climate-change/extreme-makeover-human-activities-are-making-some-extreme-events-more-frequent-or-intense/.
 
 -   OpenStreetMap Contributors (2025). OpenStreetMap database. Retrieved from <https://www.openstreetmap.org>. Distributed by Geofabrik GmbH, Karlsruhe, Germany. Available at <https://download.geofabrik.de/>
 
--   U.S. Census Bureau. (2020). TIGER/Line Shapefiles and American Community Survey 2019 (5-Year Estimates), Texas — Census Tract Level (ACS_2019_5YR_TRACT_48_TEXAS) \[Data set\]. U.S. Department of Commerce. Available from <https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-data.html>
+-   Román, M.O., Wang, Z., Sun, Q., Kalb, V.L., Miller, S.D., Molthan, A., Schultz, L., Bell, J., Stokes, E.C., Pandey, B., et al. (2018). NASA’s Black Marble nighttime lights product suite (VNP46). Remote Sensing of Environment, 210, 113-143. <https://doi.org/10.1016/j.rse.2018.03.017>
 
--   Lee CC, Maron M, Mostafavi A. Community-scale big data reveals disparate impacts of the Texas winter storm of 2021 and its managed power outage. Humanit Soc Sci Commun. 2022;9(1):335. doi:10.1057/s41599-022-01353-8. Epub 2022 Sep 24. PMID: 36187845; PMCID: PMC9510185.
+-   U.S. Census Bureau. (2020). TIGER/Line Shapefiles and American Community Survey 2019 (5-Year Estimates), Texas — Census Tract Level (ACS_2019_5YR_TRACT_48_TEXAS) \[Data set\]. U.S. Department of Commerce. Available from <https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-data.html>
