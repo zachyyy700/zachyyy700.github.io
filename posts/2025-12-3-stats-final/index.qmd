@@ -16,7 +16,13 @@ execute:
 
 [Data Link](https://portal.edirepository.org/nis/metadataviewer?packageid=knb-lter-msp.11.1)
 
-Dataset description: Urban lakes are heavily impacted by human activities and climate variability, and they provide many ecosystem services to residents. The Minneapolis-St. Paul Area Long Term Ecological Research Program (MSP LTER) is studying long term changes in urban lake water quality. The goal of this dataset is to understand how land-use change, management, and climate have impacted urban lake biogeochemistry over time. This dataset includes parameters characterizing the long term (\> 5 years) surface water quality and chemistry of 294 lakes and ponds in the Minneapolis-Saint Paul Seven County Metropolitan Area, Minnesota, USA
+**Dataset description:** 
+
+Urban lakes are heavily impacted by human activities and climate variability, and they provide many ecosystem services to residents. The Minneapolis-St. Paul Area Long Term Ecological Research Program (MSP LTER) is studying long term changes in urban lake water quality. The goal of this dataset is to understand how land-use change, management, and climate have impacted urban lake biogeochemistry over time. This dataset includes parameters characterizing the long term (\> 5 years) surface water quality and chemistry of 294 lakes and ponds in the Minneapolis-Saint Paul Seven County Metropolitan Area, Minnesota, USA.
+
+**Main research question:**
+
+What's the relationship between turbidity and nutrients in Minnesota's urban lakes?
 
 ```{r}
 library(tidyverse)
@@ -29,7 +35,10 @@ theme_set(theme_classic())
 lakes <- read_csv(here::here('data', "Timeseries_v6_forEDI.csv"))
 ```
 
-**Variables Description:**
+```{r}
+head(lakes)
+```
+
 
 ::: {#tbl-panel layout-ncol="2"}
 | Variables | Description |
@@ -65,6 +74,8 @@ Dataset Overview
 :::
 
 ```{r}
+#| label: fig-parameter-summary
+#| fig-cap: "Histograms for all water quality parameters in dataset."
 ggplot(lakes, aes(result)) +
   geom_histogram() +
   facet_wrap(~parameter, scales = "free")
@@ -95,28 +106,6 @@ graph TD
   
   classDef whitebox fill:#EDEDED;
   class Date,County,Secchi,TN,TP whitebox;
-```
-
-```{r}
-#| include: false
-
-stats <- lakes |> 
-  group_by(parameter) |> 
-  summarise(obs_count = n(),
-            min = min(result),
-            median = median(result),
-            mean = mean(result),
-            max = max(result),
-            sd = sd(result))
-```
-
-```{r}
-#| include: false
-
-ggplot(lakes |> filter(parameter != "spCond.uS_cm"), aes(parameter, result)) +
-  geom_boxplot() +
-  ylim(0, 200) +
-  coord_flip()
 ```
 
 # Statistical Model
@@ -209,6 +198,9 @@ response <- rgamma(n = n, shape = phi, scale = exp(beta0 + beta1 * predictor) / 
 **Plotting simulated data:**
 
 ```{r}
+#| label: fig-sim-data
+#| fig-cap: "Scatterplot of simulated response and predictor."
+
 # Combine into dataframe
 sim_df <- data.frame(predictor, response)
 
@@ -242,7 +234,7 @@ sim_ci <- sim_grid |>
 
 ```{r}
 #| label: tbl-sim-coefs
-#| tbl-cap: "Returned coefficients from running model on simulated data"
+#| tbl-cap: "Returned coefficients from running model on simulated data."
 # Return simulated data coefficients
 sim_sum <- summary(sim_model)
 
@@ -251,6 +243,8 @@ coef(sim_sum) |>
 ```
 
 ```{r}
+#| label: fig-sim-model
+#| fig-cap: "Simulated data with Gamma model fit."
 # Plot simulated data with model fit
 ggplot() + 
   geom_point(data = sim_df, aes(predictor, response), alpha = 0.3) +
@@ -261,6 +255,8 @@ ggplot() +
 ## Fit model to real data
 
 ```{r}
+#| label: fig-real-data
+#| fig-cap: "Scatterplot of real data."
 # Raw scatterplot
 ggplot(lakes_wide, aes(secchi.m, TP.mg_L)) + geom_point(alpha = 0.1)
 ```
@@ -276,6 +272,8 @@ real_sum <- summary(real_model)
 ```
 
 ```{r}
+#| label: fig-real-model
+#| fig-cap: "Real data with Gamma model fit."
 # Create prediction grid (one predictor for now)
 pred_grid <- tibble(secchi.m = seq(min(lakes_wide$secchi.m, na.rm = TRUE), 
                                     max(lakes_wide$secchi.m, na.rm = TRUE), 
@@ -333,34 +331,45 @@ rownames(ci_table) <- c("(Intercept)", "secchi.m")
 ci_table |> kbl(col.names = c("Link Estimate", "Response Estimate", "CI Lower Bound", "CI Upper Bound"), digits = 3, align = 'c')
 ```
 
-# Extend model to other parameters
+## Extend model to other parameters
 
 ```{r}
 response_vars <- lakes_wide |> 
   select(NOX.mg_L:TN.mg_L) |> 
   colnames()
-
-lakes_nonzero <- lakes_wide |> 
-  filter(spCond.uS_cm > 0) |>
-  filter(NH4.mg_L > 0) |>
-  filter(chla.Pcorr.ug_L > 0)
 ```
 
 ```{r}
 response_df <- map_df(response_vars, ~{
-  model <- glm(as.formula(paste(.x, "~ secchi.m")), data = lakes_nonzero, family = Gamma(link = "log"))
+  
+  # Remove zeros for each response before modeling
+  model_data <- lakes_wide |> 
+    filter(lakes_wide[[.x]] > 0)
+  
+  # Run model
+  model <- glm(as.formula(paste(.x, "~ secchi.m")), 
+               data = model_data, 
+               family = Gamma(link = "log"))
+  # Get model summary
   model_sum <- summary(model)
   
+  # Create tibble of all responses
   tibble(
-    response = .x,
-    term = names(coef(model)),
-    estimate = coef(model),
-    p_val = coef(model_sum)[, 4]
-  )
-  
-})
+  response = .x,
+  term = names(coef(model)),
+  estimate = coef(model),
+  p_val = coef(model_sum)[, 4]
+)})
 ```
 
+```{r}
+#| label: tbl-all-parameters
+#| tbl-cap: "Secchi.m coefficient estimates & p-values for all water quality parameters in dataset."
+response_df |> 
+  filter(term == "secchi.m") |> 
+  select(-term) |> 
+  kbl(col.names = c("Response", "Estimate", "p-value"), digits = 3, align = 'c')
+```
 
 # Inference
 
@@ -373,3 +382,5 @@ response_df <- map_df(response_vars, ~{
 -   $H_1$: $\beta_1 \neq 0$
 
 In response space ($e^{-0.358}$), the coefficient for secchi.m ($\beta_1$) is about $0.70 \pm 0.004$ at 95% confidence. Meaning, for every 1 meter increase of Secchi depth (clearer waters), total phosphorus (TP) decreases by 30% (multiplied by 0.70). The intercept coefficient ($\beta_0$) represents TP when Secchi depth is 0 meters. Undo-ing the link ($e^{-2.123}$), this value is estimated at $0.12 \pm 0.002$ at 95% confidence. Both estimates are highly significant, indicating there's essentially a zero percent chance that these estimates could have resulted by chance and we can reject the null hypothesis.
+
+It's known that turbid, murky waters usually indicate higher concentrations of pollutants. Whether it's sediment, nutrients, or other contaminants, these results align with the expectation that turbid waters contain more pollutants. Overall, using our Gamma model on this data reinforces the idea that water clarity is in fact a reliable indicator of nutrient pollution and lake health.
