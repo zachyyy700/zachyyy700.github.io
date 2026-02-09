@@ -18,11 +18,11 @@ about:
       target: _blank
 ---
 
-## Alooooha!
+## Hii!
 
 <hr class="custom-line">
 
-I'm Zach, a data science lover passionate about the environment. Born and raised in Hawaii connected me to a culture that emphasizes environmental health and led me to this environmental journey I'm on. I have career interests in water quality, waste management, and renewable energy. On my free time, I enjoy surfing, reading, gaming, and cooking Japanese curry. Feel free to surf around my website to learn more!
+I'm Zach, a data science lover passionate about the environment. Born and raised in Hawaiʻi connected me to a culture that emphasizes environmental health and led me to this environmental journey I'm on. I have career interests in water quality, waste management, and renewable energy. On my free time, I enjoy surfing, reading, gaming, and cooking Japanese curry. Feel free to surf around my website to learn more!
 
 <hr class="custom-line">
 
@@ -32,7 +32,7 @@ I'm Zach, a data science lover passionate about the environment. Born and raised
 
 -   Short stories
 
--   お茶漬け ([Ochazuke:](https://en.wikipedia.org/wiki/Chazuke) A Japanese dish made by pouring a broth of green tea & dashi over rice and other toppings.)
+-   トウカイテイオー, the Miracle Horse
 
 ### Current Work:
 

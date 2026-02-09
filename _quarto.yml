@@ -22,8 +22,7 @@ website:
       - text: "The Blog"
         href: posts.qmd
   page-footer: 
-    left: Copyright 2025, Zachary Loo
-    right: This website is built with Quarto and GitHub Pages
+    right: This website is built with Quarto and GitHub Pages.
 
 format:
   html:
