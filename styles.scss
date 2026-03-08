@@ -86,3 +86,30 @@ body {
 
   }
 }
+
+// Panel tabset
+.panel-tabset {
+  .nav-tabs {
+    border-bottom-color: $brown;
+
+    .nav-link {
+      color: $brown;
+      
+      &:hover {
+        color: $darkgreen;
+        border-color: $brown;
+        background-color: $green;
+      }
+
+      &.active {
+        color: $tan;
+        background-color: $darkgreen;
+        border-color: $brown;
+      }
+    }
+  }
+
+  .tab-content {
+    padding-top: 1rem;
+  }
+}
