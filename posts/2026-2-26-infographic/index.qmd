@@ -21,9 +21,9 @@ After exploring the data, I thought it was best to focus my infographic on one h
 
 # Infographic
 
-To see the image better, right-click the image, and "Open Image in New Tab" to open in a new tab.
+To see the image better, right-click the image, and select "Open Image in New Tab" to open in a new tab.
 
-![](pics/AK_infographic.png)
+![](pics/AK_infographic_newcolors.png)
 
 # Visualizations
 
