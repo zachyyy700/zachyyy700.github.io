@@ -1,6 +1,6 @@
 ---
 title: "The Arima Kinen"
-description: "An infographic."
+description: "An infographic on Japan's horseracing SuperBowl."
 date: "February 26, 2026"
 editor: source
 categories: [MEDS, R, Data Viz]
@@ -13,13 +13,15 @@ What drives you to acheive your dreams? Does your motivation come from your own 
 
 # Data
 
-Horse race data was sourced from [netkeiba](https://www.netkeiba.com/), a website that hosts official Japan Racing Association (JRA) data. This was done by a user on Kaggle, an online data science community where users can find datasets to work with or publish their own. The user who published this horse racing data used web-scraping tools to assimilate the race results data used in the analysis. 
+Horse race data was sourced from [netkeiba](https://www.netkeiba.com/), a website that hosts official Japan Racing Association (JRA) data. This was done by a user on Kaggle, an online data science community where users can find datasets to work with or publish their own. The user who published this horse racing data used web-scraping tools to assimilate the race results data used in this project. 
 
 # Approach
 
 After exploring the data, I thought it was best to focus my infographic on one highly regarded race: The Arima Kinen, Japan's Grand Prix. This race takes place every year in December and is one of two "All-Star" races that occur annually. Additionally, horse racing fans are able to vote which horses they want to race, resulting in high expectations and large winnings to lucky bettors. I wanted to have my infographic centered around the winners and highlight certain aspects of this high-level of racing.
 
 # Infographic
+
+To see the image better, right-click the image, and "Open Image in New Tab" to open in a new tab.
 
 ![](pics/AK_infographic.png)
 
@@ -72,6 +74,12 @@ All plots were initially made in R and then exported in a vectorized format. The
 
 **Text:** Most of my text was added in Affinity. In each individual plot, the basic text was handled in R, for axes and legends, but I knew I wanted to get more fancy and creative with the titles, subtitles, and other annotations. For example, creating the fancy title backgrounds was done in Affinity. Having this flexibility with the text made it easier to tie everything together.
 
+## Icons
+
+**Icons:** All icons used were downloaded from the Noun Project, a free,  online collection of vector icons create by real artists. The following icons were used in this project to add to the visual appeal of the infographic.
+
+![](pics/noun-horse-6080477.svg){width=160px} ![](pics/noun-horseshoe-8078569.svg){width=160px} ![](pics/noun-trophy-355128.svg){width=160px} ![](pics/noun-stopwatch-4717672.svg){width=160px} ![](pics/noun-embellishment-159893.svg){width=160px}
+
 ## Themes
 
 **Themes:** Like the graphic form type, I chose to keep plot themes simple, nothing crazy, just straightfoward. This included removing some axis titles and only keep major y gridlines for the line charts.
@@ -110,6 +118,8 @@ All plots were initially made in R and then exported in a vectorized format. The
 :::
 
 # Full Code
+
+For those interested in seeing the code used to create the four charts, expand the code chunk below.
 
 
 ```{r}
@@ -196,7 +206,7 @@ arima_kinen_all  <- bind_rows(ak_winners, ak_winners_recent) |>
         n = row_number(), 
         annot = ifelse(n %% 5 == 0 & n != n(), TRUE, FALSE),
         avg_speed_m_s = distance_m / as.numeric(finish_time)) |> 
-
+    # Flip win fav column
     mutate(win_fav_rev = abs(win_fav - 16), .after = win_fav)
 
 # Create translation df
@@ -235,6 +245,7 @@ arima_kinen_all <- arima_kinen_all |>
 arima_kinen_all <- arima_kinen_all |> 
     group_by(horse_name_eng) |> 
     mutate(win_count = n()) |> 
+    # Bold repeat winners
     mutate(repeat_win_label = ifelse(win_count > 1, paste0("**", horse_name_eng, "**"), horse_name_eng))
 
 winners_plot <- ggplot(arima_kinen_all) + 
@@ -285,13 +296,14 @@ winners_plot <- ggplot(arima_kinen_all) +
     )
 
 #......................Winning Times Chart.......................
-
+# Filter to non-AK winners on the same track & distance
 non_ak_winners <- jra_results |> 
     filter(race_name != "有馬記念", distance_m == 2500, racetrack_name == '中山', final_position == 1, track_surface == "芝") |> 
     group_by(race_name) |> 
     mutate(race_count = n()) |> 
     filter(race_count >= 25)
 
+# Aggregate non-AK winners
 non_ak_yearly <- non_ak_winners |> 
     group_by(year) |> 
     summarise(avg_win_time = mean(finish_time))
@@ -326,7 +338,6 @@ winning_times_plot <- ggplot() +
     )
 
 #........................Prize Money Chart.......................
-
 # Create df for recent data, winners of different G1 races & 1st place prize
 prize_g1_recent <- tribble(
     ~year, ~race_name, ~prize_money_10kY,
@@ -356,6 +367,7 @@ prize_g1_recent <- tribble(
     2025, "安田記念", 18382.2,
 )
 
+# Filter to races of interest
 prize_g1 <- jra_results |> 
     filter(race_grade == "G1", race_name %in% c("有馬記念", "宝塚記念", "東京優駿", "安田記念"), final_position == 1, year != 2021) |> 
     select(year, race_name, prize_money_10kY)
@@ -363,11 +375,13 @@ prize_g1 <- jra_results |>
 # Combine recent & original data
 prize_g1_all <- bind_rows(prize_g1, prize_g1_recent)
 
+# Translate race names
 race_names_translate <- tibble(
     race_name = c("有馬記念", "宝塚記念", "東京優駿", "安田記念"),
     race_name_eng = c("Arima Kinen", "Takarazuka Kinen", "Tokyo Yushun", "Yasuda Kinen")
 )
 
+# Join translated names
 prize_g1_all <- left_join(prize_g1_all, race_names_translate, by = 'race_name') 
 
 prize_plot <- ggplot(prize_g1_all) +
@@ -393,13 +407,15 @@ prize_plot <- ggplot(prize_g1_all) +
         legend.position = 'top')
 
 #......................Top 10 Winners Chart......................
-
+# Filter to horses that won AK
 ak_champs <- jra_results |> 
     filter(horse_name %in% ak_names$horse_name, race_grade %in% c("G1", "G2", "G3")) |> 
+    # Calculate career wins
     group_by(horse_name, race_grade) |> 
     summarise(grade_win_count = sum(final_position == 1, na.rm = TRUE), n_races = n(), grade_winpct = grade_win_count / n_races) |> 
     left_join(ak_names)
 
+# Arrange horses by win percentage descending
 champ_order <- ak_champs |>
     group_by(horse_name_eng) |>
     filter(race_grade == "G1") |>

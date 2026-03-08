@@ -94,6 +94,7 @@ body {
 
     .nav-link {
       color: $brown;
+      border: 1px solid $brown;
       
       &:hover {
         color: $darkgreen;
@@ -110,6 +111,7 @@ body {
   }
 
   .tab-content {
+    border: 1px solid $brown;
     padding-top: 1rem;
   }
 }
