@@ -94,6 +94,8 @@ body {
 
     .nav-link {
       color: $brown;
+      min-width: 140px;
+      text-align: center;
       border: 1px solid $brown;
       
       &:hover {
