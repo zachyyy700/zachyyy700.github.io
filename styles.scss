@@ -142,3 +142,14 @@ body::before {
 main {
   background-color: $tan;
 }
+
+// Heading styling
+h1, h2, h3 {
+  border-left: 4px solid $darkgreen;
+  padding-left: 0.4em;
+}
+// No heading styles for title class
+.title {
+  border-left: none;
+  padding-left: 0;
+}

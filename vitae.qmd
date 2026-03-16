@@ -1,9 +1,6 @@
 ---
-title: "Curriculum Vitae"
 editor: source
 ---
-
-------------------------------------------------------------------------
 
 # Education
 
@@ -55,7 +52,6 @@ editor: source
 
 - **Data Analysis**: Proficient in analyzing large datasets using software such as R and Python to derive meaningful insights and trends for environmental research
 
-------------------------------------------------------------------------
 
 # Awards & Certificates
 

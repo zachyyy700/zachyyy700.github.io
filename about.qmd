@@ -1,7 +1,9 @@
 ---
-title: "About"
 editor: source
+toc: false
 ---
+
+# About
 
 <img src="media/deadmans.png" class="about-right-image"/>
 
@@ -9,7 +11,7 @@ I grew up on Oʻahu, surrounded by nature that inspired my passion for caring fo
 
 Initially, I considered going into medicine and spent time learning about the human body. But an AP Environmental Science class changed my course and I realized this field was just as fascinating and impactful. I went on to earn a B.S. in Global Environmental Science from the University of Hawaiʻi at Mānoa, where I gained a deeper understanding of environmental systems, data, and coding. Again, because of my great advisors and other teachers, I've become fascinated by the complex and growing field of Environmental Data Science. In the near future, I'm very excited to utilize data insights to help solve environmental problems.
 
-#### Hobbies
+## Hobbies
 
 -   Surfing, I learned how during the COVID-19 pandemic when there wasn't much to do. I started on a longboard as most do but as I got better and learned my style, I've concluded I prefer longboarding. Though I do own a small twin-fin fish that I attempt to take out sometimes. My favorite place to surf is Ala Moana, Oʻahu.
 
@@ -23,7 +25,7 @@ Initially, I considered going into medicine and spent time learning about the hu
 
 -   日本語の勉強, inspired by my sister who lives in Japan, I wanted to learn Japanese to connect with her in another language. I started around May 2024 and I'm teaching myself!
 
-#### Fun Facts
+## Fun Facts
 
 -   I have a twin sister!
 

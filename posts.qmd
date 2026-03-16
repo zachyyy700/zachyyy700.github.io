@@ -1,5 +1,4 @@
 ---
-title: "Zach's Blog"
 listing: 
   contents: posts
   type: grid
@@ -7,3 +6,4 @@ listing:
   categories: true
 ---
 
+# Zach's Blog

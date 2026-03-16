@@ -18,7 +18,7 @@ about:
       target: _blank
 ---
 
-## Hii!
+# Hii! {style="border-left: none; padding-left: 0;"}
 
 <hr class="custom-line">
 

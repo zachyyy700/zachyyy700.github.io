@@ -17,7 +17,7 @@ website:
         href: index.qmd
       - text: "About"
         href: about.qmd
-      - text: "CV"
+      - text: "Curriculum Vitae"
         href: vitae.qmd
       - text: "The Blog"
         href: posts.qmd
