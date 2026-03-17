@@ -13,8 +13,6 @@ website:
     title: false
     logo: media/ZL_favi_final.png
     left:
-      - text: "Home"
-        href: index.qmd
       - text: "About"
         href: about.qmd
       - text: "Curriculum Vitae"
