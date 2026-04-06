@@ -206,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>introduction</p>
-<div id="9831eadd" class="cell" data-execution_count="1">
+<div id="f1a0cd86" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> osxphotos</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image <span class="im">as</span> PILImage</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.core.pylabtools <span class="im">import</span> figsize</span>
@@ -218,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="osxphotos-python-library" class="level2">
 <h2 class="anchored" data-anchor-id="osxphotos-python-library"><code>osxphotos</code> Python Library</h2>
-<div id="a733ab85" class="cell" data-execution_count="2">
+<div id="de6d6d51" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrive photos library from system path</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>photosdb <span class="op">=</span> osxphotos.PhotosDB()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -241,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Videos</li>
 <li>Saved pictures from internet</li>
 </ul>
-<div id="eefea2e8" class="cell" data-execution_count="3">
+<div id="8e0299c8" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> photo_filter(photo): </span>
@@ -259,11 +259,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p>Since the <code>photos</code> object is a list, a simple for loop can apply the filtering function.</p>
-<div id="805e8042" class="cell" data-execution_count="4">
+<div id="33808c21" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>photos_filtered <span class="op">=</span> [p <span class="cf">for</span> p <span class="kw">in</span> photos <span class="cf">if</span> photo_filter(p)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>As of now, photos aren’t sorted by date.</p>
-<div id="f0d3496d" class="cell" data-execution_count="5">
+<div id="638d6a83" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> photo <span class="kw">in</span> photos_filtered[:<span class="dv">5</span>]:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Date: </span><span class="sc">{</span>photo<span class="sc">.</span>date<span class="sc">}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -277,7 +277,7 @@ Date: 2024-06-07 09:48:30+00:00</code></pre>
 </section>
 <section id="sorting" class="level1">
 <h1>Sorting</h1>
-<div id="4916d5a0" class="cell" data-execution_count="6">
+<div id="997d9fb4" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>photos_sorted <span class="op">=</span> <span class="bu">sorted</span>(photos_filtered, key<span class="op">=</span><span class="kw">lambda</span> p: p.date)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check sort</span></span>
@@ -294,7 +294,7 @@ Date: 2024-01-02 11:19:09.531000-10:00</code></pre>
 </section>
 <section id="viewing" class="level1">
 <h1>Viewing</h1>
-<div id="d4894925" class="cell" data-execution_count="7">
+<div id="ae1917e4" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> display_valid_photos(photolist, figsize):</span>
@@ -335,10 +335,10 @@ Date: 2024-01-02 11:19:09.531000-10:00</code></pre>
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Error in </span><span class="sc">{</span>err_count<span class="sc">}</span><span class="ss"> photos.'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="10ef930e" class="cell" data-execution_count="8">
+<div id="0064646d" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>photos_feb26 <span class="op">=</span> [p <span class="cf">for</span> p <span class="kw">in</span> photos_sorted <span class="cf">if</span> ((p.date.year <span class="op">==</span> <span class="dv">2026</span>) <span class="op">&amp;</span> (p.date.month <span class="op">==</span> <span class="dv">2</span>))]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="e7da4f39" class="cell" data-execution_count="9">
+<div id="e67cca46" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>display_valid_photos(photos_feb26, figsize<span class="op">=</span>(<span class="dv">20</span>,<span class="dv">6</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Error in 64 photos.</code></pre>
@@ -362,7 +362,7 @@ Date: 2024-01-02 11:19:09.531000-10:00</code></pre>
 <li>March 15, 2025, Illenium concert (purple) [3rd of the day]</li>
 <li>June 12, 2024, Hydrangea (green/purple) [22nd of the day]</li>
 </ul>
-<div id="8a8a4daf" class="cell" data-execution_count="10">
+<div id="9b884658" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> photo_pick(photolist, date_str, photo_position <span class="op">=</span> <span class="va">None</span>, exact <span class="op">=</span> <span class="va">False</span>):</span>
@@ -382,14 +382,14 @@ Date: 2024-01-02 11:19:09.531000-10:00</code></pre>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> photo_day</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="bf7ce308" class="cell" data-execution_count="11">
+<div id="b15a0d71" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function works!</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>test_day <span class="op">=</span> photo_pick(photos_sorted, <span class="st">"2025-01-01"</span>, exact <span class="op">=</span> <span class="va">False</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>check_test_day <span class="op">=</span> [p <span class="cf">for</span> p <span class="kw">in</span> photos_sorted <span class="cf">if</span> (p.date.year <span class="op">==</span> <span class="dv">2025</span>) <span class="op">&amp;</span> (p.date.month <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (p.date.day <span class="op">==</span> <span class="dv">1</span>)]</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>test_exact <span class="op">=</span> photo_pick(photos_sorted, <span class="st">"2025-01-01"</span>, photo_position<span class="op">=</span><span class="dv">2</span>, exact<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="29ada830" class="cell" data-execution_count="12">
+<div id="59220942" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>jun12 <span class="op">=</span> photo_pick(photos_sorted, <span class="st">"2024-6-12"</span>, exact<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>photo1 <span class="op">=</span> photo_pick(photos_sorted, <span class="st">"2024-6-12"</span>, photo_position<span class="op">=</span><span class="dv">22</span>, exact<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -402,7 +402,7 @@ Date: 2024-01-02 11:19:09.531000-10:00</code></pre>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>dec21 <span class="op">=</span> photo_pick(photos_sorted, <span class="st">"2025-12-21"</span>, exact<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>photo4 <span class="op">=</span> photo_pick(photos_sorted, <span class="st">"2025-12-21"</span>, photo_position<span class="op">=</span><span class="dv">3</span>, exact<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="ad7e589d" class="cell" data-execution_count="13">
+<div id="2d6077fa" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>test_photos <span class="op">=</span> [photo1, photo2, photo3, photo4]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
