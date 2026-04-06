@@ -67,7 +67,7 @@
     "href": "posts.html",
     "title": "Zach’s Blog",
     "section": "",
-    "text": "Zach’s Blog\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Arima Kinen\n\n\n\nMEDS\n\nR\n\nData Viz\n\n\n\nAn infographic on Japan’s horseracing SuperBowl.\n\n\n\nZach Loo\n\n\nFeb 26, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Source and Impact of Ecological Bias\n\n\n\nMEDS\n\nR\n\nEthics\n\n\n\nA dive into the nuances in spatial resolutions for environmental epidemiology.\n\n\n\nZach Loo\n\n\nDec 5, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nGamma Models for Pollution Concentrations\n\n\n\nMEDS\n\nR\n\nStatistics\n\n\n\nLearning & using gamma regression.\n\n\n\nZach Loo\n\n\nDec 3, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nVisualizing the 2025 California Wildfires\n\n\n\nMEDS\n\nPython\n\nGeospatial\n\n\n\nUsing Landsat & EJI data to analyze the effects of California’s wildfires.\n\n\n\nZach Loo\n\n\nNov 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpotify on Webpages\n\n\n\nPersonal\n\nR\n\nMusic\n\n\n\nUsing an R package to extract my Spotify data.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n2021 Texas Power Crisis\n\n\n\nMEDS\n\nR\n\nGeospatial\n\n\n\nAssessing the socio-economic impacts of severe weather events.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Blog Post\n\n\n\nMEDS\n\nR\n\n\n\nPost Description\n\n\n\nZach Loo\n\n\nNov 16, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "Zach’s Blog\n\n\n\n\n\n\n\n\n\n\n\n\n\nMy Photos as Colors\n\n\n\n\n\n\nZach Loo\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Arima Kinen\n\n\n\nMEDS\n\nR\n\nData Viz\n\n\n\nAn infographic on Japan’s horseracing SuperBowl.\n\n\n\nZach Loo\n\n\nFeb 26, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Source and Impact of Ecological Bias\n\n\n\nMEDS\n\nR\n\nEthics\n\n\n\nA dive into the nuances in spatial resolutions for environmental epidemiology.\n\n\n\nZach Loo\n\n\nDec 5, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nGamma Models for Pollution Concentrations\n\n\n\nMEDS\n\nR\n\nStatistics\n\n\n\nLearning & using gamma regression.\n\n\n\nZach Loo\n\n\nDec 3, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nVisualizing the 2025 California Wildfires\n\n\n\nMEDS\n\nPython\n\nGeospatial\n\n\n\nUsing Landsat & EJI data to analyze the effects of California’s wildfires.\n\n\n\nZach Loo\n\n\nNov 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpotify on Webpages\n\n\n\nPersonal\n\nR\n\nMusic\n\n\n\nUsing an R package to extract my Spotify data.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n2021 Texas Power Crisis\n\n\n\nMEDS\n\nR\n\nGeospatial\n\n\n\nAssessing the socio-economic impacts of severe weather events.\n\n\n\nZach Loo\n\n\nNov 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Blog Post\n\n\n\nMEDS\n\nR\n\n\n\nPost Description\n\n\n\nZach Loo\n\n\nNov 16, 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -326,6 +326,13 @@
     "href": "posts/2026-3-17-photo-palette/photo_palette.html",
     "title": "My Photos as Colors",
     "section": "",
-    "text": "import numpy as np\nimport pandas as pd\nfrom colorthief import ColorThief"
+    "text": "introduction\n\nimport osxphotos\nfrom PIL import Image as PILImage\nfrom IPython.core.pylabtools import figsize\nimport datetime as dt\nimport numpy as np\nfrom colorthief import ColorThief\nimport math\nimport matplotlib.pyplot as plt\n\n\n\n\n# Retrive photos library from system path\nphotosdb = osxphotos.PhotosDB()\n\n# Begin Jan 1, 2025\nstart = dt.datetime(2024, 1, 1)\n# End Mar 31, 2025\nend = dt.datetime(2026, 3, 31)\n\n# Extract photo items, restrict dates\nphotos = photosdb.photos(from_date=start, to_date=end)"
+  },
+  {
+    "objectID": "posts/2026-3-17-photo-palette/photo_palette.html#osxphotos-python-library",
+    "href": "posts/2026-3-17-photo-palette/photo_palette.html#osxphotos-python-library",
+    "title": "My Photos as Colors",
+    "section": "",
+    "text": "# Retrive photos library from system path\nphotosdb = osxphotos.PhotosDB()\n\n# Begin Jan 1, 2025\nstart = dt.datetime(2024, 1, 1)\n# End Mar 31, 2025\nend = dt.datetime(2026, 3, 31)\n\n# Extract photo items, restrict dates\nphotos = photosdb.photos(from_date=start, to_date=end)"
   }
 ]
