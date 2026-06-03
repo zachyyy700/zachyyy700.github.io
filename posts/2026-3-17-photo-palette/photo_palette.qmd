@@ -1,5 +1,7 @@
 ---
 title: "My Photos as Colors"
+description: "Visualizing colors from my photos library."
+categories: [Personal, Python]
 jupyter: python3
 image: images/devs_sunset.JPG
 ---
