@@ -5,6 +5,10 @@
 .DS_Store
 .quarto
 
+_environment.local
+
+environment.yml
+
 /.quarto/
 
 **/*.quarto_ipynb
@@ -20,3 +24,4 @@ posts/*/data/
 
 # blog jupyter checkpoints
 posts/*/.ipynb_checkpoints/
+/_*.local

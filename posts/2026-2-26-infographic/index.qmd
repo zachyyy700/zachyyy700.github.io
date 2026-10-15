@@ -4,7 +4,7 @@ description: "An infographic on Japan's horseracing SuperBowl."
 date: "February 26, 2026"
 editor: source
 categories: [MEDS, R, Data Viz]
-image: teio_pic.jpg
+image: pics/teio_pic.jpg
 ---
 
 # Background

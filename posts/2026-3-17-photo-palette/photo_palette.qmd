@@ -94,66 +94,9 @@ for photo in photos_sorted[:5]:
     print(f'Date: {photo.date}')
 ```
 
-# Viewing
-
-To view our photos, we can write another function that uses `PILImage` and will display our photos in a grid. Note that some photos will result in errors and these won't be displayed.
-
-```{python}
-#| code-fold: true
-
-def display_valid_photos(photolist, figsize):
-    # Initialize valid photo empty list
-    valid_photos = []
-    valid_idx = []
-    # valid_colors = []
-    # Initialize photo error count
-    err_count = 0
-
-    # Iterate through photos
-    for i, photo in enumerate(photolist):
-        try:
-            valid_photos.append((photo.path, PILImage.open(photo.path)))
-            valid_idx.append(i)
-        except Exception:
-            err_count += 1
-
-    # Plot valid photos
-    cols = 8
-    rows = math.ceil(len(valid_photos) / cols)
-    fig, axes = plt.subplots(rows, cols, figsize=figsize)
-    plt.subplots_adjust(hspace=0.8)
-    axes = axes.flatten()
-    
-    for i, (path, img) in enumerate(valid_photos):
-        # Photo row
-        axes[i].imshow(img)
-        axes[i].axis('off')
-        axes[i].set_title(f'#{valid_idx[i]}')
-
-        # # Color swatch row
-        # color = get_color(path)
-        # valid_colors.append(color)
-        # swatch = PILImage.new("RGB", (50, 50), color)
-        # axes[i * 2 + 1].imshow(swatch)
-        # axes[i * 2 + 1].axis('off')
-
-    for ax in axes[len(valid_photos):]:
-        ax.axis('off')
-
-    print(f'Error in {err_count} photos.')
-```
-
-```{python}
-photos_feb26 = [p for p in photos_sorted if ((p.date.year == 2026) & (p.date.month == 2))]
-```
-
-```{python}
-display_valid_photos(photos_feb26, figsize=(11, 24))
-```
-
 # Color Extracting
 
-Now that we can successfully view our photos, we can start extracting colors! The Python library `colortheif` will be used for the extracting and can return the RBG values of a photo's dominant color. To test this, I pick four photos with obvious dominant colors to make sure the extracted color is accurate.
+Now that our photos are sorted, we can start extracting colors! The Python library `colortheif` will be used for the extracting and can return the RBG values of a photo's dominant color. To test this, I pick four photos with obvious dominant colors to make sure the extracted color is accurate.
 
 Photos:
 
@@ -259,12 +202,12 @@ This looks good! The extracted colors seem to be accurate and we can continue th
 
 # K-means Palette Generation
 
-While thinking about how to "aggregate" colors, I thought the K-means clustering algorithm could be useful. If I can plot my colors onto a 2-D plane, we can set an amount of clusters such that the centroid of each cluster will be the aggregate color. I'll an example plot later to show what this looks like.
+While thinking about how to "aggregate" colors, I thought the K-means clustering algorithm could be useful. If I can plot my colors onto a 2-D plane, we can set an amount of clusters such that the centroid of each cluster will be the aggregate color. I'll show an example plot later to show what this looks like.
 
 ```{python}
 #| code-fold: true
 def extract_colors(photolist):
-        # Initialize valid photo empty list
+    # Initialize valid photo empty list
     valid_photos = []
     valid_colors = []
     # Initialize photo error count
@@ -282,6 +225,12 @@ def extract_colors(photolist):
         color = get_color(path)
         valid_colors.append(color)
     return valid_colors
+```
+
+First, I'll choose a month to test the color aggregation on.
+
+```{python}
+photos_feb26 = [p for p in photos_sorted if ((p.date.year == 2026) & p.date.month == 2)]
 ```
 
 ```{python}
